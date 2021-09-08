@@ -1,6 +1,7 @@
 application {
   config {
     baseName laPiquette
+    packageName com.im2ag.lapiquette
   }
   entities Product, Order, OrderLine, Client
   paginate * with pagination except OrderLine
