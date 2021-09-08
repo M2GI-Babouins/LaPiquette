@@ -27,6 +27,10 @@
           TRACE
         </button>
 
+        <button (click)="changeLevel(logger.name, 'ADD')" [ngClass]="logger.level === 'ADD' ? 'btn-add' : 'btn-light'" class="btn btn-sm">
+          TRACE
+        </button>
+
         <button
           (click)="changeLevel(logger.name, 'DEBUG')"
           [ngClass]="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"

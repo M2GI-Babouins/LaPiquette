@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +10,7 @@ import { IProduct } from '../product.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { ProductService } from '../service/product.service';
 import { ProductDeleteDialogComponent } from '../delete/product-delete-dialog.component';
+import { Order } from 'app/entities/order/order.model';
 
 @Component({
   selector: 'jhi-product',
@@ -70,6 +72,11 @@ export class ProductComponent implements OnInit {
         this.loadPage();
       }
     });
+  }
+
+  public addToCart(product: IProduct): void {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    console.log('Item added to cart : ' + product.name);
   }
 
   protected sort(): string[] {
