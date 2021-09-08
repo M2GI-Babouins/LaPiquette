@@ -1,6 +1,7 @@
 application {
   config {
     baseName laPiquette
+    packageName com.im2ag.lapiquette
   }
   entities Product, Order, OrderLine, Client
   paginate * with pagination except OrderLine
@@ -57,13 +58,7 @@ relationship OneToOne {
  */
 relationship ManyToOne {
     Order to Client
-}
-
-/**
- * One to many relationship.
- */
-relationship OneToMany {
-    Order{orderLine} to OrderLine
+    OrderLine to Order{orderLine}
 }
 
 paginate * with infinite-scroll

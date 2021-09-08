@@ -1,0 +1,75 @@
+{
+  "name": "Product",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "year",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "region",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "alcoholPer",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "recommandation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ageLimit",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "temperature",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "percentPromo",
+      "fieldType": "Float",
+      "fieldValidateRules": ["max"],
+      "fieldValidateRulesMax": "1"
+    },
+    {
+      "fieldName": "stock",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "urlImage",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "product",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["laPiquette"],
+  "changelogDate": "20210908082100"
+}
