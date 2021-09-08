@@ -1,0 +1,25 @@
+{
+  "name": "Todo",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "javadoc": "My comment"
+    },
+    {
+      "fieldName": "count",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "todo",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["laPiquette"],
+  "changelogDate": "20210908081632"
+}
