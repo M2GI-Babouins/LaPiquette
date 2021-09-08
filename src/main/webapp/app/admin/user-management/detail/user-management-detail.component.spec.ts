@@ -20,7 +20,7 @@ describe('Component Tests', () => {
             {
               provide: ActivatedRoute,
               useValue: {
-                data: of({ user: new User('ABC', 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') }),
+                data: of({ user: new User(123, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') }),
               },
             },
           ],
@@ -43,7 +43,7 @@ describe('Component Tests', () => {
         // THEN
         expect(comp.user).toEqual(
           expect.objectContaining({
-            id: 'ABC',
+            id: 123,
             login: 'user',
             firstName: 'first',
             lastName: 'last',

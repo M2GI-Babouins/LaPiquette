@@ -34,7 +34,7 @@ describe('Service Tests', () => {
         });
 
         const req = httpMock.expectOne({ method: 'GET' });
-        req.flush(new User('ABC', 'user'));
+        req.flush(new User(123, 'user'));
         expect(expectedResult).toEqual('user');
       });
 

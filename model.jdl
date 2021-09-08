@@ -8,6 +8,7 @@ application {
 
 }
 
+
 entity Product {
     id Long unique
     name String
@@ -57,13 +58,7 @@ relationship OneToOne {
  */
 relationship ManyToOne {
     Order to Client
-}
-
-/**
- * One to many relationship.
- */
-relationship OneToMany {
-    Order{orderLine} to OrderLine
+    OrderLine to Order{orderLine}
 }
 
 paginate * with infinite-scroll
