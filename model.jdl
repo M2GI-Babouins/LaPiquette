@@ -8,7 +8,6 @@ application {
 
 }
 
-
 entity Product {
     id Long unique
     name String
