@@ -13,8 +13,14 @@ export class OrderDetailComponent implements OnInit {
   constructor(protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ order }) => {
+    /* this.activatedRoute.data.subscribe(({ order }) => {
       this.order = order;
+    });*/
+
+    this.activatedRoute.data.subscribe((order: IOrder) => {
+      if (!order.bill) {
+        this.order = order;
+      }
     });
   }
 

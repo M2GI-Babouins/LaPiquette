@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -72,6 +73,10 @@ export class OrderService {
       return [...ordersToAdd, ...orderCollection];
     }
     return orderCollection;
+  }
+
+  getCurrentOrder(): void {
+    console.log(this.resourceUrl);
   }
 
   protected convertDateFromClient(order: IOrder): IOrder {
