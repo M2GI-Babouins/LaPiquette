@@ -1,6 +1,7 @@
 application {
   config {
     baseName laPiquette
+    packageName com.im2ag.lapiquette
   }
   entities Product, Order, OrderLine, Client
   paginate * with pagination except OrderLine
@@ -22,20 +23,21 @@ entity Product {
     temperature Integer
     percentPromo Float max (1)
     stock Integer
-    urlImage String
+    image ImageBlob
 }
 
 entity Order {
     id Long unique
     totalPrice Float
     datePurchase LocalDate
-    bill Boolean
+    basket Boolean
 }
 
+@embedded
 entity OrderLine{
+    id Long unique
     quantity Integer
     unityPrice Float
-    totalPrice Float
 }
 
 entity Client{
@@ -49,7 +51,7 @@ entity Client{
 }
 
 relationship OneToOne {
-    OrderLine{product} to Product
+    OrderLine to Product
 }
 
 /**
@@ -57,13 +59,7 @@ relationship OneToOne {
  */
 relationship ManyToOne {
     Order to Client
-}
-
-/**
- * One to many relationship.
- */
-relationship OneToMany {
-    Order{orderLine} to OrderLine
+    OrderLine to Order
 }
 
 paginate * with infinite-scroll
