@@ -16,13 +16,70 @@
   >
     <fa-icon icon="bars"></fa-icon>
   </a>
-  <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
+  <div class="navbar-collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
           <span>
             <fa-icon icon="home"></fa-icon>
             <span jhiTranslate="global.menu.home">Home</span>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <input type="text" value="Chercher un vin" />
+        <a class="nav-link" routerLink="/product">
+          <span>
+            <fa-icon></fa-icon>
+            <span>Recherche</span>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/product">
+          <span>
+            <fa-icon></fa-icon>
+            <span>Vins Rouge</span>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/product">
+          <span>
+            <fa-icon></fa-icon>
+            <span>Vins Blanc</span>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/product">
+          <span>
+            <fa-icon></fa-icon>
+            <span>Vins Rosé</span>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/product">
+          <span>
+            <fa-icon></fa-icon>
+            <span>Vins Mousseux</span>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/">
+          <span>
+            <fa-icon icon="home"></fa-icon>
+            <span jhiTranslate="global.menu.home">Home</span>
+          </span>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/order">
+          <span>
+            <fa-icon></fa-icon>
+            <span>Panier</span>
           </span>
         </a>
       </li>
