@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-console */
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
@@ -25,6 +26,7 @@ export class ProductComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  productAdded = false;
 
   constructor(
     protected productService: ProductService,
@@ -75,8 +77,13 @@ export class ProductComponent implements OnInit {
   }
 
   public addToCart(product: IProduct): void {
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    console.log('Item added to cart : ' + product.name);
+    console.log('Product added to cart : ' + product.name);
+    this.productAdded = true;
+  }
+
+  public removeFromCart(product: IProduct): void {
+    console.log('Product removed from cart : ' + product.name);
+    this.productAdded = false;
   }
 
   protected sort(): string[] {
