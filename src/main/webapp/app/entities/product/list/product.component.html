@@ -89,10 +89,6 @@
           <td>{{ product.urlImage }}</td>
           <td class="text-right">
             <div class="btn-group">
-              <button type="submit" class="btn btn-add btn-sm" (click)="addToCart(product)">
-                <fa-icon icon="plus"></fa-icon>
-                <span class="d-none d-md-inline">Add to Cart</span>
-              </button>
               <button
                 type="submit"
                 [routerLink]="['/product', product.id, 'view']"

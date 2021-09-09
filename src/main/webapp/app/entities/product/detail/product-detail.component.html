@@ -75,15 +75,6 @@
       <button type="button" [routerLink]="['/product', product.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
-
-      <button *ngIf="!productAdded; else removeTemplate" type="button" (click)="addToCart(product)" class="btn btn-add">
-        <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add to Cart</span>
-      </button>
-      <ng-template #removeTemplate>
-        <button type="button" (click)="removeFromCart(product)" class="btn btn-add">
-          <fa-icon icon="sign-out-alt"></fa-icon>&nbsp;<span>Remove From Cart</span>
-        </button>
-      </ng-template>
     </div>
   </div>
 </div>
