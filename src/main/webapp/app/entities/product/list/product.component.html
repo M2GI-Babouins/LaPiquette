@@ -89,14 +89,9 @@
           <td>{{ product.urlImage }}</td>
           <td class="text-right">
             <div class="btn-group">
-              <button *ngIf="!productAdded; else removeTemplate" type="button" (click)="addToCart(product)" class="btn btn-add">
+              <button type="button" (click)="addToCart(product)" class="btn btn-add">
                 <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add to Cart</span>
               </button>
-              <ng-template #removeTemplate>
-                <button type="button" (click)="removeFromCart(product)" class="btn btn-add">
-                  <fa-icon icon="sign-out-alt"></fa-icon>&nbsp;<span>Remove From Cart</span>
-                </button>
-              </ng-template>
               <button
                 type="submit"
                 [routerLink]="['/product', product.id, 'view']"

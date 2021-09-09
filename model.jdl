@@ -9,6 +9,12 @@ application {
 
 }
 
+entity BasketLine {
+    quantity Integer
+}
+
+entity Basket {}
+
 entity Product {
     id Long unique
     name String
@@ -21,7 +27,6 @@ entity Product {
     recommandation String
     ageLimit Integer
     temperature Integer
-    percentPromo Float max (1)
     stock Integer
     urlImage String
 }
@@ -30,13 +35,11 @@ entity Order {
     id Long unique
     totalPrice Float
     datePurchase LocalDate
-    bill Boolean
 }
 
 entity OrderLine{
     quantity Integer
     unityPrice Float
-    totalPrice Float
 }
 
 entity Client{
@@ -51,6 +54,7 @@ entity Client{
 
 relationship OneToOne {
     OrderLine{product} to Product
+    BasketLine to Product
 }
 
 /**
@@ -59,6 +63,9 @@ relationship OneToOne {
 relationship ManyToOne {
     Order to Client
     OrderLine to Order{orderLine}
+    BasketLine to Basket
 }
+
+
 
 paginate * with infinite-scroll
