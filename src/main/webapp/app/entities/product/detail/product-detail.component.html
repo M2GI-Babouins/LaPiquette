@@ -1,89 +1,54 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="product">
-      <h2 data-cy="productDetailsHeading"><span jhiTranslate="laPiquetteApp.product.detail.title">Product</span></h2>
-
-      <hr />
-
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="laPiquetteApp.product.id">Id</span></dt>
-        <dd>
-          <span>{{ product.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.name">Name</span></dt>
-        <dd>
-          <span>{{ product.name }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.year">Year</span></dt>
-        <dd>
-          <span>{{ product.year }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.region">Region</span></dt>
-        <dd>
-          <span>{{ product.region }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.type">Type</span></dt>
-        <dd>
-          <span>{{ product.type }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.price">Price</span></dt>
-        <dd>
-          <span>{{ product.price }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.description">Description</span></dt>
-        <dd>
-          <span>{{ product.description }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.alcoholPer">Alcohol Per</span></dt>
-        <dd>
-          <span>{{ product.alcoholPer }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.recommandation">Recommandation</span></dt>
-        <dd>
-          <span>{{ product.recommandation }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.ageLimit">Age Limit</span></dt>
-        <dd>
-          <span>{{ product.ageLimit }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.temperature">Temperature</span></dt>
-        <dd>
-          <span>{{ product.temperature }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.percentPromo">Percent Promo</span></dt>
-        <dd>
-          <span>{{ product.percentPromo }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.stock">Stock</span></dt>
-        <dd>
-          <span>{{ product.stock }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.urlImage">Url Image</span></dt>
-        <dd>
-          <span>{{ product.urlImage }}</span>
-        </dd>
-      </dl>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
-
-      <button type="button" [routerLink]="['/product', product.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
-
-      <button *ngIf="!productAdded; else removeTemplate" type="button" (click)="addToCart(product)" class="btn btn-add">
-        <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add to Cart</span>
-      </button>
-      <ng-template #removeTemplate>
-        <button type="button" (click)="removeFromCart(product)" class="btn btn-add">
-          <fa-icon icon="sign-out-alt"></fa-icon>&nbsp;<span>Remove From Cart</span>
-        </button>
-      </ng-template>
+<div class="col-10 col-offset-1">
+  <h2>{{ product.name }}</h2>
+  <div class="col-6">
+    <img [src]="product.urlImage" class="img-fluid col-6" alt="gépal'image" />
+    <div class="col-6">
+      <div class="col-12">
+        <p>{{ product.description }}</p>
+      </div>
+      <table class="table table-striped">
+        <tr>
+          <th scope="row">Price</th>
+          <td>{{ product.price }} euros</td>
+        </tr>
+        <tr>
+          <th scope="row">Année :</th>
+          <td>{{ product.year }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Cepage/region :</th>
+          <td>{{ product.region }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Robe :</th>
+          <td>{{ product.type }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Alcool % :</th>
+          <td>{{ product.alcoholPer }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Accompagnement :</th>
+          <td>{{ product.recommandation }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Garde :</th>
+          <td>{{ product.ageLimit }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Temperature de service :</th>
+          <td>{{ product.temperature }}</td>
+        </tr>
+        <tr>
+          <th scope="row">En stock :</th>
+          <td>{{ product.stock }}</td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>
+
+<button *ngIf="!productAdded; else removeTemplate" (click)="addToCart(product)">Add to Cart</button>
+<ng-template #removeTemplate>
+  <button (click)="removeFromCart(product)">Remove from Cart</button>
+</ng-template>
