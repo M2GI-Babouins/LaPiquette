@@ -1,50 +1,50 @@
 <div class="col-10 col-offset-1">
   <h2>{{ product.name }}</h2>
   <div class="col-6">
-    <img [src]="product.urlImage" class="img-fluid col-6" alt="gépal'image" />
-    <div class="col-6">
-      <div class="col-12">
-        <p>{{ product.description }}</p>
-      </div>
-      <table class="table table-striped">
-        <tr>
-          <th scope="row">Price</th>
-          <td>{{ product.price }} euros</td>
-        </tr>
-        <tr>
-          <th scope="row">Année :</th>
-          <td>{{ product.year }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Cepage/region :</th>
-          <td>{{ product.region }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Robe :</th>
-          <td>{{ product.type }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Alcool % :</th>
-          <td>{{ product.alcoholPer }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Accompagnement :</th>
-          <td>{{ product.recommandation }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Garde :</th>
-          <td>{{ product.ageLimit }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Temperature de service :</th>
-          <td>{{ product.temperature }}</td>
-        </tr>
-        <tr>
-          <th scope="row">En stock :</th>
-          <td>{{ product.stock }}</td>
-        </tr>
-      </table>
+    <img [src]="product.urlImage" class="img-fluid" alt="gépal'image" />
+  </div>
+  <div class="col-6">
+    <div class="col-12">
+      <p>{{ product.description }}</p>
     </div>
+    <table class="table table-striped">
+      <tr>
+        <th scope="row">Price</th>
+        <td>{{ product.price }} euros</td>
+      </tr>
+      <tr>
+        <th scope="row">Année :</th>
+        <td>{{ product.year }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Cepage/region :</th>
+        <td>{{ product.region }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Robe :</th>
+        <td>{{ product.type }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Alcool % :</th>
+        <td>{{ product.alcoholPer }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Accompagnement :</th>
+        <td>{{ product.recommandation }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Garde :</th>
+        <td>{{ product.ageLimit }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Temperature de service :</th>
+        <td>{{ product.temperature }}</td>
+      </tr>
+      <tr>
+        <th scope="row">En stock :</th>
+        <td>{{ product.stock }}</td>
+      </tr>
+    </table>
   </div>
 </div>
 

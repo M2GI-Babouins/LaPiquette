@@ -24,7 +24,7 @@ import { Order } from 'app/entities/order/order.model';
 export class ProductComponent implements OnInit {
   products: any;
 
-  constructor() {}
+  constructor(protected productService: ProductService) {}
 
   ngOnInit() {
     this.products = [
@@ -39,6 +39,8 @@ export class ProductComponent implements OnInit {
       { id: 9, name: 'Frank', price: '42' },
       { id: 10, name: 'Bernard', price: '111111' },
     ];
+
+    this.products = this.productService.loadAll();
   }
 
   public addToCart(product: any) {
