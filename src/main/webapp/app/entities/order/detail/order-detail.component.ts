@@ -8,20 +8,20 @@ import { IOrder } from '../order.model';
   templateUrl: './order-detail.component.html',
 })
 export class OrderDetailComponent implements OnInit {
-  order: IOrder | null = null;
+  order: IOrder = { id: -1 };
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    /* this.activatedRoute.data.subscribe(({ order }) => {
+    this.activatedRoute.data.subscribe(({ order }) => {
       this.order = order;
-    });*/
-
-    this.activatedRoute.data.subscribe((order: IOrder) => {
-      if (!order.bill) {
-        this.order = order;
-      }
     });
+
+    /* this.activatedRoute.data.subscribe((order) => {
+      if (!order.bill) {
+        this.order.id = order.id;
+      }
+    });*/
   }
 
   previousState(): void {

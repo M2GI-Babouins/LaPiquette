@@ -49,7 +49,7 @@ export class OrderUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const order = this.createFromForm();
-    if (order.id !== undefined) {
+    if (order.id !== -1) {
       this.subscribeToSaveResponse(this.orderService.update(order));
     } else {
       this.subscribeToSaveResponse(this.orderService.create(order));
@@ -101,7 +101,7 @@ export class OrderUpdateComponent implements OnInit {
 
   protected createFromForm(): IOrder {
     return {
-      ...new Order(),
+      ...new Order(-1),
       id: this.editForm.get(['id'])!.value,
       totalPrice: this.editForm.get(['totalPrice'])!.value,
       datePurchase: this.editForm.get(['datePurchase'])!.value,
