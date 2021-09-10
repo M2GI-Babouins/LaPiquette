@@ -29,9 +29,9 @@ export class OrderLineComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderLines = [
-      { id: 1, quantity: 1, unityPrice: 2.9, order: { id: 2 }, product: { name: 'La Piquette' } },
-      { id: 2, quantity: 1, unityPrice: 8.9, order: { id: 2 }, product: { name: "L'autre" } },
-      { id: 3, quantity: 3, unityPrice: 29, order: { id: 2 }, product: { name: 'La Bon Vin' } },
+      { id: 1, quantity: 1, unityPrice: 2.9, order: { id: this.orderId }, product: { name: 'La Piquette' } },
+      { id: 2, quantity: 1, unityPrice: 8.9, order: { id: this.orderId }, product: { name: "L'autre" } },
+      { id: 3, quantity: 3, unityPrice: 29, order: { id: this.orderId }, product: { name: 'La Bon Vin' } },
     ];
     this.setTotalPrice();
     // this.orderLineService.findAll();
