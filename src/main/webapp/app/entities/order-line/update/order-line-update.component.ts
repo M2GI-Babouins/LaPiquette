@@ -93,7 +93,6 @@ export class OrderLineUpdateComponent implements OnInit {
       id: orderLine.id,
       quantity: orderLine.quantity,
       unityPrice: orderLine.unityPrice,
-      totalPrice: orderLine.totalPrice,
       product: orderLine.product,
       order: orderLine.order,
     });

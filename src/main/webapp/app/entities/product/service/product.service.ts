@@ -20,7 +20,7 @@ export class ProductService {
     return this.http.get<IProduct[]>(`${this.resourceUrl}`, { observe: 'response' });
   }
 
-  //#region Générés par Jhipster
+  // #region Générés par Jhipster
   create(product: IProduct): Observable<EntityResponseType> {
     return this.http.post<IProduct>(this.resourceUrl, product, { observe: 'response' });
   }
@@ -62,5 +62,5 @@ export class ProductService {
     }
     return productCollection;
   }
-  //#endregion
+  // #endregion
 }
