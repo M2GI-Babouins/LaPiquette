@@ -9,10 +9,10 @@
         <td>{{ orderLine.quantity }}</td>
         <td>{{ orderLine.totalPrice }}</td>
         <td>
-          <button (click)="addOne(orderLine.id)"><fa-icon icon="plus"></fa-icon>Plus</button>
-        </td>
-        <td>
-          <button (click)="subOne(orderLine.id)"><fa-icon icon="minus"></fa-icon>Moins</button>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button (click)="addOne(orderLine.id)"><fa-icon icon="plus"></fa-icon></button>
+            <button (click)="subOne(orderLine.id)"><b>-</b></button>
+          </div>
         </td>
       </tr>
     </table>

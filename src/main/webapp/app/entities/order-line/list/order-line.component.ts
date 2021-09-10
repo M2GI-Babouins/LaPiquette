@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -27,11 +29,11 @@ export class OrderLineComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderLines = [
-      { quantity: 1, unityPrice: 2.9, totalPrice: 2.9, order: { id: 2 } },
-      { quantity: 1, unityPrice: 8.9, totalPrice: 2.9, order: { id: 2 } },
-      { quantity: 3, unityPrice: 29, totalPrice: 2.9, order: { id: 2 } },
+      { quantity: 1, unityPrice: 2.9, order: { id: 2 } },
+      { quantity: 1, unityPrice: 8.9, order: { id: 2 } },
+      { quantity: 3, unityPrice: 29, order: { id: 2 } },
     ];
-
+    this.setTotalPrice();
     // this.orderLineService.findAll();
   }
 
@@ -45,7 +47,7 @@ export class OrderLineComponent implements OnInit {
 
   addOne(idline: number | undefined): void {
     const currentLine = this.orderLines.find(orderLine => orderLine.id === idline);
-    if (currentLine !== undefined) {
+    if (currentLine?.quantity !== undefined) {
       // currentLine.quantity = currentLine.quantity+1;
     }
   }
