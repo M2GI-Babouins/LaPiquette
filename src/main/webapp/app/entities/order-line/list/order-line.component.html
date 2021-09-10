@@ -1,12 +1,19 @@
-<div class="col-12 col-offset-1">
+<div class="col-10 col-offset-1">
   <h2>Produits Sélectionnés :</h2>
   <div class="col-9">
     <div class="col-12"></div>
     <table class="table table-striped">
       <tr *ngFor="let orderLine of orderLines">
         <th scope="row">orderLine</th>
-        <td>{{ orderLine.order }}</td>
         <td>{{ orderLine.unityPrice }}</td>
+        <td>{{ orderLine.quantity }}</td>
+        <td>{{ orderLine.totalPrice }}</td>
+        <td>
+          <button (click)="addOne(orderLine.id)"><fa-icon icon="plus"></fa-icon>Plus</button>
+        </td>
+        <td>
+          <button (click)="subOne(orderLine.id)"><fa-icon icon="minus"></fa-icon>Moins</button>
+        </td>
       </tr>
     </table>
   </div>

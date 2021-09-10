@@ -2,6 +2,7 @@
   <div class="col-8">
     <div *ngIf="order">
       <h2 data-cy="orderDetailsHeading"><span jhiTranslate="laPiquetteApp.order.detail.title">Order</span></h2>
+      <h4>Cout Total : {{ order.totalPrice }} euros</h4>
 
       <hr />
 
@@ -9,43 +10,19 @@
 
       <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="laPiquetteApp.order.id">Id</span></dt>
-        <dd>
-          <span>{{ order.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.order.totalPrice">Total Price</span></dt>
-        <dd>
-          <span>{{ order.totalPrice }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.order.datePurchase">Date Purchase</span></dt>
-        <dd>
-          <span>{{ order.datePurchase | formatMediumDate }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.order.bill">Bill</span></dt>
-        <dd>
-          <span>{{ order.bill }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.order.client">Client</span></dt>
-        <dd>
-          <div *ngIf="order.client">
-            <a [routerLink]="['/client', order.client?.id, 'view']">{{ order.client?.id }}</a>
-          </div>
-        </dd>
-        <dd>
-          <div>
-            <jhi-order-line [orderId]="order.id"></jhi-order-line>
-          </div>
-        </dd>
-      </dl>
+      <div>
+        <jhi-order-line [orderId]="order.id"></jhi-order-line>
+      </div>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
       </button>
 
       <button type="button" [routerLink]="['/order', order.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Modifier</span>
       </button>
+
+      <button type="button" class="btn btn-succes"><fa-icon icon="check"></fa-icon>&nbsp;<span>Add</span></button>
     </div>
   </div>
 </div>

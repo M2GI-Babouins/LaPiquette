@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IOrderLine } from '../order-line.model';
@@ -16,36 +16,44 @@ import { IOrder } from 'app/entities/order/order.model';
   selector: 'jhi-order-line',
   templateUrl: './order-line.component.html',
 })
-export class OrderLineComponent implements OnChanges {
+export class OrderLineComponent implements OnInit {
   @Input() orderId: number = -1;
 
-  orderLines: IOrderLine[] = [
-    { quantity: 1, unityPrice: 2.9, totalPrice: 2.9, order: { id: 2 } },
-    { quantity: 1, unityPrice: 4.5, totalPrice: 2.9, order: { id: 1 } },
-    { quantity: 1, unityPrice: 14, totalPrice: 2.9, order: { id: 1 } },
-    { quantity: 1, unityPrice: 9.9, totalPrice: 2.9, order: { id: 3 } },
-    { quantity: 1, unityPrice: 8.9, totalPrice: 2.9, order: { id: 2 } },
-    { quantity: 3, unityPrice: 29, totalPrice: 2.9, order: { id: 2 } },
-  ];
-
-  id?: number;
-  quantity?: number | null;
-  unityPrice?: number | null;
-  totalPrice?: number | null;
-  product?: IProduct | null;
-  order?: IOrder | null;
+  orderLines: IOrderLine[] = [];
 
   isLoading = false;
 
   constructor(protected orderLineService: OrderLineService, protected modalService: NgbModal, protected parseLinks: ParseLinks) {}
 
-  ngOnChanges(): void {
-    this.keepCurrentOrder(this.orderId);
+  ngOnInit(): void {
+    this.orderLines = [
+      { quantity: 1, unityPrice: 2.9, totalPrice: 2.9, order: { id: 2 } },
+      { quantity: 1, unityPrice: 8.9, totalPrice: 2.9, order: { id: 2 } },
+      { quantity: 3, unityPrice: 29, totalPrice: 2.9, order: { id: 2 } },
+    ];
+
+    // this.orderLineService.findAll();
   }
 
-  keepCurrentOrder(orderId: number): void {
-    console.log('order id :');
-    console.log(orderId);
-    this.orderLines = this.orderLines.filter(orderLine => orderLine.order?.id === orderId);
+  setTotalPrice() {
+    this.orderLines.map(orderline => {
+      if (orderline.quantity && orderline.unityPrice) {
+        orderline.totalPrice = orderline.quantity + orderline.unityPrice;
+      }
+    });
+  }
+
+  addOne(idline: number | undefined): void {
+    const currentLine = this.orderLines.find(orderLine => orderLine.id === idline);
+    if (currentLine !== undefined) {
+      // currentLine.quantity = currentLine.quantity+1;
+    }
+  }
+
+  subOne(idline: number | undefined): void {
+    const currentLine = this.orderLines.find(orderLine => orderLine.id === idline);
+    if (currentLine !== undefined) {
+      // currentLine.quantity = currentLine.quantity+1;
+    }
   }
 }
