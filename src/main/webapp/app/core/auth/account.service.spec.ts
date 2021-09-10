@@ -1,10 +1,12 @@
 jest.mock('@angular/router');
+jest.mock('@ngx-translate/core');
 jest.mock('app/core/auth/state-storage.service');
 
 import { Router } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { NgxWebstorageModule } from 'ngx-webstorage';
+import { TranslateService } from '@ngx-translate/core';
+import { NgxWebstorageModule, SessionStorageService } from 'ngx-webstorage';
 
 import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
@@ -33,11 +35,13 @@ describe('Service Tests', () => {
     let httpMock: HttpTestingController;
     let mockStorageService: StateStorageService;
     let mockRouter: Router;
+    let mockTranslateService: TranslateService;
+    let sessionStorageService: SessionStorageService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-        providers: [StateStorageService, Router],
+        providers: [TranslateService, StateStorageService, Router],
       });
 
       service = TestBed.inject(AccountService);
@@ -45,6 +49,8 @@ describe('Service Tests', () => {
       httpMock = TestBed.inject(HttpTestingController);
       mockStorageService = TestBed.inject(StateStorageService);
       mockRouter = TestBed.inject(Router);
+      mockTranslateService = TestBed.inject(TranslateService);
+      sessionStorageService = TestBed.inject(SessionStorageService);
     });
 
     afterEach(() => {
@@ -114,6 +120,32 @@ describe('Service Tests', () => {
 
         // Then there is a new request
         httpMock.expectOne({ method: 'GET' });
+      });
+
+      describe('should change the language on authentication if necessary', () => {
+        it('should change language if user has not changed language manually', () => {
+          // GIVEN
+          sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? undefined : 'otherSessionStorageValue'));
+
+          // WHEN
+          service.identity().subscribe();
+          httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+          // THEN
+          expect(mockTranslateService.use).toHaveBeenCalledWith('accountLang');
+        });
+
+        it('should not change language if user has changed language manually', () => {
+          // GIVEN
+          sessionStorageService.retrieve = jest.fn(key => (key === 'locale' ? 'sessionLang' : undefined));
+
+          // WHEN
+          service.identity().subscribe();
+          httpMock.expectOne({ method: 'GET' }).flush({ ...accountWithAuthorities([]), langKey: 'accountLang' });
+
+          // THEN
+          expect(mockTranslateService.use).not.toHaveBeenCalled();
+        });
       });
 
       describe('navigateToStoredUrl', () => {
