@@ -3,11 +3,11 @@
   <div class="col-10">
     <div class="col-12"></div>
     <table class="table table-striped">
-      <th>Nom du produit</th>
-      <td>Quantité</td>
-      <td>Prix unitaire</td>
-      <td>Prix Total</td>
-      <td>Actions</td>
+      <th><em>Nom du produit</em></th>
+      <td><em>Quantité</em></td>
+      <td><em>Prix unitaire</em></td>
+      <td><em>Prix Total</em></td>
+      <td><em>Actions</em></td>
       <tr *ngFor="let orderLine of orderLines">
         <th scope="row">{{ orderLine.product?.name }}</th>
         <td>{{ orderLine.quantity }}</td>
@@ -16,7 +16,10 @@
         <td>
           <div class="btn-group" role="group" aria-label="Basic example">
             <button (click)="addOne(orderLine.id)"><b>+</b></button>
-            <button (click)="subOne(orderLine.id)"><b>-</b></button>
+            <button *ngIf="orderLine.quantity !== 1; else deleteTemplate" (click)="subOne(orderLine.id)"><b>-</b></button>
+            <ng-template #deleteTemplate>
+              <button (click)="deleteOrderLine(orderLine.id)"><b>x</b></button>
+            </ng-template>
           </div>
         </td>
       </tr>

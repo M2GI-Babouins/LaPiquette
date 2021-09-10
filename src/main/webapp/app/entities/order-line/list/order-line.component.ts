@@ -61,4 +61,8 @@ export class OrderLineComponent implements OnInit {
     }
     this.setTotalPrice();
   }
+
+  deleteOrderLine(idline: number | undefined): void {
+    this.orderLines = this.orderLines.filter(orderLine => orderLine.id !== idline);
+  }
 }

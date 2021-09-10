@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="order">
-      <h2 data-cy="orderDetailsHeading"><span jhiTranslate="laPiquetteApp.order.detail.title">Order</span></h2>
+      <h2 data-cy="orderDetailsHeading"><span>Panier</span></h2>
       <h4>Cout Total : {{ order.totalPrice }} euros</h4>
 
       <hr />
@@ -18,11 +18,9 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
       </button>
 
-      <button type="button" [routerLink]="['/order', order.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Modifier</span>
-      </button>
+      <button type="button" class="btn btn-success"><fa-icon icon="check"></fa-icon><span>Acheter</span></button>
 
-      <button type="button" class="btn btn-success"><fa-icon icon="check"></fa-icon>&nbsp;<span>Acheter</span></button>
+      <button type="button" class="btn btn-danger"><fa-icon icon="cross"></fa-icon><span>Supprimer</span></button>
     </div>
   </div>
 </div>
