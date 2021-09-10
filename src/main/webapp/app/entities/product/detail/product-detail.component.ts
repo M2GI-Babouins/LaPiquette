@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 import { IProduct } from '../product.model';
 import { ProductService } from '../service/product.service';
@@ -14,7 +15,7 @@ import { ProductService } from '../service/product.service';
   templateUrl: './product-detail.component.html',
 })
 export class ProductDetailComponent implements OnInit {
-  product = {
+  product: IProduct = {
     id: 1,
     name: 'Bleu',
     price: 25000,
@@ -27,12 +28,12 @@ export class ProductDetailComponent implements OnInit {
     ageLimit: 10,
     temperature: 6,
     stock: 2,
-    urlImage: '../../../content/images/wine-logo.jpg',
+    image: '../../../content/images/wine-logo.jpg',
   };
 
   productAdded = false;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils) {}
 
   ngOnInit(): void {
     /*this.activatedRoute.data.subscribe(({ product }) => {
@@ -48,5 +49,17 @@ export class ProductDetailComponent implements OnInit {
   public removeFromCart(product?: IProduct): void {
     console.log('Product removed from cart : ' + product?.name);
     this.productAdded = false;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
+  }
+
+  previousState(): void {
+    window.history.back();
   }
 }
