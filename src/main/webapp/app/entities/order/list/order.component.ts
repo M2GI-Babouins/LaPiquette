@@ -58,7 +58,7 @@ export class OrderComponent implements OnInit {
   }
 
   trackId(index: number, item: IOrder): number {
-    return item.id!;
+    return item.id;
   }
 
   delete(order: IOrder): void {

@@ -21,3 +21,12 @@ Main page styles
     background-size: contain;
   }
 }
+
+.logo-img {
+  height: 100px;
+  width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url('../../content/images/wine-logo.jpg') no-repeat center center;
+  background-size: contain;
+}

@@ -8,7 +8,7 @@ import { IOrder } from '../order.model';
   templateUrl: './order-detail.component.html',
 })
 export class OrderDetailComponent implements OnInit {
-  order: IOrder | null = null;
+  order: IOrder = { id: -1 };
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 

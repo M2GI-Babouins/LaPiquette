@@ -3,7 +3,7 @@ import { IClient } from 'app/entities/client/client.model';
 import { IOrderLine } from 'app/entities/order-line/order-line.model';
 
 export interface IOrder {
-  id?: number;
+  id: number;
   totalPrice?: number | null;
   datePurchase?: dayjs.Dayjs | null;
   basket?: boolean | null;
@@ -13,7 +13,7 @@ export interface IOrder {
 
 export class Order implements IOrder {
   constructor(
-    public id?: number,
+    public id: number = -1,
     public totalPrice?: number | null,
     public datePurchase?: dayjs.Dayjs | null,
     public basket?: boolean | null,

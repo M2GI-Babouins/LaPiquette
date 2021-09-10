@@ -25,6 +25,6 @@ export class OrderRoutingResolveService implements Resolve<IOrder> {
         })
       );
     }
-    return of(new Order());
+    return of(new Order(-1));
   }
 }
