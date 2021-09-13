@@ -1,81 +1,67 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="product">
-      <h2 data-cy="productDetailsHeading"><span jhiTranslate="laPiquetteApp.product.detail.title">Product</span></h2>
-
-      <hr />
-
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="laPiquetteApp.product.id">Id</span></dt>
-        <dd>
-          <span>{{ product.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.name">Name</span></dt>
-        <dd>
-          <span>{{ product.name }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.year">Year</span></dt>
-        <dd>
-          <span>{{ product.year }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.region">Region</span></dt>
-        <dd>
-          <span>{{ product.region }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.type">Type</span></dt>
-        <dd>
-          <span>{{ product.type }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.price">Price</span></dt>
-        <dd>
-          <span>{{ product.price }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.description">Description</span></dt>
-        <dd>
-          <span>{{ product.description }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.alcoholPer">Alcohol Per</span></dt>
-        <dd>
-          <span>{{ product.alcoholPer }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.recommandation">Recommandation</span></dt>
-        <dd>
-          <span>{{ product.recommandation }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.ageLimit">Age Limit</span></dt>
-        <dd>
-          <span>{{ product.ageLimit }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.temperature">Temperature</span></dt>
-        <dd>
-          <span>{{ product.temperature }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.stock">Stock</span></dt>
-        <dd>
-          <span>{{ product.stock }}</span>
-        </dd>
-        <dt><span jhiTranslate="laPiquetteApp.product.image">Image</span></dt>
-        <dd>
-          <div *ngIf="product.image">
-            <a (click)="openFile(product.image, product.imageContentType)">
-              <img [src]="'data:' + product.imageContentType + ';base64,' + product.image" style="max-width: 100%" alt="product image" />
-            </a>
-            {{ product.imageContentType }}, {{ byteSize(product.image) }}
-          </div>
-        </dd>
-      </dl>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+<div class="col-12 row justify-content-center" *ngIf="product">
+  <div class="col-12">
+    <!--Bouton retour-->
+    <div class="col-3">
+      <button type="submit" (click)="previousState()" class="btn btn-outline-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
-
-      <button type="button" [routerLink]="['/product', product.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
+      <br />
     </div>
+  </div>
+  <!--Fiche Produit-->
+  <div class="col-10 row">
+    <div class="col-6">
+      <img src="" class="img-fluid" alt="JPG" />
+    </div>
+    <div class="col-6 rounded" style="background-color: #943e3e45">
+      <h4>{{ product.name }}</h4>
+      <p>
+        <span class="mr-1"
+          ><strong>{{ product.price }} € - {{ product.stock }} restant(s)</strong></span
+        >
+      </p>
+      <p>{{ product.description }}</p>
+      <div class="table-responsive">
+        <table class="table table-sm table-borderless mb-0">
+          <tbody>
+            <tr>
+              <th class="" scope="row"><strong>Type</strong></th>
+              <td>{{ product.type }}</td>
+            </tr>
+            <tr>
+              <th class="" scope="row"><strong>Region</strong></th>
+              <td>{{ product.region }}</td>
+            </tr>
+            <tr>
+              <th class="" scope="row"><strong>Accompagne bien</strong></th>
+              <td>{{ product.recommandation }}</td>
+            </tr>
+            <tr>
+              <th class="" scope="row"><strong>Temps de Garde</strong></th>
+              <td>{{ product.ageLimit }} ans</td>
+            </tr>
+            <tr>
+              <th class="" scope="row"><strong>Teneur en alcool</strong></th>
+              <td>{{ product.alcoholPer }} %</td>
+            </tr>
+          </tbody>
+        </table>
+        <!--Validation Commande-->
+        <div class="row col-12">
+          <div class="col-8">
+            <button class="btn btn-outline-success" (click)="addToCart(product)">Ajouter au panier</button>
+            <input class="quantity" min="0" max="{{ product.stock }}" name="quantity" [value]="cmd" type="number" />
+          </div>
+          <div class="col-4">
+            <button class="btn btn-" (click)="removeFromCart(product)">Retirer du Panier</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-2" id="Encart panier" *ngFor="let produit of panierLocal">
+    <!--TODO: Ajouter encart panier actuel-->
+    <p class="col-12">{{ produit.name }}</p>
+    <p class="col-12">{{ produit.number }}</p>
   </div>
 </div>

@@ -40,7 +40,7 @@ export class ProductComponent implements OnInit {
       { id: 10, name: 'Bernard', price: '111111' },
     ];
 
-    this.products = this.productService.loadAll();
+    //this.products = this.productService.loadAll();
   }
 
   public addToCart(product: any) {

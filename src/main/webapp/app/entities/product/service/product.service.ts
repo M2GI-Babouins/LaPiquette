@@ -16,6 +16,32 @@ export class ProductService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
+  ajouterPanier(produit: IProduct, quantity: number): void {
+    let panier = JSON.parse(localStorage.getItem('panier')!);
+    if (panier == null) {
+      panier = [];
+    }
+    const newOrderLine = {
+      name: produit.name,
+      product: JSON.stringify(produit),
+      number: quantity,
+    };
+    panier.push(newOrderLine);
+    localStorage.setItem('panier', JSON.stringify(panier));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  getPanier() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return JSON.parse(localStorage.getItem('panier')!);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  removePanier() {
+    const panier: never[] = [];
+    localStorage.setItem('panier', JSON.stringify(panier));
+  }
+
   loadAll(): Observable<EntityArrayResponseType> {
     return this.http.get<IProduct[]>(`${this.resourceUrl}`, { observe: 'response' });
   }

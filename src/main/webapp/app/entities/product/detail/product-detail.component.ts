@@ -1,8 +1,3 @@
-/* eslint-disable spaced-comment */
-/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataUtils } from 'app/core/util/data-util.service';
@@ -15,6 +10,9 @@ import { ProductService } from '../service/product.service';
   templateUrl: './product-detail.component.html',
 })
 export class ProductDetailComponent implements OnInit {
+  //
+  cmd = 1;
+  //initialisation sans back end
   product: IProduct = {
     id: 1,
     name: 'Bleu',
@@ -22,33 +20,39 @@ export class ProductDetailComponent implements OnInit {
     year: 25,
     region: 'Poitou-Charante',
     type: 'Rouge',
-    description: 'Il pue',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, sapiente illo. Sit error voluptas repellat rerum quidem, soluta enim perferendis voluptates laboriosam. Distinctio, officia quis dolore quos sapiente tempore alias',
     alcoholPer: 50,
     recommandation: 'Poulet',
     ageLimit: 10,
     temperature: 6,
     stock: 2,
-    image: '../../../content/images/wine-logo.jpg',
+    image: 'https://static.wamiz.com/images/upload/17127142_2244568545769182_7436378995601440768_n(1).jpg',
   };
+
+  panierLocal: any = [];
 
   productAdded = false;
 
-  constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils, protected productService: ProductService) {}
 
   ngOnInit(): void {
-    /*this.activatedRoute.data.subscribe(({ product }) => {
+    this.activatedRoute.data.subscribe(({ product }) => {
       this.product = product;
-    });*/
+    });
+
+    this.panierLocal = this.productService.getPanier();
   }
 
-  public addToCart(product?: IProduct): void {
-    console.log('Product added to cart : ' + product?.name);
+  public addToCart(product: IProduct): void {
     this.productAdded = true;
+    this.productService.ajouterPanier(product, this.cmd);
   }
 
-  public removeFromCart(product?: IProduct): void {
-    console.log('Product removed from cart : ' + product?.name);
+  public removeFromCart(product: IProduct): void {
+    //TODO:
     this.productAdded = false;
+    this.productService.removePanier();
   }
 
   byteSize(base64String: string): string {
