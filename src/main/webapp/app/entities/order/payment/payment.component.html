@@ -1,0 +1,11 @@
+<div>
+  <angular-rave
+    [customer]="{ email: 'user@example.com', phonenumber: '0809808800900' }"
+    [amount]="500000"
+    [customizations]="{ title: 'Bill Payment' }"
+    [tx_ref]="'USR1295950'"
+    (callback)="paymentSuccess($event)"
+    (close)="paymentFailure()"
+    (init)="paymentInit()"
+  ></angular-rave>
+</div>

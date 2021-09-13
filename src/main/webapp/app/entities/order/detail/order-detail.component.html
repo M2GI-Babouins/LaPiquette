@@ -46,9 +46,15 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
       </button>
 
-      <button type="button" class="btn btn-success"><fa-icon icon="check"></fa-icon><span>Acheter</span></button>
+      <button type="button" (click)="openPayment = true" class="btn btn-success">
+        <fa-icon icon="check"></fa-icon><span>Acheter</span>
+      </button>
 
       <button type="button" class="btn btn-danger"><fa-icon icon="cross"></fa-icon><span>Supprimer</span></button>
     </div>
   </div>
+</div>
+
+<div *ngIf="showPayment()">
+  <jhi-payment></jhi-payment>
 </div>

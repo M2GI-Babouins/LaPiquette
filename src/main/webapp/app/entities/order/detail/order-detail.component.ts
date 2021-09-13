@@ -9,6 +9,7 @@ import { IOrder } from '../order.model';
 })
 export class OrderDetailComponent implements OnInit {
   order: IOrder = { id: -1 };
+  openPayment = false;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
@@ -48,5 +49,13 @@ export class OrderDetailComponent implements OnInit {
 
   deleteOrderLine(idline: number | undefined): void {
     this.order.orderLines = this.order.orderLines?.filter(orderLine => orderLine.id !== idline);
+  }
+
+  showPayment(): boolean {
+    if (this.openPayment) {
+      this.openPayment = false;
+      return true;
+    }
+    return false;
   }
 }
