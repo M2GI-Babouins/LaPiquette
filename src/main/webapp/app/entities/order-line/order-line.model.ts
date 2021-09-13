@@ -7,6 +7,7 @@ export interface IOrderLine {
   unityPrice?: number | null;
   product?: IProduct | null;
   order?: IOrder | null;
+  totalPrice?: number;
 }
 
 export class OrderLine implements IOrderLine {

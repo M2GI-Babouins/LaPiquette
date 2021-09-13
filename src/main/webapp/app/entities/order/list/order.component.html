@@ -3,7 +3,7 @@
     <span jhiTranslate="laPiquetteApp.order.home.title">Orders</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info mr-2">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="laPiquetteApp.order.home.refreshListLabel">Refresh List</span>
       </button>
@@ -31,7 +31,7 @@
   <div class="table-responsive" id="entities" *ngIf="orders && orders.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="laPiquetteApp.order.id">Id</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="totalPrice">
             <span jhiTranslate="laPiquetteApp.order.totalPrice">Total Price</span> <fa-icon icon="sort"></fa-icon>
@@ -97,7 +97,6 @@
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
       ></ngb-pagination>
     </div>
   </div>

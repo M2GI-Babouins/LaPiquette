@@ -31,7 +31,7 @@ export class OrderComponent implements OnInit {
     protected modalService: NgbModal
   ) {}
 
-  loadPage(page?: number, dontNavigate?: boolean): void {
+  /* loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
 
@@ -51,10 +51,20 @@ export class OrderComponent implements OnInit {
           this.onError();
         }
       );
-  }
+  }*/
 
   ngOnInit(): void {
-    this.handleNavigation();
+    // this.handleNavigation();
+    const orderline = [
+      { id: 1, quantity: 1, unityPrice: 2.9, product: { name: 'La Piquette' } },
+      { id: 2, quantity: 1, unityPrice: 8.9, product: { name: "L'autre" } },
+      { id: 3, quantity: 3, unityPrice: 29, product: { name: 'La Bon Vin' } },
+    ];
+
+    this.orders = [
+      { id: 1, totalPrice: 27 },
+      { id: 2, totalPrice: 27, orderLines: orderline },
+    ];
   }
 
   trackId(index: number, item: IOrder): number {
@@ -67,7 +77,7 @@ export class OrderComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
-        this.loadPage();
+        // this.loadPage();
       }
     });
   }
@@ -90,7 +100,7 @@ export class OrderComponent implements OnInit {
       if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
         this.predicate = predicate;
         this.ascending = ascending;
-        this.loadPage(pageNumber, true);
+        // this.loadPage(pageNumber, true);
       }
     });
   }

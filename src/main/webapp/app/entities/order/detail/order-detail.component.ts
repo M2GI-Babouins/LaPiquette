@@ -9,6 +9,7 @@ import { IOrder } from '../order.model';
 })
 export class OrderDetailComponent implements OnInit {
   order: IOrder = { id: -1 };
+  openPayment = false;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
@@ -20,5 +21,41 @@ export class OrderDetailComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  setTotalPrice(): void {
+    this.order.orderLines?.map(orderline => {
+      if (orderline.quantity && orderline.unityPrice) {
+        orderline.totalPrice = orderline.quantity * orderline.unityPrice;
+      }
+    });
+  }
+
+  addOne(idline: number | undefined): void {
+    const currentLine = this.order.orderLines?.find(orderLine => orderLine.id === idline);
+    if (currentLine?.quantity !== undefined) {
+      currentLine.quantity ? currentLine.quantity + 1 : 0;
+    }
+    this.setTotalPrice();
+  }
+
+  subOne(idline: number | undefined): void {
+    const currentLine = this.order.orderLines?.find(orderLine => orderLine.id === idline);
+    if (currentLine?.quantity !== undefined) {
+      currentLine.quantity ? currentLine.quantity - 1 : 0;
+    }
+    this.setTotalPrice();
+  }
+
+  deleteOrderLine(idline: number | undefined): void {
+    this.order.orderLines = this.order.orderLines?.filter(orderLine => orderLine.id !== idline);
+  }
+
+  showPayment(): boolean {
+    if (this.openPayment) {
+      this.openPayment = false;
+      return true;
+    }
+    return false;
   }
 }
