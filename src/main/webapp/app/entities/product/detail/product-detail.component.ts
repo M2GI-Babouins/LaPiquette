@@ -15,30 +15,16 @@ import { ProductService } from '../service/product.service';
   templateUrl: './product-detail.component.html',
 })
 export class ProductDetailComponent implements OnInit {
-  product: IProduct = {
-    id: 1,
-    name: 'Bleu',
-    price: 25000,
-    year: 25,
-    region: 'Poitou-Charante',
-    type: 'Rouge',
-    description: 'Il pue',
-    alcoholPer: 50,
-    recommandation: 'Poulet',
-    ageLimit: 10,
-    temperature: 6,
-    stock: 2,
-    image: '../../../content/images/wine-logo.jpg',
-  };
+  product: IProduct | null = null;
 
   productAdded = false;
 
   constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils) {}
 
   ngOnInit(): void {
-    /*this.activatedRoute.data.subscribe(({ product }) => {
+    this.activatedRoute.data.subscribe(({ product }) => {
       this.product = product;
-    });*/
+    });
   }
 
   public addToCart(product?: IProduct): void {
