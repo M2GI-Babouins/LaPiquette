@@ -1,25 +1,4 @@
 <div>
-  <h2 id="page-heading" data-cy="ProductHeading">
-    <span jhiTranslate="laPiquetteApp.product.home.title">Products</span>
-
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="laPiquetteApp.product.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-product"
-        [routerLink]="['/product/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="laPiquetteApp.product.home.createLabel"> Create a new Product </span>
-      </button>
-    </div>
-  </h2>
-
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
@@ -28,63 +7,55 @@
     <span jhiTranslate="laPiquetteApp.product.home.notFound">No products found</span>
   </div>
 
+  <div class="product-sidenav">
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Clients</a>
+    <a href="#">Contact</a>
+  </div>
+
   <div class="table-responsive" id="entities" *ngIf="products && products.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
-          <th scope="col" jhiSortBy="name"><span jhiTranslate="laPiquetteApp.product.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="year"><span jhiTranslate="laPiquetteApp.product.year">Year</span> <fa-icon icon="sort"></fa-icon></th>
+    <div class="product-wrapper">
+      <div class="product-box" *ngFor="let product of products; trackBy: trackId">
+        <div class="product product-list-title">
+          <div
+            style="
+              position: relative;
+              min-height: 5em;
+              min-width: 6em;
+              max-width: 6em;
+              bottom: 1px;
+              right: 2px;
+              color: black;
+              background-color: aquamarine;
+            "
+          >
+            <img [src]="product.image" alt="logo" />
+          </div>
 
-          <th scope="col" jhiSortBy="type"><span jhiTranslate="laPiquetteApp.product.type">Type</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="price">
-            <span jhiTranslate="laPiquetteApp.product.price">Price</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="urlImage">
-            <span jhiTranslate="laPiquetteApp.product.image">Image</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let product of products; trackBy: trackId" data-cy="entityTable">
-          <td>{{ product.name }}</td>
-          <td>{{ product.year }}</td>
-          <td>{{ product.type }}</td>
-          <td>{{ product.price }}</td>
-          <td><img [src]="product.image" alt="logo" /></td>
-          <!-- <img src={{ product.image }} alt="logo"> -->
+          <p style="float: right; bottom: 1px">{{ product.name }}</p>
+        </div>
 
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/product', product.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
+        <div class="product product-list-info" style="clear: left">
+          <p style="font-size: smaller; text-align: center">{{ product.year }} - {{ product.type }}</p>
+        </div>
 
-              <button
-                type="submit"
-                [routerLink]="['/product', product.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
+        <div class="product product-list-interact">
+          <p>{{ product.price }} €</p>
 
-              <button type="submit" (click)="delete(product)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <button type="submit" [routerLink]="['/product', product.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+            <fa-icon icon="eye"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+          </button>
+
+          <button type="submit" class="btn btn-info btn-sm" data-cy="entityBasketButton">
+            <fa-icon icon="eye"></fa-icon>
+            <span class="d-none d-md-inline">Acheter</span>
+          </button>
+          <div style="clear: left"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div *ngIf="products && products.length > 0">
