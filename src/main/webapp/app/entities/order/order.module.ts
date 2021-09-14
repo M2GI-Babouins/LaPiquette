@@ -9,7 +9,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { AngularRaveModule } from 'angular-rave';
 
 @NgModule({
-  imports: [SharedModule, OrderRoutingModule, AngularRaveModule.forRoot('FLWPUBK-XXXXXXXXXXXXXXXXXXX')],
+  imports: [SharedModule, OrderRoutingModule, AngularRaveModule.forRoot('FLWPUBK-7bde30b96a7fa718186142b04a6368b7-X')],
   declarations: [OrderComponent, OrderDetailComponent, OrderUpdateComponent, OrderDeleteDialogComponent, PaymentComponent],
   entryComponents: [OrderDeleteDialogComponent],
 })

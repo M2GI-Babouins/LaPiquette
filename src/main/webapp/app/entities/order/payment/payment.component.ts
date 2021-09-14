@@ -1,6 +1,9 @@
+import { IOrder } from './../order.model';
 import { OrderService } from './../service/order.service';
 import { Component, OnInit } from '@angular/core';
 import { RavePaymentData } from 'angular-rave';
+import { ActivatedRoute } from '@angular/router';
+import { RaveOptions } from 'angular-rave';
 
 @Component({
   selector: 'jhi-payment',
@@ -8,15 +11,25 @@ import { RavePaymentData } from 'angular-rave';
   styleUrls: ['./payment.component.scss'],
 })
 export class PaymentComponent implements OnInit {
-  constructor(private orderService: OrderService) {}
+  order: IOrder = { id: -1, totalPrice: 0.001 };
+  paymentOptions: RaveOptions = {
+    customer: { name: 'Default', email: 'Default@mail.fr', phonenumber: '0600000000' },
+    amount: 0.01,
+    tx_ref: 'id_here',
+    customizations: { title: 'Paiement du panier' },
+  };
+
+  constructor(private orderService: OrderService, protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    // eslint-disable-next-line no-console
-    console.log('OK');
+    this.activatedRoute.data.subscribe(({ order }) => {
+      this.order = order;
+    });
   }
 
   paymentInit(): void {
-    // Handle payment
+    this.paymentOptions.amount = this.order.totalPrice ?? 0.01;
+    this.paymentOptions.tx_ref = 'LPK-${this.order.id}';
   }
 
   paymentSuccess(res: RavePaymentData): void {
