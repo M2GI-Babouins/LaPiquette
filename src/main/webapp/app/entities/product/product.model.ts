@@ -43,3 +43,40 @@ export class Product implements IProduct {
 export function getProductIdentifier(product: IProduct): number | undefined {
   return product.id;
 }
+
+export enum Region {
+  Alsace = 'Alsace',
+  Aquitaine = 'Aquitaine',
+  Auvergne = 'Auvergne',
+  BasseNormandie = 'Basse-Normandie',
+  Bourgogne = 'Bourgogne',
+  Bretagne = 'Bretagne',
+  Centre = 'Centre',
+  ChampagneArdenne = 'Champagne-Ardenne',
+  Corse = 'Corse',
+  FrancheCompte = 'Franche-Compté',
+  HauteNormandie = 'Haute-Normandie',
+  IleDeFrance = 'Ile de France',
+  LanquedocRoussillon = 'Lanquedoc-Roussillon',
+  Limousin = 'Limousin',
+  MidiPyrene = 'Midi-Pyréné',
+  NordPasDeCalais = 'Nord Pas de Calais',
+  PaysDeLaLoire = 'Pays de la Loire',
+  PoitouCharentes = 'Poitou-Charentes',
+  ProvenceAlpesCoteDAzur = "Provence Alpes Cote D'Azure",
+  RhoneAlpes = 'Rhone Alpes',
+}
+
+export enum Recommandation {
+  ViandeRouge = 'Viande Rouge',
+  ViandeBlanche = 'Viande Blanche',
+  Poisson = 'Poisson',
+  Aperitif = 'Apéritif',
+}
+
+export enum Type {
+  Rouge = 'Vin Rouge',
+  Blanc = 'Vin Blanc',
+  Rose = 'Vin Rosé',
+  Mousseux = 'Vin Mousseux',
+}

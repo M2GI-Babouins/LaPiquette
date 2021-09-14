@@ -1,9 +1,26 @@
-<div class="row">
-  <div class="col-lg-3" *ngFor="let product of products">
-    <p>{{ product.name }}</p>
-    <p>{{ product.price }}</p>
-    <button type="button" class="btn btn-outline-success" (click)="addToCart(product)">Acheter</button>
-    <a [routerLink]="['/product/' + product.id + '/view']">Voir Détail</a>
+<div class="row align-items-start">
+  <div class="filtres col-3">
+    <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
   </div>
-  <br />
+
+  <div class="col-9">
+    <div class="row">
+      <div class="col-lg-3" *ngFor="let product of products">
+        <div class="product">
+          <h5>
+            <strong>{{ product.name }}</strong>
+          </h5>
+          <p>
+            <em>{{ product.price }} euros</em>
+          </p>
+          <p *ngIf="product.year">Year : {{ product.year }}</p>
+          <p *ngIf="product.region">Region : {{ product.region }}</p>
+          <p *ngIf="product.recommandation">Recommandation : {{ product.recommandation }}</p>
+          <button type="button" class="btn btn-outline-success" (click)="addToCart(product)">Ajouter au panier</button>
+          <a [routerLink]="['/product/' + product.id + '/view']" class="btn btn-outline-primary">Voir Détail</a>
+        </div>
+      </div>
+      <br />
+    </div>
+  </div>
 </div>
