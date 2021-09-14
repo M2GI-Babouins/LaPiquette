@@ -13,12 +13,12 @@
 
 | Priorité | Tache                                          | Critère                                                                                              | Rush | Effort estimé | Statut       |
 | -------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---- | ------------- | ------------ |
-| 1        | [Visiteur] Afficher produits                   | Afficher une liste de produits                                                                       | 1    | M             | Pas commencé |
-| 2        | [Visiteur] Afficher panier                     | Cliquer sur l'encart et voir les produits du panier                                                  | 1    | S             | Pas commencé |
-| 3        | [Visiteur] Modifier le panier                  | Pouvoir ajouter ou supprimer des éléments du panier                                                  | 1    | S             | Pas commencé |
-| 4        | [Visiteur] Commander/Payer un produit          | Selectionner, payer et recevoir facture                                                              | 1    | M             | Pas commencé |
-| 5        | [Visiteur] Pouvoir trier et filtrer            | Utiliser le folet filtre, trie et voir les résultats correspondants                                  | 2    | S             | Pas commencé |
-| 6        | [Visiteur] Afficher un produit avec image      | Avoir l'affichage détaillé d'un produit                                                              | 2    | M             | Pas commencé |
+| 1        | [Visiteur] Afficher produits                   | Afficher une liste de produits                                                                       | 1    | M             | Done         |
+| 2        | [Visiteur] Afficher panier                     | Cliquer sur l'encart et voir les produits du panier                                                  | 1    | S             | En cours     |
+| 3        | [Visiteur] Modifier le panier                  | Pouvoir ajouter ou supprimer des éléments du panier                                                  | 1    | S             | En cours     |
+| 4        | [Visiteur] Commander/Payer un produit          | Selectionner, payer et recevoir facture                                                              | 1    | M             | Done         |
+| 5        | [Visiteur] Pouvoir trier et filtrer            | Utiliser le folet filtre, trie et voir les résultats correspondants                                  | 2    | S             | En cours     |
+| 6        | [Visiteur] Afficher un produit avec image      | Avoir l'affichage détaillé d'un produit                                                              | 2    | M             | En cours     |
 | 7        | [Admin] Ajouter un produit                     | Remplir formulaire, observer l'ajout dans le stock                                                   | 3    | L             | Pas commencé |
 | 8        | [Admin] Modifier un produit (notament le prix) | Remplir formulaire, observer la modification dans le stock                                           | 3    | S             | Pas commencé |
 | 9        | [Visiteur] Rechercher un produit               | Ecrire dans la barre de recherche et voir le résultat                                                | 4    | L             | Pas commencé |
