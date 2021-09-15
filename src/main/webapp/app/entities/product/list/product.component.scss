@@ -10,3 +10,40 @@
 .btn {
   background-color: #ddd;
 }
+
+.logo {
+  position: relative;
+  min-height: 5em;
+  min-width: 6em;
+  max-width: 6em;
+  bottom: 1px;
+  right: 2px;
+  color: black;
+}
+
+#productName {
+  float: right;
+  bottom: 1px;
+}
+
+#productYear {
+  font-size: smaller;
+  text-align: center;
+}
+
+.logo-img {
+  height: 100px;
+  width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url('../../../../content/images/wine-logo.jpg') no-repeat center center;
+  background-size: contain;
+}
+
+img {
+  height: 100px;
+  width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  background-size: contain;
+}
