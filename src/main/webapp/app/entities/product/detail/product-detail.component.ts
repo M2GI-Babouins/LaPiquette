@@ -19,6 +19,7 @@ export class ProductDetailComponent implements OnInit {
   panierLocal: any = [];
 
   productAdded = false;
+  productRemoved = false;
 
   constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils, protected productService: ProductService) {}
 
@@ -32,11 +33,13 @@ export class ProductDetailComponent implements OnInit {
 
   public addToCart(product: IProduct): void {
     this.productAdded = true;
+    this.productRemoved = false;
     this.productService.ajouterPanier(product, this.quantity);
   }
 
   public removeFromCart(product: IProduct): void {
     this.productAdded = false;
+    this.productRemoved = true;
     this.productService.removeFromPanier(product);
   }
 
