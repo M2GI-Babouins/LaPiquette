@@ -11,7 +11,7 @@ import { RaveOptions } from 'angular-rave';
   styleUrls: ['./payment.component.scss'],
 })
 export class PaymentComponent implements OnInit {
-  order: IOrder = { id: -1, totalPrice: 0.001 };
+  order: IOrder = { id: -1, totalPrice: 0.001, orderLines: [] };
   paymentOptions: RaveOptions = {
     customer: { name: 'Default', email: 'Default@mail.fr', phonenumber: '0600000000' },
     amount: 0.01,
@@ -28,7 +28,7 @@ export class PaymentComponent implements OnInit {
   }
 
   paymentInit(): void {
-    this.paymentOptions.amount = this.order.totalPrice ?? 0.01;
+    this.paymentOptions.amount = this.order.totalPrice;
     this.paymentOptions.tx_ref = 'LPK-${this.order.id}';
   }
 

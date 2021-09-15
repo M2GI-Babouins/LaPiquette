@@ -1,3 +1,4 @@
+import { OrderLine } from './../../order-line/order-line.model';
 import { OrderService } from './../service/order.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -10,8 +11,6 @@ import { IOrder } from '../order.model';
 })
 export class OrderDetailComponent implements OnInit {
   openPayment = false;
-
-  order: IOrder = { id: -1 };
 
   constructor(protected activatedRoute: ActivatedRoute, protected orderService: OrderService) {}
 
@@ -28,35 +27,20 @@ export class OrderDetailComponent implements OnInit {
     window.history.back();
   }
 
-  setTotalPrice(): void {
-    this.order.orderLines?.map(orderline => {
-      if (orderline.quantity && orderline.unityPrice) {
-        orderline.totalPrice = orderline.quantity * orderline.unityPrice;
-      }
-    });
+  addOne(ol: OrderLine): void {
+    this.orderService.changeBasketQuantity(ol, ol.quantity + 1);
   }
 
-  addOne(idline: number | undefined): void {
-    const currentLine = this.order.orderLines?.find(orderLine => orderLine.id === idline);
-    if (currentLine?.quantity !== undefined) {
-      currentLine.quantity ? currentLine.quantity + 1 : 0;
-    }
-    this.setTotalPrice();
+  subOne(ol: OrderLine): void {
+    this.orderService.changeBasketQuantity(ol, ol.quantity - 1);
   }
 
-  subOne(idline: number | undefined): void {
-    const currentLine = this.order.orderLines?.find(orderLine => orderLine.id === idline);
-    if (currentLine?.quantity !== undefined) {
-      currentLine.quantity ? currentLine.quantity - 1 : 0;
-    }
-    this.setTotalPrice();
-  }
-
-  deleteOrderLine(idline: number | undefined): void {
-    this.order.orderLines = this.order.orderLines?.filter(orderLine => orderLine.id !== idline);
+  deleteOrderLine(ol: OrderLine): void {
+    this.orderService.deleteFromBasket(ol);
   }
 
   showPayment(): boolean {
+    this.orderService.setOrderDate();
     if (this.openPayment) {
       this.openPayment = false;
       return true;
@@ -65,6 +49,6 @@ export class OrderDetailComponent implements OnInit {
   }
 
   deleteOrder(): void {
-    this.order = { id: -1, totalPrice: 0 };
+    this.orderService.deleteAllBasket();
   }
 }

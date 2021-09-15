@@ -23,8 +23,6 @@ export class ProductService {
   ) {}
 
   ajouterPanier(product: IProduct, quantity: number): void {
-    const orderline = new OrderLine(null, quantity, product.price, product, null);
-
     let panierLocal = JSON.parse(localStorage.getItem('panier')!);
     if (panierLocal == null) {
       panierLocal = [];
@@ -32,19 +30,20 @@ export class ProductService {
     let found = false;
     panierLocal.forEach((order: OrderLine) => {
       if (order.product!.id === product.id) {
-        order.quantity! += quantity;
+        order.quantity += quantity;
         found = true;
       }
     });
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!found) {
+      const orderline = new OrderLine(null, quantity, product.price, product, null);
       panierLocal.push(orderline);
       // eslint-disable-next-line no-console
       console.log(orderline);
     }
     localStorage.setItem('panier', JSON.stringify(panierLocal));
 
-    this.orderService.addToBasket(orderline);
+    this.orderService.addToBasket(product, quantity);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
