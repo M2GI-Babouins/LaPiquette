@@ -55,6 +55,10 @@ export class ProductDetailComponent implements OnInit {
     this.productService.removeFromPanier(product);
   }
 
+  public removeCart(): void {
+    this.productService.removePanier();
+  }
+
   public afficherSuppression(product: IProduct): boolean {
     return this.productService.isInCart(product);
   }

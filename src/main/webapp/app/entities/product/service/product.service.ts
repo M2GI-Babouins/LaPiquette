@@ -6,6 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IProduct, getProductIdentifier, Product } from '../product.model';
+import { OrderLine } from 'app/entities/order-line/order-line.model';
 
 export type EntityResponseType = HttpResponse<IProduct>;
 export type EntityArrayResponseType = HttpResponse<IProduct[]>;
@@ -16,31 +17,26 @@ export class ProductService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  ajouterPanier(produit: IProduct, quantity: number): void {
-    let panier = JSON.parse(localStorage.getItem('panier')!);
-    if (panier == null) {
-      panier = [];
+  ajouterPanier(product: IProduct, quantity: number): void {
+    let panierLocal = JSON.parse(localStorage.getItem('panier')!);
+    if (panierLocal == null) {
+      panierLocal = [];
     }
     let found = false;
-    panier.forEach((order: { name: string | null | undefined; number: number }) => {
-      // eslint-disable-next-line no-console
-      console.log(order);
-      if (order.name === produit.name) {
-        order.number += quantity;
+    panierLocal.forEach((order: OrderLine) => {
+      if (order.product!.id === product.id) {
+        order.quantity! += quantity;
         found = true;
       }
     });
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!found) {
-      const newOrderLine = {
-        name: produit.name,
-        product: JSON.stringify(produit),
-        number: quantity,
-      };
-      panier.push(newOrderLine);
+      const orderline = new OrderLine(null, quantity, product.price, product, null);
+      panierLocal.push(orderline);
+      // eslint-disable-next-line no-console
+      console.log(orderline);
     }
-
-    localStorage.setItem('panier', JSON.stringify(panier));
+    localStorage.setItem('panier', JSON.stringify(panierLocal));
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -57,8 +53,8 @@ export class ProductService {
 
   removeFromPanier(produit: IProduct): void {
     const panier = JSON.parse(localStorage.getItem('panier')!);
-    panier.forEach((order: { name: string | null | undefined; number: number }) => {
-      if (order.name === produit.name) {
+    panier.forEach((order: OrderLine) => {
+      if (order.product!.id === produit.id) {
         panier.splice(panier.indexOf(order), 1);
       }
     });
@@ -68,8 +64,8 @@ export class ProductService {
   isInCart(produit: IProduct): boolean {
     const panier = JSON.parse(localStorage.getItem('panier')!);
     let found = false;
-    panier.forEach((order: { name: string | null | undefined; number: number }) => {
-      if (order.name === produit.name) {
+    panier.forEach((order: OrderLine) => {
+      if (order.product!.id === produit.id) {
         found = true;
       }
     });
