@@ -9,6 +9,7 @@ import { ProductService } from '../service/product.service';
 @Component({
   selector: 'jhi-product-detail',
   templateUrl: './product-detail.component.html',
+  styleUrls: ['../list/product.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
   quantity!: number;

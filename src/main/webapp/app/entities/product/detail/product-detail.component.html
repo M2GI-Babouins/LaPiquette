@@ -5,17 +5,23 @@
 
       <jhi-alert></jhi-alert>
 
-      <div class="product-detail product-detail-container" style="display: flex">
-        <div class="product-detail product-detail-child" style="flex: 1; border: 2px solid yellow">
-          <div *ngIf="product.image">
-            <a (click)="openFile(product.image, product.imageContentType)">
-              <img [src]="'data:' + product.imageContentType + ';base64,' + product.image" style="max-width: 100%" alt="product image" />
-            </a>
-            {{ product.imageContentType }}, {{ byteSize(product.image) }}
-          </div>
+      <div
+        class="product-detail product-detail-container"
+        style="display: flex; border: 2px solid #831717; margin-right: 20px; padding: 10px"
+      >
+        <div class="product-detail product-detail-child" style="flex: 1">
+          <img
+            *ngIf="product.image === null; else logoTemplate"
+            [src]="'data:' + product.imageContentType + ';base64,' + product.image"
+            style="max-width: 100%"
+            alt="product image"
+          />
+          <ng-template #logoTemplate>
+            <span class="logo-img"></span>
+          </ng-template>
         </div>
 
-        <div class="product-detail product-detail-child" style="flex: 1; border: 2px solid yellow; margin-right: 20px">
+        <div class="product-detail product-detail-child" style="flex: 9; margin-right: 20px; padding: 10px">
           <h3>{{ product.name }}</h3>
 
           <h4>{{ product.year }} - {{ product.region }} - {{ product.type }} - {{ product.alcoholPer }}</h4>
