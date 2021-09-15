@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,6 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { IOrder } from 'app/entities/order/order.model';
+import { ProductService } from 'app/entities/product/service/product.service';
 
 @Component({
   selector: 'jhi-navbar',
@@ -25,6 +28,7 @@ export class NavbarComponent implements OnInit {
   account: Account | null = null;
   order: IOrder = { id: 2 };
   orderList: IOrder[] = [];
+  wineName = '';
 
   constructor(
     private loginService: LoginService,
@@ -32,7 +36,8 @@ export class NavbarComponent implements OnInit {
     private sessionStorageService: SessionStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private productService: ProductService
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
@@ -68,5 +73,11 @@ export class NavbarComponent implements OnInit {
 
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
+  }
+
+  onSearch() {
+    console.log(this.wineName);
+    // use productService
+    this.router.navigate(['/product']);
   }
 }

@@ -58,4 +58,8 @@ export class OrderDetailComponent implements OnInit {
     }
     return false;
   }
+
+  deleteOrder(): void {
+    this.order = { id: -1, totalPrice: 0 };
+  }
 }

@@ -1,7 +1,32 @@
+
+<!--<div class="row align-items-start">
+  <div class="filtres col-3">
+    <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
+  </div>
+
+  <div class="col-9">
+    <div class="row">
+      <div class="col-lg-3" *ngFor="let product of products">
+        <div class="product">
+          <h5>
+            <strong>{{ product.name }}</strong>
+          </h5>
+          <p>
+            <em>{{ product.price }} euros</em>
+          </p>
+          <p *ngIf="product.year">Year : {{ product.year }}</p>
+          <p *ngIf="product.region">Region : {{ product.region }}</p>
+          <p *ngIf="product.recommandation">Recommandation : {{ product.recommandation }}</p>
+          <button type="button" class="btn btn-outline-success" (click)="addToCart(product)">Ajouter au panier</button>
+          <a [routerLink]="['/product/' + product.id + '/view']" class="btn btn-outline-primary">Voir Détail</a>
+        </div>
+      </div>
+      <br />-->
 <div>
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
+
 
   <div class="product-sidenav">
     <button
@@ -21,49 +46,66 @@
     <a href="#">Contact</a>
   </div>
 
-  <div class="table-responsive" id="entities">
-    <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
-      <span jhiTranslate="laPiquetteApp.product.home.notFound">No products found</span>
+
+  <div class="row align-items-start">
+    <div class="filtres col-3">
+      <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
     </div>
 
-    <div class="product-wrapper" *ngIf="products && products.length > 0">
-      <div class="product-box" *ngFor="let product of products; trackBy: trackId">
-        <div class="product product-list-title">
-          <div
-            style="
-              position: relative;
-              min-height: 5em;
-              min-width: 6em;
-              max-width: 6em;
-              bottom: 1px;
-              right: 2px;
-              color: black;
-              background-color: aquamarine;
-            "
-          >
-            <img [src]="product.image" alt="logo" />
+    <div class="col-9">
+      <div class="table-responsive" id="entities">
+        <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
+
+        <span>Pas de Produits trouvés</span>
+
+      </div>
+        
+        <div class="product-wrapper"  *ngIf="products && products.length > 0">
+          <div class="product-box" *ngFor="let product of products; trackBy: trackId">
+            <div class="product product-list-title">
+              <div
+                style="
+                  position: relative;
+                  min-height: 5em;
+                  min-width: 6em;
+                  max-width: 6em;
+                  bottom: 1px;
+                  right: 2px;
+                  color: black;
+                  background-color: aquamarine;
+                "
+              >
+                <img [src]="product.image" alt="logo" />
+              </div>
+
+              <p style="float: right; bottom: 1px">{{ product.name }}</p>
+            </div>
+
+            <div class="product product-list-info" style="clear: left">
+              <p style="font-size: smaller; text-align: center">{{ product.year }} - {{ product.type }}</p>
+            </div>
+
+            <div class="product product-list-interact">
+              <p>{{ product.price }} €</p>
+
+              <button
+                type="submit"
+                [routerLink]="['/product', product.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" (click)="addToCart(product)" class="btn btn-info btn-sm" data-cy="entityBasketButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">Acheter</span>
+              </button>
+              <div style="clear: left"></div>
+            </div>
           </div>
 
-          <p style="float: right; bottom: 1px">{{ product.name }}</p>
-        </div>
-
-        <div class="product product-list-info" style="clear: left">
-          <p style="font-size: smaller; text-align: center">{{ product.year }} - {{ product.type }}</p>
-        </div>
-
-        <div class="product product-list-interact">
-          <p>{{ product.price }} €</p>
-
-          <button type="submit" [routerLink]="['/product', product.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-            <fa-icon icon="eye"></fa-icon>
-            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-          </button>
-
-          <button type="submit" (click)="addToCart(product)" class="btn btn-info btn-sm" data-cy="entityBasketButton">
-            <fa-icon icon="eye"></fa-icon>
-            <span class="d-none d-md-inline">Acheter</span>
-          </button>
-          <div style="clear: left"></div>
         </div>
       </div>
     </div>

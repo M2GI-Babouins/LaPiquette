@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IProduct, getProductIdentifier } from '../product.model';
+import { IProduct, getProductIdentifier, Product } from '../product.model';
+import { OrderLine } from 'app/entities/order-line/order-line.model';
 
 export type EntityResponseType = HttpResponse<IProduct>;
 export type EntityArrayResponseType = HttpResponse<IProduct[]>;
@@ -15,6 +16,61 @@ export class ProductService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/products');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+
+  ajouterPanier(product: IProduct, quantity: number): void {
+    let panierLocal = JSON.parse(localStorage.getItem('panier')!);
+    if (panierLocal == null) {
+      panierLocal = [];
+    }
+    let found = false;
+    panierLocal.forEach((order: OrderLine) => {
+      if (order.product!.id === product.id) {
+        order.quantity! += quantity;
+        found = true;
+      }
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!found) {
+      const orderline = new OrderLine(null, quantity, product.price, product, null);
+      panierLocal.push(orderline);
+      // eslint-disable-next-line no-console
+      console.log(orderline);
+    }
+    localStorage.setItem('panier', JSON.stringify(panierLocal));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  getPanier() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return JSON.parse(localStorage.getItem('panier')!);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  removePanier() {
+    const panier: never[] = [];
+    localStorage.setItem('panier', JSON.stringify(panier));
+  }
+
+  removeFromPanier(produit: IProduct): void {
+    const panier = JSON.parse(localStorage.getItem('panier')!);
+    panier.forEach((order: OrderLine) => {
+      if (order.product!.id === produit.id) {
+        panier.splice(panier.indexOf(order), 1);
+      }
+    });
+    localStorage.setItem('panier', JSON.stringify(panier));
+  }
+
+  isInCart(produit: IProduct): boolean {
+    const panier = JSON.parse(localStorage.getItem('panier')!);
+    let found = false;
+    panier.forEach((order: OrderLine) => {
+      if (order.product!.id === produit.id) {
+        found = true;
+      }
+    });
+    return found;
+  }
 
   loadAll(): Observable<EntityArrayResponseType> {
     return this.http.get<IProduct[]>(`${this.resourceUrl}`, { observe: 'response' });

@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IProduct } from '../product.model';
+import { IProduct, Recommandation, Region } from '../product.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { ProductService } from '../service/product.service';
@@ -21,9 +21,13 @@ import { first } from 'rxjs/operators';
 @Component({
   selector: 'jhi-product',
   templateUrl: './product.component.html',
+  styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent implements OnInit {
-  products?: IProduct[];
+
+  products: IProduct[] = [];
+  newProducts: IProduct[] = [];
+
   isLoading = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
@@ -38,6 +42,7 @@ export class ProductComponent implements OnInit {
     protected router: Router,
     protected modalService: NgbModal
   ) {}
+
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
@@ -63,13 +68,6 @@ export class ProductComponent implements OnInit {
 
   ngOnInit() {
     this.handleNavigation();
-    // const subscribe = this.productService.loadAll().subscribe({
-    //  next: value => console.log(value),
-    //  error: err => console.log(err),
-    //  complete: () => console.log("END")
-    // });
-    // this.productService.loadAll();
-    // console.log(subscribe);*/
   }
 
   trackId(index: number, item: IProduct): number {
@@ -89,6 +87,11 @@ export class ProductComponent implements OnInit {
 
   public addToCart(product: any) {
     console.log('Vive le scrumdaddy');
+  }
+
+
+  public setNewProducts(products: IProduct[]) {
+    this.products = products;
   }
 
   protected sort(): string[] {
