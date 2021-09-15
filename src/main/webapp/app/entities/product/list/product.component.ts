@@ -24,7 +24,6 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent implements OnInit {
-
   products: IProduct[] = [];
   newProducts: IProduct[] = [];
 
@@ -42,7 +41,6 @@ export class ProductComponent implements OnInit {
     protected router: Router,
     protected modalService: NgbModal
   ) {}
-
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
@@ -88,7 +86,6 @@ export class ProductComponent implements OnInit {
   public addToCart(product: any) {
     console.log('Vive le scrumdaddy');
   }
-
 
   public setNewProducts(products: IProduct[]) {
     this.products = products;
