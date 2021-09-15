@@ -22,11 +22,13 @@
         </div>
 
         <div class="product-detail product-detail-child" style="flex: 9; margin-right: 20px; padding: 10px">
-          <h3>{{ product.name }}</h3>
+          <h3>
+            {{ product.name }} - <em>{{ product.price }} €</em>
+          </h3>
 
           <h4>{{ product.year }} - {{ product.region }} - {{ product.type }} - {{ product.alcoholPer }}</h4>
 
-          <p>{{ product.price }} € - plus que {{ product.stock }} bouteilles !</p>
+          <p>Plus que {{ product.stock }} bouteilles ! Dépechez vous !</p>
         </div>
       </div>
 
