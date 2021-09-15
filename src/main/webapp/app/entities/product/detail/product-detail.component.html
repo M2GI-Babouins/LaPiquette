@@ -47,21 +47,26 @@
           </tbody>
         </table>
         <!--Validation Commande-->
-        <div class="row col-12">
-          <div class="col-8">
-            <button class="btn btn-outline-success" (click)="addToCart(product)">Ajouter au panier</button>
-            <input class="quantity" min="0" max="{{ product.stock }}" name="quantity" [value]="cmd" type="number" />
-          </div>
-          <div class="col-4">
-            <button class="btn btn-" (click)="removeFromCart(product)">Retirer du Panier</button>
-          </div>
+        <div class="row col-12" style="margin-top: 5%">
+          <form (ngSubmit)="addToCart(product)">
+            <button type="submit" class="btn btn-outline-success">Ajouter au panier</button>
+            <input
+              name="quantity"
+              class="quantity"
+              min="0"
+              max="{{ product.stock }}"
+              [(ngModel)]="quantity"
+              value="1"
+              placeholder="1"
+              type="number"
+            />
+            <button *ngIf="afficherSuppression(product)" class="btn btn-outline-danger" (click)="removeFromCart(product)">
+              Retirer du Panier
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-2" id="Encart panier" *ngFor="let produit of panierLocal">
-    <!--TODO: Ajouter encart panier actuel-->
-    <p class="col-12">{{ produit.name }}</p>
-    <p class="col-12">{{ produit.number }}</p>
-  </div>
+  <div class="col-2" id="Encart panier"></div>
 </div>

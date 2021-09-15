@@ -11,7 +11,8 @@ import { ProductService } from '../service/product.service';
 })
 export class ProductDetailComponent implements OnInit {
   //
-  cmd = 1;
+  quantity: any;
+
   //initialisation sans back end
   product: IProduct = {
     id: 1,
@@ -46,13 +47,16 @@ export class ProductDetailComponent implements OnInit {
 
   public addToCart(product: IProduct): void {
     this.productAdded = true;
-    this.productService.ajouterPanier(product, this.cmd);
+    this.productService.ajouterPanier(product, this.quantity);
   }
 
   public removeFromCart(product: IProduct): void {
-    //TODO:
     this.productAdded = false;
-    this.productService.removePanier();
+    this.productService.removeFromPanier(product);
+  }
+
+  public afficherSuppression(product: IProduct): boolean {
+    return this.productService.isInCart(product);
   }
 
   byteSize(base64String: string): string {

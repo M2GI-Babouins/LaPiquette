@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IProduct, getProductIdentifier } from '../product.model';
+import { IProduct, getProductIdentifier, Product } from '../product.model';
 
 export type EntityResponseType = HttpResponse<IProduct>;
 export type EntityArrayResponseType = HttpResponse<IProduct[]>;
@@ -21,12 +21,25 @@ export class ProductService {
     if (panier == null) {
       panier = [];
     }
-    const newOrderLine = {
-      name: produit.name,
-      product: JSON.stringify(produit),
-      number: quantity,
-    };
-    panier.push(newOrderLine);
+    let found = false;
+    panier.forEach((order: { name: string | null | undefined; number: number }) => {
+      // eslint-disable-next-line no-console
+      console.log(order);
+      if (order.name === produit.name) {
+        order.number += quantity;
+        found = true;
+      }
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!found) {
+      const newOrderLine = {
+        name: produit.name,
+        product: JSON.stringify(produit),
+        number: quantity,
+      };
+      panier.push(newOrderLine);
+    }
+
     localStorage.setItem('panier', JSON.stringify(panier));
   }
 
@@ -40,6 +53,27 @@ export class ProductService {
   removePanier() {
     const panier: never[] = [];
     localStorage.setItem('panier', JSON.stringify(panier));
+  }
+
+  removeFromPanier(produit: IProduct): void {
+    const panier = JSON.parse(localStorage.getItem('panier')!);
+    panier.forEach((order: { name: string | null | undefined; number: number }) => {
+      if (order.name === produit.name) {
+        panier.splice(panier.indexOf(order), 1);
+      }
+    });
+    localStorage.setItem('panier', JSON.stringify(panier));
+  }
+
+  isInCart(produit: IProduct): boolean {
+    const panier = JSON.parse(localStorage.getItem('panier')!);
+    let found = false;
+    panier.forEach((order: { name: string | null | undefined; number: number }) => {
+      if (order.name === produit.name) {
+        found = true;
+      }
+    });
+    return found;
   }
 
   loadAll(): Observable<EntityArrayResponseType> {
