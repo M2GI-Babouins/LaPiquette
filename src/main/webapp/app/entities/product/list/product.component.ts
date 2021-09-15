@@ -25,29 +25,60 @@ import { Order } from 'app/entities/order/order.model';
 export class ProductComponent implements OnInit {
   products: IProduct[] = [];
   newProducts: IProduct[] = [];
+  isLoading = false;
+  totalItems = 0;
+  itemsPerPage = ITEMS_PER_PAGE;
+  page?: number;
+  predicate!: string;
+  ascending!: boolean;
+  ngbPaginationPage = 1;
 
-  constructor(protected productService: ProductService) {}
+  constructor(
+    protected productService: ProductService,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router,
+    protected modalService: NgbModal
+  ) {}
 
   ngOnInit() {
-    this.products = [
-      { id: 1, name: 'Oui', price: 15, region: Region.Alsace, recommandation: Recommandation.ViandeRouge, stock: 5 },
-      { id: 2, name: 'Non', price: 30, region: Region.BasseNormandie, recommandation: Recommandation.Poisson, stock: 3 },
-      { id: 3, name: 'Licorne', price: 50, region: Region.ChampagneArdenne, recommandation: Recommandation.Aperitif, stock: 8 },
-      { id: 4, name: 'FlammandRose', price: 5, region: Region.BasseNormandie, recommandation: Recommandation.ViandeRouge, stock: 15 },
-      { id: 5, name: 'Ortensia', price: 89, region: Region.Aquitaine, recommandation: Recommandation.ViandeBlanche, stock: 78 },
-      { id: 6, name: 'Piquette', price: 25000, region: Region.MidiPyrene, recommandation: Recommandation.ViandeRouge, stock: 2 },
-      { id: 7, name: 'carotte', price: 3, region: Region.MidiPyrene, recommandation: Recommandation.Aperitif, stock: 0 },
-      { id: 8, name: 'radis', price: 4, region: Region.NordPasDeCalais, recommandation: Recommandation.ViandeBlanche, stock: 35 },
-      { id: 9, name: 'Henri', price: 2, region: Region.Bourgogne, recommandation: Recommandation.Aperitif, stock: 45 },
-      { id: 10, name: 'Bernard', price: 8, region: Region.Corse, recommandation: Recommandation.Poisson, stock: 50 },
-      { id: 11, name: 'Piquette', price: 25000, region: Region.MidiPyrene, recommandation: Recommandation.ViandeRouge, stock: 2 },
-      { id: 12, name: 'carotte', price: 3, region: Region.MidiPyrene, recommandation: Recommandation.Poisson, stock: 0 },
-      { id: 13, name: 'radis', price: 4, region: Region.NordPasDeCalais, recommandation: Recommandation.ViandeBlanche, stock: 35 },
-      { id: 14, name: 'Henri', price: 2, region: Region.Bourgogne, recommandation: Recommandation.Aperitif, stock: 45 },
-      { id: 15, name: 'Bernard', price: 8, region: Region.Corse, recommandation: Recommandation.Poisson, stock: 50 },
-    ];
-
     // this.products = this.productService.loadAll();
+  }
+
+  loadPage(page?: number, dontNavigate?: boolean): void {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
+    this.productService
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe(
+        (res: HttpResponse<IProduct[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        () => {
+          this.isLoading = false;
+          this.onError();
+        }
+      );
+  }
+
+  trackId(index: number, item: IProduct): number {
+    return item.id!;
+  }
+
+  delete(product: IProduct): void {
+    const modalRef = this.modalService.open(ProductDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.product = product;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'deleted') {
+        this.loadPage();
+      }
+    });
   }
 
   public addToCart(product: any) {
@@ -56,5 +87,48 @@ export class ProductComponent implements OnInit {
 
   public setNewProducts(products: IProduct[]) {
     this.products = products;
+  }
+
+  protected sort(): string[] {
+    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
+    if (this.predicate !== 'id') {
+      result.push('id');
+    }
+    return result;
+  }
+
+  protected handleNavigation(): void {
+    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
+      const page = params.get('page');
+      const pageNumber = page !== null ? +page : 1;
+      const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
+      const predicate = sort[0];
+      const ascending = sort[1] === ASC;
+      if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
+        this.predicate = predicate;
+        this.ascending = ascending;
+        this.loadPage(pageNumber, true);
+      }
+    });
+  }
+
+  protected onSuccess(data: IProduct[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+    this.totalItems = Number(headers.get('X-Total-Count'));
+    this.page = page;
+    if (navigate) {
+      this.router.navigate(['/product'], {
+        queryParams: {
+          page: this.page,
+          size: this.itemsPerPage,
+          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
+        },
+      });
+    }
+    this.products = data ?? [];
+    this.ngbPaginationPage = this.page;
+  }
+
+  protected onError(): void {
+    this.ngbPaginationPage = this.page ?? 1;
   }
 }
