@@ -1,6 +1,8 @@
 package com.im2ag.lapiquette.repository;
 
 import com.im2ag.lapiquette.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 

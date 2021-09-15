@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IProduct, getProductIdentifier, Product } from '../product.model';
+import { IProduct, getProductIdentifier } from '../product.model';
 import { OrderLine } from 'app/entities/order-line/order-line.model';
 
 export type EntityResponseType = HttpResponse<IProduct>;

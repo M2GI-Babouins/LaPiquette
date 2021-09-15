@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { ClientComponent } from '../list/client.component';
 import { ClientDetailComponent } from '../detail/client-detail.component';
 import { ClientUpdateComponent } from '../update/client-update.component';
