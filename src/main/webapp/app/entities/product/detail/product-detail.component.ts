@@ -1,8 +1,3 @@
-/* eslint-disable spaced-comment */
-/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataUtils } from 'app/core/util/data-util.service';
@@ -15,26 +10,40 @@ import { ProductService } from '../service/product.service';
   templateUrl: './product-detail.component.html',
 })
 export class ProductDetailComponent implements OnInit {
+  quantity: any;
+
   product: IProduct | null = null;
+
+  panierLocal: any = [];
 
   productAdded = false;
 
-  constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils, protected productService: ProductService) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ product }) => {
       this.product = product;
     });
+
+    this.panierLocal = this.productService.getPanier();
   }
 
-  public addToCart(product?: IProduct): void {
-    console.log('Product added to cart : ' + product?.name);
+  public addToCart(product: IProduct): void {
     this.productAdded = true;
+    this.productService.ajouterPanier(product, this.quantity);
   }
 
-  public removeFromCart(product?: IProduct): void {
-    console.log('Product removed from cart : ' + product?.name);
+  public removeFromCart(product: IProduct): void {
     this.productAdded = false;
+    this.productService.removeFromPanier(product);
+  }
+
+  public removeCart(): void {
+    this.productService.removePanier();
+  }
+
+  public afficherSuppression(product: IProduct): boolean {
+    return this.productService.isInCart(product);
   }
 
   byteSize(base64String: string): string {
