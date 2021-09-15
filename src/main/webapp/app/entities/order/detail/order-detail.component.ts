@@ -1,3 +1,4 @@
+import { OrderService } from './../service/order.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -8,15 +9,19 @@ import { IOrder } from '../order.model';
   templateUrl: './order-detail.component.html',
 })
 export class OrderDetailComponent implements OnInit {
-  order: IOrder = { id: -1 };
   openPayment = false;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  order: IOrder = { id: -1 };
+
+  constructor(protected activatedRoute: ActivatedRoute, protected orderService: OrderService) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ order }) => {
-      this.order = order;
-    });
+    // eslint-disable-next-line no-console
+    console.log(this.getBasket().orderLines);
+  }
+
+  getBasket(): IOrder {
+    return this.orderService.getBasket();
   }
 
   previousState(): void {

@@ -1,3 +1,4 @@
+import { OrderLine } from './../../order-line/order-line.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -17,7 +18,45 @@ export type EntityArrayResponseType = HttpResponse<IOrder[]>;
 export class OrderService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/orders');
 
+  protected basket: IOrder = { id: -1, basket: true };
+
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+
+  getBasket(): IOrder {
+    return this.basket;
+  }
+
+  addToBasket(orderLine: OrderLine): void {
+    // eslint-disable-next-line no-console
+    console.log('PPRPRPRPRPR');
+    this.basket.datePurchase = dayjs();
+
+    if (this.basket.orderLines == null) {
+      this.basket.orderLines = [orderLine];
+      return;
+    }
+
+    this.basket.orderLines.forEach(function (ol, index, object) {
+      if (ol.product?.id === orderLine.product?.id) {
+        object.splice(index, 1);
+      }
+    });
+
+    this.basket.orderLines.push(orderLine);
+
+    this.calculateTotal();
+  }
+
+  calculateTotal(): void {
+    if (this.basket.orderLines == null) {
+      return;
+    }
+    let total = 0;
+    this.basket.orderLines.forEach(ol => {
+      total += ol.unityPrice! * ol.quantity!;
+    });
+    this.basket.totalPrice = total;
+  }
 
   create(order: IOrder): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(order);

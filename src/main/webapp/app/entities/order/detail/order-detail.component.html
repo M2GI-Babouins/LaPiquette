@@ -1,8 +1,8 @@
 <div class="row justify-content-center">
   <div class="col-8">
-    <div *ngIf="order">
+    <div *ngIf="getBasket()">
       <h2 data-cy="orderDetailsHeading"><span>Panier</span></h2>
-      <h4>Cout Total : {{ order.totalPrice }} euros</h4>
+      <h4>Cout Total : {{ getBasket().totalPrice }} euros</h4>
 
       <hr />
 
@@ -22,7 +22,7 @@
               <td><em>Prix unitaire</em></td>
               <td><em>Prix Total</em></td>
               <td><em>Actions</em></td>
-              <tr *ngFor="let orderLine of order.orderLines">
+              <tr *ngFor="let orderLine of getBasket().orderLines">
                 <th scope="row">{{ orderLine.product?.name }}</th>
                 <td>{{ orderLine.quantity }}</td>
                 <td>{{ orderLine.unityPrice }}</td>
