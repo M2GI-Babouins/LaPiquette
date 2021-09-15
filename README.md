@@ -35,7 +35,9 @@ Projet EconoCom de début de M2 GI. L'objectif est de réaliser une application 
 
 ## Outils complétées
 
-### 🟥 Qualité de code
+### 🟩 Qualité de code
+![Scrutinizer code quality (GitHub/Bitbucket)](https://img.shields.io/scrutinizer/quality/g/M2GI-Babouins/LaPiquette)
+https://scrutinizer-ci.com/g/M2GI-Babouins/LaPiquette/
 
 ### 🟥 Tests Unitaires & Code Coverage
 
