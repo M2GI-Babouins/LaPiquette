@@ -1,52 +1,45 @@
-<div class="col-12 row justify-content-center" *ngIf="product">
-  <div class="col-12">
-    <!--Bouton retour-->
-    <div class="col-3">
-      <button type="submit" (click)="previousState()" class="btn btn-outline-info" data-cy="entityDetailsBackButton">
+
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="product">
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <div class="product-detail product-detail-container" style="display: flex">
+        <div class="product-detail product-detail-child" style="flex: 1; border: 2px solid yellow">
+          <div *ngIf="product.image">
+            <a (click)="openFile(product.image, product.imageContentType)">
+              <img [src]="'data:' + product.imageContentType + ';base64,' + product.image" style="max-width: 100%" alt="product image" />
+            </a>
+            {{ product.imageContentType }}, {{ byteSize(product.image) }}
+          </div>
+        </div>
+
+        <div class="product-detail product-detail-child" style="flex: 1; border: 2px solid yellow; margin-right: 20px">
+          <h3>{{ product.name }}</h3>
+
+          <h4>{{ product.year }} - {{ product.region }} - {{ product.type }} - {{ product.alcoholPer }}</h4>
+
+          <p>{{ product.price }} € - plus que {{ product.stock }} bouteilles !</p>
+        </div>
+      </div>
+
+      <div class="product-detail product-detail-suppl-info">
+        <p>{{ product.description }}</p>
+
+        <p>Accord Mets-vin : {{ product.recommandation }}</p>
+
+        <p>A garder pendant : {{ product.ageLimit }}</p>
+
+        <p>A servir à {{ product.temperature }}°C</p>
+      </div>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
-      <br />
-    </div>
-  </div>
-  <!--Fiche Produit-->
-  <div class="col-10 row">
-    <div class="col-6">
-      <img src="" class="img-fluid" alt="JPG" />
-    </div>
-    <div class="col-6 rounded" style="background-color: #943e3e45">
-      <h4>{{ product.name }}</h4>
-      <p>
-        <span class="mr-1"
-          ><strong>{{ product.price }} € - {{ product.stock }} restant(s)</strong></span
-        >
-      </p>
-      <p>{{ product.description }}</p>
-      <div class="table-responsive">
-        <table class="table table-sm table-borderless mb-0">
-          <tbody>
-            <tr>
-              <th class="" scope="row"><strong>Type</strong></th>
-              <td>{{ product.type }}</td>
-            </tr>
-            <tr>
-              <th class="" scope="row"><strong>Region</strong></th>
-              <td>{{ product.region }}</td>
-            </tr>
-            <tr>
-              <th class="" scope="row"><strong>Accompagne bien</strong></th>
-              <td>{{ product.recommandation }}</td>
-            </tr>
-            <tr>
-              <th class="" scope="row"><strong>Temps de Garde</strong></th>
-              <td>{{ product.ageLimit }} ans</td>
-            </tr>
-            <tr>
-              <th class="" scope="row"><strong>Teneur en alcool</strong></th>
-              <td>{{ product.alcoholPer }} %</td>
-            </tr>
-          </tbody>
-        </table>
-        <!--Validation Commande-->
+
+           <!--Validation Commande-->
         <div class="row col-12" style="margin-top: 5%">
           <form (ngSubmit)="addToCart(product)">
             <button type="submit" class="btn btn-outline-success">Ajouter au panier</button>
@@ -65,8 +58,7 @@
             </button>
           </form>
         </div>
-      </div>
+
     </div>
   </div>
-  <div class="col-2" id="Encart panier" *ngFor="let orderline of panierLocal"></div>
 </div>

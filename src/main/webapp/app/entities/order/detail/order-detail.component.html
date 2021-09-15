@@ -10,17 +10,51 @@
 
       <jhi-alert></jhi-alert>
 
+      <!--Orderline-->
       <div>
-        <!--<jhi-order-line [orderId]="order.id"></jhi-order-line>-->
+        <div class="col-12 col-offset-1">
+          <h2>Produits Sélectionnés :</h2>
+          <div class="col-10">
+            <div class="col-12"></div>
+            <table class="table table-striped">
+              <th><em>Nom du produit</em></th>
+              <td><em>Quantité</em></td>
+              <td><em>Prix unitaire</em></td>
+              <td><em>Prix Total</em></td>
+              <td><em>Actions</em></td>
+              <tr *ngFor="let orderLine of order.orderLines">
+                <th scope="row">{{ orderLine.product?.name }}</th>
+                <td>{{ orderLine.quantity }}</td>
+                <td>{{ orderLine.unityPrice }}</td>
+                <td>{{ orderLine.totalPrice }}</td>
+                <td>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button (click)="addOne(orderLine.id!)"><b>+</b></button>
+                    <button *ngIf="orderLine.quantity !== 1; else deleteTemplate" (click)="subOne(orderLine.id!)"><b>-</b></button>
+                    <ng-template #deleteTemplate>
+                      <button (click)="deleteOrderLine(orderLine.id!)"><b>x</b></button>
+                    </ng-template>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </div>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
       </button>
 
-      <button type="button" class="btn btn-success"><fa-icon icon="check"></fa-icon><span>Acheter</span></button>
+      <button type="button" (click)="openPayment = true" class="btn btn-success">
+        <fa-icon icon="check"></fa-icon><span>Acheter</span>
+      </button>
 
-      <button type="button" class="btn btn-danger"><fa-icon icon="cross"></fa-icon><span>Supprimer</span></button>
+      <button type="button" (click)="deleteOrder()" class="btn btn-danger"><fa-icon icon="cross"></fa-icon><span>Supprimer</span></button>
     </div>
   </div>
+</div>
+
+<div *ngIf="showPayment()">
+  <jhi-payment></jhi-payment>
 </div>

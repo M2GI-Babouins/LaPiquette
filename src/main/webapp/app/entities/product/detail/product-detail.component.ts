@@ -10,26 +10,11 @@ import { ProductService } from '../service/product.service';
   templateUrl: './product-detail.component.html',
 })
 export class ProductDetailComponent implements OnInit {
-  //
+
   quantity: any;
 
-  //initialisation sans back end
-  product: IProduct = {
-    id: 1,
-    name: 'Bleu',
-    price: 25000,
-    year: 25,
-    region: 'Poitou-Charante',
-    type: 'Rouge',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, sapiente illo. Sit error voluptas repellat rerum quidem, soluta enim perferendis voluptates laboriosam. Distinctio, officia quis dolore quos sapiente tempore alias',
-    alcoholPer: 50,
-    recommandation: 'Poulet',
-    ageLimit: 10,
-    temperature: 6,
-    stock: 2,
-    image: 'https://static.wamiz.com/images/upload/17127142_2244568545769182_7436378995601440768_n(1).jpg',
-  };
+  product: IProduct | null = null;
+
 
   panierLocal: any = [];
 
@@ -43,6 +28,7 @@ export class ProductDetailComponent implements OnInit {
     });
 
     this.panierLocal = this.productService.getPanier();
+
   }
 
   public addToCart(product: IProduct): void {

@@ -1,0 +1,8 @@
+<div>
+  <angular-rave
+    [raveOptions]="paymentOptions"
+    (init)="paymentInit()"
+    (callback)="paymentSuccess($event)"
+    (close)="paymentFailure()"
+  ></angular-rave>
+</div>
