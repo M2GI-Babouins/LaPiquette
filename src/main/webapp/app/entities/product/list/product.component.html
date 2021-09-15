@@ -27,18 +27,25 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
-    
-    <span>Pas de Produits trouvés</span>
-
-  </div>
 
   <div class="product-sidenav">
+    <button
+      type="submit"
+      [routerLink]="['/product', 'new']"
+      class="btn btn-info btn-sm"
+      data-cy="entityDetailsButton"
+      *jhiHasAnyAuthority="'ROLE_ADMIN'"
+    >
+      <fa-icon icon="eye"></fa-icon>
+      <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Nouveau produit</span>
+    </button>
+
     <a href="#">About</a>
     <a href="#">Services</a>
     <a href="#">Clients</a>
     <a href="#">Contact</a>
   </div>
+
 
   <div class="row align-items-start">
     <div class="filtres col-3">
@@ -46,8 +53,14 @@
     </div>
 
     <div class="col-9">
-      <div class="table-responsive" id="entities" *ngIf="products && products.length > 0">
-        <div class="product-wrapper">
+      <div class="table-responsive" id="entities">
+        <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
+
+        <span>Pas de Produits trouvés</span>
+
+      </div>
+        
+        <div class="product-wrapper"  *ngIf="products && products.length > 0">
           <div class="product-box" *ngFor="let product of products; trackBy: trackId">
             <div class="product product-list-title">
               <div

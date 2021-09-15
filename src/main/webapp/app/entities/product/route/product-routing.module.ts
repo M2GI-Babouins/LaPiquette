@@ -6,6 +6,8 @@ import { ProductComponent } from '../list/product.component';
 import { ProductDetailComponent } from '../detail/product-detail.component';
 import { ProductUpdateComponent } from '../update/product-update.component';
 import { ProductRoutingResolveService } from './product-routing-resolve.service';
+import { VisitorRouteAccessService } from 'app/core/auth/visitor-route-access-service.service';
+import { AdminRouteAccessService } from 'app/core/auth/admin-route-access.service';
 
 const productRoute: Routes = [
   {
@@ -14,7 +16,7 @@ const productRoute: Routes = [
     data: {
       defaultSort: 'id,asc',
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [VisitorRouteAccessService],
   },
   {
     path: ':id/view',
@@ -22,7 +24,7 @@ const productRoute: Routes = [
     resolve: {
       product: ProductRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [VisitorRouteAccessService],
   },
   {
     path: 'new',
@@ -30,7 +32,7 @@ const productRoute: Routes = [
     resolve: {
       product: ProductRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [AdminRouteAccessService],
   },
   {
     path: ':id/edit',
@@ -38,7 +40,7 @@ const productRoute: Routes = [
     resolve: {
       product: ProductRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [AdminRouteAccessService],
   },
 ];
 
