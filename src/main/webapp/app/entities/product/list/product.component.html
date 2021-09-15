@@ -1,3 +1,4 @@
+
 <!--<div class="row align-items-start">
   <div class="filtres col-3">
     <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
@@ -21,14 +22,15 @@
         </div>
       </div>
       <br />-->
-
 <div>
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
+    
     <span>Pas de Produits trouvés</span>
+
   </div>
 
   <div class="product-sidenav">
@@ -90,6 +92,7 @@
               <div style="clear: left"></div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
