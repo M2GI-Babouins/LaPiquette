@@ -6,6 +6,7 @@ import { OrderComponent } from '../list/order.component';
 import { OrderDetailComponent } from '../detail/order-detail.component';
 import { OrderUpdateComponent } from '../update/order-update.component';
 import { OrderRoutingResolveService } from './order-routing-resolve.service';
+import { AdminRouteAccessService } from 'app/core/auth/admin-route-access.service';
 
 const orderRoute: Routes = [
   {
@@ -30,7 +31,7 @@ const orderRoute: Routes = [
     resolve: {
       order: OrderRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [AdminRouteAccessService],
   },
   {
     path: ':id/edit',
@@ -38,7 +39,7 @@ const orderRoute: Routes = [
     resolve: {
       order: OrderRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [AdminRouteAccessService],
   },
 ];
 
