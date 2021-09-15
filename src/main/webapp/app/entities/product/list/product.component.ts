@@ -68,13 +68,6 @@ export class ProductComponent implements OnInit {
 
   ngOnInit() {
     this.handleNavigation();
-    // const subscribe = this.productService.loadAll().subscribe({
-    //  next: value => console.log(value),
-    //  error: err => console.log(err),
-    //  complete: () => console.log("END")
-    // });
-    // this.productService.loadAll();
-    // console.log(subscribe);*/
   }
 
   trackId(index: number, item: IProduct): number {
