@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataUtils } from 'app/core/util/data-util.service';
@@ -10,11 +11,9 @@ import { ProductService } from '../service/product.service';
   templateUrl: './product-detail.component.html',
 })
 export class ProductDetailComponent implements OnInit {
-
-  quantity: any;
+  quantity!: number;
 
   product: IProduct | null = null;
-
 
   panierLocal: any = [];
 
@@ -28,7 +27,6 @@ export class ProductDetailComponent implements OnInit {
     });
 
     this.panierLocal = this.productService.getPanier();
-
   }
 
   public addToCart(product: IProduct): void {

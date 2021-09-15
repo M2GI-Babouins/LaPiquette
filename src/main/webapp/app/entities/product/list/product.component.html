@@ -28,8 +28,9 @@
 
   <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
     <span>Pas de Produits trouvés</span>
+  </div>
 
-    <div class="product-sidenav">
+  <!--<div class="product-sidenav">
       <button
         type="submit"
         [routerLink]="['/product', 'new']"
@@ -40,72 +41,75 @@
         <fa-icon icon="eye"></fa-icon>
         <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Nouveau produit</span>
       </button>
+    </div>-->
+
+  <div class="row align-items-start">
+    <div class="filtres col-2">
+      <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
     </div>
 
-    <div class="row align-items-start">
-      <div class="filtres col-2">
-        <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
-      </div>
-
-      <div class="col-10">
-        <div class="row" id="entities" *ngIf="products && products.length > 0">
-          <div class="product col-lg-3" *ngFor="let product of products; trackBy: trackId">
-            <div class="product-list-title">
-              <div class="logo" style="display: inline-block">
+    <div class="col-10">
+      <div class="row" id="entities" *ngIf="products && products.length > 0">
+        <div class="product col-lg-3" *ngFor="let product of products; trackBy: trackId">
+          <div class="product-detail product-detail-container" style="display: flex">
+            <div class="product-detail product-detail-child" style="flex: 1">
+              <div class="logo" style="display: inline">
                 <img *ngIf="product.image === null; else logoTemplate" [src]="product.image" />
                 <ng-template #logoTemplate>
                   <span class="logo-img"></span>
                 </ng-template>
               </div>
+            </div>
 
+            <div class="product-detail product-detail-child" style="flex: 2">
               <h5>
                 {{ product.name }} - <em>{{ product.price }} €</em>
               </h5>
-            </div>
-
-            <div class="product-list-info" style="clear: left">
               <p>{{ product.year }} - Vin {{ product.type }}</p>
-              <p>Region : {{ product.region }}</p>
-              <p>Avec quoi le boire : {{ product.recommandation }}</p>
             </div>
+          </div>
 
-            <div class="product-list-interact">
-              <button
-                type="submit"
-                [routerLink]="['/product', product.id, 'view']"
-                class="btn btn-outline-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">Voir Détail</span>
-              </button>
+          <div class="product-list-info" style="clear: left">
+            <p>Region : {{ product.region }}</p>
+            <p>Avec quoi le boire : {{ product.recommandation }}</p>
+          </div>
 
-              <button type="submit" (click)="addToCart(product)" class="btn btn-outline-success btn-sm" data-cy="entityBasketButton">
-                <fa-icon icon="plus"></fa-icon>
-                <span class="d-none d-md-inline">Acheter</span>
-              </button>
-            </div>
+          <div class="product-list-interact">
+            <button
+              type="submit"
+              [routerLink]="['/product', product.id, 'view']"
+              class="btn btn-outline-info btn-sm"
+              data-cy="entityDetailsButton"
+            >
+              <fa-icon icon="eye"></fa-icon>
+              <span class="d-none d-md-inline">Voir Détail</span>
+            </button>
+
+            <button type="submit" (click)="addToCart(product)" class="btn btn-outline-success btn-sm" data-cy="entityBasketButton">
+              <fa-icon icon="plus"></fa-icon>
+              <span class="d-none d-md-inline">Acheter</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div *ngIf="products && products.length > 0">
-      <div class="row justify-content-center">
-        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-      </div>
+  <div *ngIf="products && products.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
 
-      <div class="row justify-content-center">
-        <ngb-pagination
-          [collectionSize]="totalItems"
-          [(page)]="ngbPaginationPage"
-          [pageSize]="itemsPerPage"
-          [maxSize]="5"
-          [rotate]="true"
-          [boundaryLinks]="true"
-          (pageChange)="loadPage($event)"
-        ></ngb-pagination>
-      </div>
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
     </div>
   </div>
 </div>
