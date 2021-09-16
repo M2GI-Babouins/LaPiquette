@@ -21,6 +21,7 @@ export type EntityArrayResponseType = HttpResponse<IProduct[]>;
 export class ProductService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/products');
   filterType = '';
+  nameSearched: string | undefined;
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -86,6 +87,14 @@ export class ProductService {
 
   getFilterType() {
     return this.filterType;
+  }
+
+  setNameSearched(name: string) {
+    this.nameSearched = name;
+  }
+
+  getnameSearched() {
+    return this.nameSearched;
   }
 
   loadAll(): Observable<EntityArrayResponseType> {

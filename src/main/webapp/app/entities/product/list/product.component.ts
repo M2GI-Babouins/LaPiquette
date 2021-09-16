@@ -130,7 +130,10 @@ export class ProductComponent implements OnInit {
     this.baseProducts = data ?? [];
     this.products = data ?? [];
     if (this.productService.getFilterType() !== 'all') {
-      this.filterProducts(this.productService.getFilterType()!);
+      this.filterProductsByType(this.productService.getFilterType()!);
+    }
+    if (this.productService.getnameSearched()) {
+      this.filterProductsByName(this.productService.getnameSearched()!);
     }
     this.ngbPaginationPage = this.page;
   }
@@ -139,8 +142,14 @@ export class ProductComponent implements OnInit {
     this.ngbPaginationPage = this.page ?? 1;
   }
 
-  filterProducts(filter: string) {
-    console.log('on filtre les produits avec : ' + filter);
-    this.products = this.baseProducts.filter(product => product.type === filter);
+  filterProductsByType(filter: string) {
+    this.baseProducts = this.baseProducts.filter(product => product.type === filter);
+    this.products = this.products.filter(product => product.type === filter);
+  }
+
+  filterProductsByName(filter: string) {
+    filter = filter.toLowerCase();
+    this.baseProducts = this.baseProducts.filter(product => product.name?.toLocaleLowerCase() === filter);
+    this.products = this.products.filter(product => product.name?.toLocaleLowerCase() === filter);
   }
 }
