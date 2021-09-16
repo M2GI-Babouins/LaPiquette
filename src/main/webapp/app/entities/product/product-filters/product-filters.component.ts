@@ -4,9 +4,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { map, tail, times, uniq } from 'lodash';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
-import { FilterName, IProduct, Recommandation, Region } from '../product.model';
+import { IProduct, Recommandation, Region } from '../product.model';
 import { ProductService } from '../service/product.service';
 
 @Component({
