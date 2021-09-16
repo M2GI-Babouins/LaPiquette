@@ -9,6 +9,8 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IOrder, getOrderIdentifier } from '../order.model';
+import { IOrderLine } from './../../order-line/order-line.model';
+import { IProduct } from './../../product/product.model';
 
 export type EntityResponseType = HttpResponse<IOrder>;
 export type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -17,7 +19,52 @@ export type EntityArrayResponseType = HttpResponse<IOrder[]>;
 export class OrderService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/orders');
 
+  protected basket: IOrder = { id: -1, orderLines: [], totalPrice: 0, basket: true };
+
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+
+  getBasket(): IOrder {
+    return this.basket;
+  }
+
+  addToBasket(product: IProduct, quantity: number): void {
+    let orderline = this.basket.orderLines.find(ol => ol.product?.id === product.id);
+    if (orderline != null) {
+      orderline.quantity += quantity;
+    } else {
+      orderline = { product, quantity, unityPrice: product.price };
+      this.basket.orderLines.push(orderline);
+    }
+
+    this.calculateTotal();
+  }
+
+  changeBasketQuantity(orderLine: IOrderLine, quantity: number): void {
+    orderLine.quantity = quantity;
+    this.calculateTotal();
+  }
+
+  deleteFromBasket(orderLine: IOrderLine): void {
+    this.basket.orderLines.splice(this.basket.orderLines.findIndex(ol => ol === orderLine));
+    this.calculateTotal();
+  }
+
+  deleteAllBasket(): void {
+    this.basket.orderLines = [];
+    this.calculateTotal();
+  }
+
+  calculateTotal(): void {
+    this.basket.totalPrice = 0;
+
+    this.basket.orderLines.forEach(ol => {
+      this.basket.totalPrice += ol.unityPrice! * ol.quantity;
+    });
+  }
+
+  setOrderDate(): void {
+    this.basket.datePurchase = dayjs();
+  }
 
   create(order: IOrder): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(order);

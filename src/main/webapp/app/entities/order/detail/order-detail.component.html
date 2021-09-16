@@ -1,8 +1,8 @@
 <div class="row justify-content-center">
   <div class="col-8">
-    <div *ngIf="order">
+    <div *ngIf="getBasket()">
       <h2 data-cy="orderDetailsHeading"><span>Panier</span></h2>
-      <h4>Cout Total : {{ order.totalPrice }} euros</h4>
+      <h4>Cout Total : {{ getBasket().totalPrice }} euros</h4>
 
       <hr />
 
@@ -22,17 +22,17 @@
               <td><em>Prix unitaire</em></td>
               <td><em>Prix Total</em></td>
               <td><em>Actions</em></td>
-              <tr *ngFor="let orderLine of order.orderLines">
+              <tr *ngFor="let orderLine of getBasket().orderLines">
                 <th scope="row">{{ orderLine.product?.name }}</th>
                 <td>{{ orderLine.quantity }}</td>
                 <td>{{ orderLine.unityPrice }}</td>
                 <td>{{ orderLine.totalPrice }}</td>
                 <td>
                   <div class="btn-group" role="group" aria-label="Basic example">
-                    <button (click)="addOne(orderLine.id!)"><b>+</b></button>
-                    <button *ngIf="orderLine.quantity !== 1; else deleteTemplate" (click)="subOne(orderLine.id!)"><b>-</b></button>
+                    <button (click)="addOne(orderLine)"><b>+</b></button>
+                    <button *ngIf="orderLine.quantity !== 1; else deleteTemplate" (click)="subOne(orderLine)"><b>-</b></button>
                     <ng-template #deleteTemplate>
-                      <button (click)="deleteOrderLine(orderLine.id!)"><b>x</b></button>
+                      <button (click)="deleteOrderLine(orderLine)"><b>x</b></button>
                     </ng-template>
                   </div>
                 </td>

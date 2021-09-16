@@ -3,7 +3,7 @@ import { IOrder } from 'app/entities/order/order.model';
 
 export interface IOrderLine {
   id?: number | null;
-  quantity?: number | null;
+  quantity: number;
   unityPrice?: number | null;
   product?: IProduct | null;
   order?: IOrder | null;
@@ -13,7 +13,7 @@ export interface IOrderLine {
 export class OrderLine implements IOrderLine {
   constructor(
     public id?: number | null,
-    public quantity?: number | null,
+    public quantity: number = 1,
     public unityPrice?: number | null,
     public product?: IProduct | null,
     public order?: IOrder | null

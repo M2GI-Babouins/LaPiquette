@@ -1,3 +1,4 @@
+import { OrderService } from './../../order/service/order.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -15,7 +16,11 @@ export type EntityArrayResponseType = HttpResponse<IProduct[]>;
 export class ProductService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/products');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+    protected orderService: OrderService
+  ) {}
 
   ajouterPanier(product: IProduct, quantity: number): void {
     let panierLocal = JSON.parse(localStorage.getItem('panier')!);
@@ -25,7 +30,7 @@ export class ProductService {
     let found = false;
     panierLocal.forEach((order: OrderLine) => {
       if (order.product!.id === product.id) {
-        order.quantity! += quantity;
+        order.quantity += quantity;
         found = true;
       }
     });
@@ -37,6 +42,8 @@ export class ProductService {
       console.log(orderline);
     }
     localStorage.setItem('panier', JSON.stringify(panierLocal));
+
+    this.orderService.addToBasket(product, quantity);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

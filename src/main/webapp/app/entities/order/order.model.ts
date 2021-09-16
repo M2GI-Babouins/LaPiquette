@@ -4,21 +4,21 @@ import { IOrderLine } from 'app/entities/order-line/order-line.model';
 
 export interface IOrder {
   id: number;
-  totalPrice?: number | null;
+  orderLines: IOrderLine[];
+  totalPrice: number;
   datePurchase?: dayjs.Dayjs | null;
   basket?: boolean | null;
   client?: IClient | null;
-  orderLines?: IOrderLine[] | null;
 }
 
 export class Order implements IOrder {
   constructor(
     public id: number = -1,
-    public totalPrice?: number | null,
+    public orderLines: IOrderLine[] = [],
+    public totalPrice: number = 0,
     public datePurchase?: dayjs.Dayjs | null,
     public basket?: boolean | null,
-    public client?: IClient | null,
-    public orderLines?: IOrderLine[] | null
+    public client?: IClient | null
   ) {
     this.basket = this.basket ?? false;
   }

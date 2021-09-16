@@ -26,7 +26,7 @@ export class NavbarComponent implements OnInit {
   openAPIEnabled?: boolean;
   version = '';
   account: Account | null = null;
-  order: IOrder = { id: 2 };
+  order: IOrder = { id: 2, totalPrice: 0, orderLines: [] };
   orderList: IOrder[] = [];
   wineName = '';
 
