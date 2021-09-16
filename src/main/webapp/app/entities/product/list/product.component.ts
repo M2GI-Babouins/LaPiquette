@@ -25,7 +25,7 @@ import { first } from 'rxjs/operators';
 })
 export class ProductComponent implements OnInit {
   products: IProduct[] = [];
-  newProducts: IProduct[] = [];
+  baseProducts: IProduct[] = [];
 
   isLoading = false;
   totalItems = 0;
@@ -126,6 +126,7 @@ export class ProductComponent implements OnInit {
         },
       });
     }
+    this.baseProducts = data ?? [];
     this.products = data ?? [];
     this.ngbPaginationPage = this.page;
   }

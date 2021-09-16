@@ -1,29 +1,36 @@
 <div class="filters">
-  <form (ngSubmit)="onClickSubmit()">
+  <form>
     <title>Filtres</title>
 
     <div class="mb-3">
       <label for="price" class="form-label">Prix Maximum:</label>
-      <input type="number" name="price" [(ngModel)]="wineData.price" />
+      <input type="number" name="price" [(ngModel)]="wineData.price" (keydown.enter)="filterPrice()" />
+    </div>
+
+    <div class="mb-3">
+      <label for="region" class="form-label">Vin fait avant:</label>
+      <select class="form-select" name="region" [(ngModel)]="wineData.year" (ngModelChange)="filterYear()">
+        <option value="15">Tous</option>
+        <option *ngFor="let year of yearMade">{{ year }}</option>
+      </select>
     </div>
 
     <div class="mb-3">
       <label for="region" class="form-label">Region :</label>
-      <select class="form-select" name="region" [(ngModel)]="wineData.region">
-        <option value="15">All</option>
+      <select class="form-select" name="region" [(ngModel)]="wineData.region" (ngModelChange)="filterRegion()">
+        <option value="15">toutes region</option>
         <option *ngFor="let region of valuesRegion()">{{ region }}</option>
       </select>
     </div>
 
     <div class="mb-3 form-check">
       <label for="recommandation" class="form-label">Recommandation, avec quoi le déguster :</label>
-      <select class="form-select" name="recommandation" [(ngModel)]="wineData.recommandation">
+      <select class="form-select" name="recommandation" [(ngModel)]="wineData.recommandation" (ngModelChange)="filterRecommandation()">
         <option>All</option>
         <option *ngFor="let r of valuesRecommandation()">{{ r }}</option>
       </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Valider</button>
-    <button type="reset" class="btn btn-primary">Annuler</button>
+    <button type="reset" class="btn btn-primary" (click)="reset()">Vider Filtres</button>
   </form>
 </div>
