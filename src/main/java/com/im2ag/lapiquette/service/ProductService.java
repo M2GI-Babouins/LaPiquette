@@ -150,8 +150,17 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public float getUnitPrice(Long id) {
+    @Transactional(readOnly = true)
+    public Optional<Float> getUnitPrice(Long id) {
         log.debug("Request to get last price of Product : {}", id);
-        return productRepository.getUnitPrice(id);
+        Optional<Product> pres = productRepository.findById(id);
+        Optional<Float> res = Optional.ofNullable(null);
+        if (pres.isPresent()) {
+            Product product = pres.get();
+            float result = product.getPercentPromo() * product.getPrice();
+            System.out.println("product trouve");
+            res = Optional.of(result);
+        }
+        return res;
     }
 }
