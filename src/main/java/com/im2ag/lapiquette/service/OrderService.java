@@ -112,7 +112,7 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = false, rollbackFor = BadRequestAlertException.class)
+    @Transactional(readOnly = false, rollbackFor = IllegalArgumentException.class)
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Order> buyAnOrder(Order order) {
         Product product;
@@ -123,7 +123,7 @@ public class OrderService {
             want_qt = ol.getQuantity();
             old_qt = product.getStock();
             if (want_qt > old_qt) {
-                throw new BadRequestAlertException("Invalid order : too much quantity", "order", "orderinvalid");
+                throw new IllegalArgumentException("Invalid order : too much quantity");
             }
             product.setStock(old_qt - want_qt);
             productRepository.save(product);
