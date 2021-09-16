@@ -5,7 +5,6 @@ import com.im2ag.lapiquette.domain.OrderLine;
 import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.repository.ProductRepository;
-import com.im2ag.lapiquette.web.rest.errors.BadRequestAlertException;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -133,13 +132,15 @@ public class OrderService {
         return Optional.ofNullable(orderRepository.save(order));
     }
 
+    @Transactional(readOnly = false)
+    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Order> checkAnOrder(Order order) {
         Product product;
         float current_price;
 
         for (OrderLine ol : order.getOrderLines()) {
             product = ol.getProduct();
-            current_price = productRepository.getUnitPrice(product.getId());
+            current_price = 0f; // productRepository.getUnitPrice(product.getId());
             ol.setUnityPrice(current_price);
         }
         return Optional.ofNullable(orderRepository.save(order));
