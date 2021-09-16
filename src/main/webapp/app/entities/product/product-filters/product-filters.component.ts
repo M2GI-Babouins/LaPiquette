@@ -5,6 +5,7 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
+import { flattenDeep, uniq } from 'lodash';
 import { IProduct, Recommandation, Region } from '../product.model';
 import { ProductService } from '../service/product.service';
 
@@ -17,10 +18,10 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
   @Input() products: IProduct[] = [];
   @Output() newProducts = new EventEmitter<IProduct[]>();
 
-  recommandations = Recommandation;
   regions = Region;
   yearMade: number[] = [];
   wineData: IProduct = {};
+  recommandations!: (string | undefined)[];
 
   constructor(private productService: ProductService) {}
 
@@ -29,12 +30,8 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (this.products.length !== 0) {
       this.fillYearMade();
+      this.getRecommandations();
     }
-  }
-
-  valuesRecommandation(): Array<string> {
-    const keys = Object.values(this.recommandations);
-    return keys;
   }
 
   valuesRegion(): Array<string> {
@@ -49,6 +46,13 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
     this.yearMade = this.yearMade.map((year, i) => (year = oldestWineYear + i));
   }
 
+  getRecommandations() {
+    const pReco = this.products.map(p => p.recommandation);
+    const recommandationsBis = flattenDeep(pReco.map(reco => reco?.split(',')));
+    const recoFinal = uniq(recommandationsBis.map(r => r?.toLowerCase()).map(r => r?.trim()));
+    this.recommandations = recoFinal;
+  }
+
   filterRegion() {
     if (this.wineData.region !== null) {
       const productFiltered = this.products.filter(product => product.region === this.wineData.region);
@@ -58,7 +62,18 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
 
   filterRecommandation() {
     if (this.wineData.recommandation !== null) {
-      const productFiltered = this.products.filter(product => product.recommandation === this.wineData.recommandation);
+      const productFiltered = this.products.filter(product => {
+        const recos = product.recommandation
+          ?.split(',')
+          .map(r => r.toLowerCase())
+          .map(r => r.trim());
+        const alors = recos?.includes(this.wineData.recommandation!);
+        if (recos?.includes(this.wineData.recommandation!)) {
+          return true;
+        } else {
+          return false;
+        }
+      });
       this.newProducts.emit(productFiltered);
     }
   }

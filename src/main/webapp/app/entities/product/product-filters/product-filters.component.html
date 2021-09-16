@@ -27,7 +27,7 @@
       <label for="recommandation" class="form-label">Recommandation, avec quoi le déguster :</label>
       <select class="form-select" name="recommandation" [(ngModel)]="wineData.recommandation" (ngModelChange)="filterRecommandation()">
         <option>All</option>
-        <option *ngFor="let r of valuesRecommandation()">{{ r }}</option>
+        <option *ngFor="let r of recommandations">{{ r }}</option>
       </select>
     </div>
 
