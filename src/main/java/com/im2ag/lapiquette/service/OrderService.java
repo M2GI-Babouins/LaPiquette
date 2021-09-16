@@ -5,6 +5,7 @@ import com.im2ag.lapiquette.domain.OrderLine;
 import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.repository.ProductRepository;
+import java.time.LocalDate;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -111,24 +112,28 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = false, rollbackFor = IllegalArgumentException.class)
+    @Transactional(readOnly = false, rollbackFor = ProductNotAvailable.class)
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Order> buyAnOrder(Order order) {
         Product product;
         int old_qt, want_qt;
+        float tot_price = 0f;
 
         for (OrderLine ol : order.getOrderLines()) {
             product = ol.getProduct();
             want_qt = ol.getQuantity();
             old_qt = product.getStock();
             if (want_qt > old_qt) {
-                throw new IllegalArgumentException("Invalid order : too much quantity");
+                throw new ProductNotAvailable("Invalid order : too much quantity");
             }
             product.setStock(old_qt - want_qt);
+            tot_price = tot_price + (want_qt * ol.getUnityPrice());
             productRepository.save(product);
         }
 
         order.setBasket(false);
+        order.setTotalPrice(tot_price);
+        order.setDatePurchase(LocalDate.now());
         return Optional.ofNullable(orderRepository.save(order));
     }
 
@@ -136,12 +141,13 @@ public class OrderService {
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Order> checkAnOrder(Order order) {
         Product product;
-        float current_price;
+        Optional<Float> current_price;
 
         for (OrderLine ol : order.getOrderLines()) {
             product = ol.getProduct();
-            current_price = 0f; // productRepository.getUnitPrice(product.getId());
-            ol.setUnityPrice(current_price);
+            current_price = productRepository.getUnitPrice(product.getId());
+            if (current_price.isEmpty()) throw new IdNotFoundException("This product not exists currently id=", product.getId());
+            ol.setUnityPrice(current_price.get());
         }
         return Optional.ofNullable(orderRepository.save(order));
     }
