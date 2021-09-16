@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -153,12 +152,6 @@ public class ProductService {
 
     public float getUnitPrice(Long id) {
         log.debug("Request to get last price of Product : {}", id);
-        Optional<Product> p = productRepository.findById(id);
-        if (p.isPresent()) {
-            Product product = p.get();
-            float result = product.getPrice() * product.getPercentPromo();
-            return result;
-        }
-        return 0f;
+        return productRepository.getUnitPrice(id);
     }
 }

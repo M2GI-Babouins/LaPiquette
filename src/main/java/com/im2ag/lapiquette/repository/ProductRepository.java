@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("select price, percentPromo from Product where id = ?1")
+    @Query("select (price * percentPromo) from Product where id = ?1")
     public float getUnitPrice(Long id);
 }
