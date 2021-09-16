@@ -21,8 +21,11 @@ export class OrderService {
 
   protected basket: IOrder = { id: 0, orderLines: [], totalPrice: 0, basket: true };
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {
+    this.findBasket();
+  }
 
+  // #region Basket
   getBasket(): IOrder {
     return this.basket;
   }
@@ -37,21 +40,25 @@ export class OrderService {
     }
 
     this.calculateTotal();
+    this.updateBasket();
   }
 
   changeBasketQuantity(orderLine: IOrderLine, quantity: number): void {
     orderLine.quantity = quantity;
     this.calculateTotal();
+    this.updateBasket();
   }
 
   deleteFromBasket(orderLine: IOrderLine): void {
     this.basket.orderLines.splice(this.basket.orderLines.findIndex(ol => ol === orderLine));
     this.calculateTotal();
+    this.updateBasket();
   }
 
   deleteAllBasket(): void {
     this.basket.orderLines = [];
     this.calculateTotal();
+    this.updateBasket();
   }
 
   calculateTotal(): void {
@@ -65,6 +72,32 @@ export class OrderService {
   setOrderDate(): void {
     this.basket.datePurchase = dayjs();
   }
+
+  updateBasket(): void {
+    const copy = this.convertDateFromClient(this.basket);
+    this.http
+      .put<IOrder>(`${this.resourceUrl}/basket`, copy, { observe: 'response' })
+      // eslint-disable-next-line no-console
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .subscribe(data => console.log(data));
+  }
+
+  findBasket(): void {
+    this.http
+      .get<IOrder>(`${this.resourceUrl}/basket`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .subscribe(data => {
+        // eslint-disable-next-line no-console
+        console.log(data);
+        if (data.body) {
+          this.basket.id = data.body.id;
+          this.basket.datePurchase = data.body.datePurchase;
+          this.basket.totalPrice = data.body.totalPrice;
+          this.basket.orderLines = data.body.orderLines;
+        }
+      });
+  }
+  // #endregion Basket
 
   create(order: IOrder): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(order);
