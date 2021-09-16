@@ -54,16 +54,7 @@
       <div class="row col-12" style="margin-top: 5%">
         <form (ngSubmit)="addToCart(product)">
           <button type="submit" class="btn btn-outline-success">Ajouter au panier</button>
-          <input
-            name="quantity"
-            class="quantity"
-            min="0"
-            max="{{ product.stock }}"
-            [(ngModel)]="quantity"
-            value="1"
-            placeholder="1"
-            type="number"
-          />
+          <input name="quantity" class="quantity" min="0" max="{{ product.stock }}" [(ngModel)]="quantity" value="1" type="number" />
           <button *ngIf="afficherSuppression(product)" class="btn btn-outline-danger" (click)="removeFromCart(product)">
             Retirer du Panier
           </button>
