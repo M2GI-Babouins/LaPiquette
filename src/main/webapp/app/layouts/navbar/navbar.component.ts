@@ -29,6 +29,7 @@ export class NavbarComponent implements OnInit {
   order: IOrder = { id: 2 };
   orderList: IOrder[] = [];
   wineName = '';
+  isLoading = false;
 
   constructor(
     private loginService: LoginService,
@@ -78,6 +79,11 @@ export class NavbarComponent implements OnInit {
   onSearch() {
     console.log(this.wineName);
     // use productService
+    this.router.navigate(['/product']);
+  }
+
+  setType(type: string) {
+    this.productService.setFilterType(type);
     this.router.navigate(['/product']);
   }
 }

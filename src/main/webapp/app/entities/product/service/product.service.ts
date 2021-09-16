@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
@@ -18,6 +20,7 @@ export type EntityArrayResponseType = HttpResponse<IProduct[]>;
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/products');
+  filterType = '';
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -77,6 +80,14 @@ export class ProductService {
     return olderWineYear!;
   }
 
+  setFilterType(type: string): void {
+    this.filterType = type;
+  }
+
+  getFilterType() {
+    return this.filterType;
+  }
+
   loadAll(): Observable<EntityArrayResponseType> {
     return this.http.get<IProduct[]>(`${this.resourceUrl}`, { observe: 'response' });
   }
@@ -100,7 +111,9 @@ export class ProductService {
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
+    const oui = this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
+    console.log(oui);
+    return oui;
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
