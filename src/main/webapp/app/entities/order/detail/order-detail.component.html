@@ -1,57 +1,53 @@
 <div class="row justify-content-center">
   <div class="col-8">
-    <div *ngIf="getBasket()">
-      <h2 data-cy="orderDetailsHeading"><span>Panier</span></h2>
-      <h4>Cout Total : {{ getBasket().totalPrice }} euros</h4>
+    <h2 data-cy="orderDetailsHeading"><span>Panier</span></h2>
+    <h4>Cout Total : {{ getBasket().totalPrice }} euros</h4>
 
-      <hr />
+    <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+    <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+    <jhi-alert></jhi-alert>
 
-      <!--Orderline-->
-      <div>
-        <div class="col-12 col-offset-1">
-          <h2>Produits Sélectionnés :</h2>
-          <div class="col-10">
-            <div class="col-12"></div>
-            <table class="table table-striped">
-              <th><em>Nom du produit</em></th>
-              <td><em>Quantité</em></td>
-              <td><em>Prix unitaire</em></td>
-              <td><em>Prix Total</em></td>
-              <td><em>Actions</em></td>
-              <tr *ngFor="let orderLine of getBasket().orderLines">
-                <th scope="row">{{ orderLine.product?.name }}</th>
-                <td>{{ orderLine.quantity }}</td>
-                <td>{{ orderLine.unityPrice }}</td>
-                <td>{{ orderLine.totalPrice }}</td>
-                <td>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <button (click)="addOne(orderLine)"><b>+</b></button>
-                    <button *ngIf="orderLine.quantity !== 1; else deleteTemplate" (click)="subOne(orderLine)"><b>-</b></button>
-                    <ng-template #deleteTemplate>
-                      <button (click)="deleteOrderLine(orderLine)"><b>x</b></button>
-                    </ng-template>
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </div>
+    <!--Orderline-->
+    <div>
+      <div class="col-12 col-offset-1">
+        <h2>Produits Sélectionnés :</h2>
+        <div class="col-10">
+          <div class="col-12"></div>
+          <table class="table table-striped">
+            <th><em>Nom du produit</em></th>
+            <td><em>Quantité</em></td>
+            <td><em>Prix unitaire</em></td>
+            <td><em>Prix Total</em></td>
+            <td><em>Actions</em></td>
+            <tr *ngFor="let orderLine of getBasket().orderLines">
+              <th scope="row">{{ orderLine.product.name }}</th>
+              <td>{{ orderLine.quantity }}</td>
+              <td>{{ orderLine.unityPrice }}</td>
+              <td>{{ orderLine.quantity * orderLine.unityPrice }}</td>
+              <td>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button (click)="addOne(orderLine)"><b>+</b></button>
+                  <button *ngIf="orderLine.quantity !== 1; else deleteTemplate" (click)="subOne(orderLine)"><b>-</b></button>
+                  <ng-template #deleteTemplate>
+                    <button (click)="deleteOrderLine(orderLine)"><b>x</b></button>
+                  </ng-template>
+                </div>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
-      </button>
-
-      <button type="button" (click)="openPayment = true" class="btn btn-success">
-        <fa-icon icon="check"></fa-icon><span>Acheter</span>
-      </button>
-
-      <button type="button" (click)="deleteOrder()" class="btn btn-danger"><fa-icon icon="cross"></fa-icon><span>Supprimer</span></button>
     </div>
+
+    <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
+    </button>
+
+    <button type="button" (click)="openPayment = true" class="btn btn-success"><fa-icon icon="check"></fa-icon><span>Acheter</span></button>
+
+    <button type="button" (click)="deleteOrder()" class="btn btn-danger"><fa-icon icon="cross"></fa-icon><span>Supprimer</span></button>
   </div>
 </div>
 

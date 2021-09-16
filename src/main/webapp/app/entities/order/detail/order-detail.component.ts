@@ -1,6 +1,6 @@
 import { OrderLine } from './../../order-line/order-line.model';
 import { OrderService } from './../service/order.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IOrder } from '../order.model';
@@ -9,17 +9,14 @@ import { IOrder } from '../order.model';
   selector: 'jhi-order-detail',
   templateUrl: './order-detail.component.html',
 })
-export class OrderDetailComponent implements OnInit {
+export class OrderDetailComponent {
   openPayment = false;
 
   constructor(protected activatedRoute: ActivatedRoute, protected orderService: OrderService) {}
 
-  ngOnInit(): void {
-    // eslint-disable-next-line no-console
-    console.log(this.getBasket().orderLines);
-  }
-
   getBasket(): IOrder {
+    // eslint-disable-next-line no-console
+    console.log(this.orderService.getBasket().orderLines);
     return this.orderService.getBasket();
   }
 

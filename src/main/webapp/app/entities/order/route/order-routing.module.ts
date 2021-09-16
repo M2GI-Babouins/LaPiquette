@@ -26,6 +26,14 @@ const orderRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
+    path: 'basket',
+    component: OrderDetailComponent,
+    resolve: {
+      order: OrderRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
     path: 'new',
     component: OrderUpdateComponent,
     resolve: {

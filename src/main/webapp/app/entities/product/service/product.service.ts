@@ -29,14 +29,14 @@ export class ProductService {
     }
     let found = false;
     panierLocal.forEach((order: OrderLine) => {
-      if (order.product!.id === product.id) {
+      if (order.product.id === product.id) {
         order.quantity += quantity;
         found = true;
       }
     });
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!found) {
-      const orderline = new OrderLine(null, quantity, product.price, product, null);
+      const orderline = { product, quantity, unityPrice: product.price };
       panierLocal.push(orderline);
       // eslint-disable-next-line no-console
       console.log(orderline);
@@ -61,7 +61,7 @@ export class ProductService {
   removeFromPanier(produit: IProduct): void {
     const panier = JSON.parse(localStorage.getItem('panier')!);
     panier.forEach((order: OrderLine) => {
-      if (order.product!.id === produit.id) {
+      if (order.product.id === produit.id) {
         panier.splice(panier.indexOf(order), 1);
       }
     });
@@ -72,7 +72,7 @@ export class ProductService {
     const panier = JSON.parse(localStorage.getItem('panier')!);
     let found = false;
     panier.forEach((order: OrderLine) => {
-      if (order.product!.id === produit.id) {
+      if (order.product.id === produit.id) {
         found = true;
       }
     });

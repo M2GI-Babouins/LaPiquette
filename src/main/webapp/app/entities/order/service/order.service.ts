@@ -19,7 +19,7 @@ export type EntityArrayResponseType = HttpResponse<IOrder[]>;
 export class OrderService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/orders');
 
-  protected basket: IOrder = { id: -1, orderLines: [], totalPrice: 0, basket: true };
+  protected basket: IOrder = { id: 0, orderLines: [], totalPrice: 0, basket: true };
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -28,11 +28,11 @@ export class OrderService {
   }
 
   addToBasket(product: IProduct, quantity: number): void {
-    let orderline = this.basket.orderLines.find(ol => ol.product?.id === product.id);
+    let orderline = this.basket.orderLines.find(ol => ol.product.id === product.id);
     if (orderline != null) {
       orderline.quantity += quantity;
     } else {
-      orderline = { product, quantity, unityPrice: product.price };
+      orderline = { product, quantity, unityPrice: product.price! };
       this.basket.orderLines.push(orderline);
     }
 
@@ -58,7 +58,7 @@ export class OrderService {
     this.basket.totalPrice = 0;
 
     this.basket.orderLines.forEach(ol => {
-      this.basket.totalPrice += ol.unityPrice! * ol.quantity;
+      this.basket.totalPrice += ol.unityPrice * ol.quantity;
     });
   }
 
