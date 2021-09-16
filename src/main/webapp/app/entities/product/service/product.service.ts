@@ -89,7 +89,7 @@ export class ProductService {
     return this.filterType;
   }
 
-  setNameSearched(name: string) {
+  setNameSearched(name: string | undefined) {
     this.nameSearched = name;
   }
 

@@ -85,6 +85,7 @@ export class NavbarComponent implements OnInit {
 
   setType(type: string) {
     this.productService.setFilterType(type);
+    this.productService.setNameSearched(undefined);
     this.router.navigate(['/product']);
   }
 }
