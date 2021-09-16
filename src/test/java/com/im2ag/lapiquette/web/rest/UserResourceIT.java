@@ -2,7 +2,6 @@ package com.im2ag.lapiquette.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -12,7 +11,6 @@ import com.im2ag.lapiquette.domain.User;
 import com.im2ag.lapiquette.repository.UserRepository;
 import com.im2ag.lapiquette.security.AuthoritiesConstants;
 import com.im2ag.lapiquette.service.dto.AdminUserDTO;
-import com.im2ag.lapiquette.service.dto.UserDTO;
 import com.im2ag.lapiquette.service.mapper.UserMapper;
 import com.im2ag.lapiquette.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
