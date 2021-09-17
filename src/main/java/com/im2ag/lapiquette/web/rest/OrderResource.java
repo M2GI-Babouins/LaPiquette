@@ -1,14 +1,17 @@
 package com.im2ag.lapiquette.web.rest;
 
 import com.im2ag.lapiquette.domain.Order;
+import com.im2ag.lapiquette.repository.ClientRepository;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.service.OrderService;
 import com.im2ag.lapiquette.web.rest.errors.BadRequestAlertException;
+import java.io.Console;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -17,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -42,11 +44,65 @@ public class OrderResource {
     private final OrderService orderService;
 
     private final OrderRepository orderRepository;
+    private final ClientRepository clientRepository;
 
-    public OrderResource(OrderService orderService, OrderRepository orderRepository) {
+    public OrderResource(OrderService orderService, OrderRepository orderRepository, ClientRepository clientRepository) {
         this.orderService = orderService;
         this.orderRepository = orderRepository;
+        this.clientRepository = clientRepository;
     }
+
+    //#region Basket
+
+    /**
+     * {@code PUT  /orders/basket} : Updates the basket.
+     *
+     * @param order the order to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated order,
+     * or with status {@code 500 (Internal Server Error)} if the order couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/orders/basket")
+    public ResponseEntity<Order> updateOrder(@Valid @RequestBody Order order) throws URISyntaxException {
+        log.debug("REST request to update Basket : {}", order);
+
+        //Si le panier n'existe pas on le créé
+        if (!orderRepository.existsById(order.getId())) {
+            Order result = orderService.save(order);
+            return ResponseEntity
+                .created(new URI("/api/orders/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }
+
+        //Sinon on l'update
+        Order result = orderService.save(order);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code GET  /orders/:id} : get the "id" order.
+     *
+     * @param id the id of the order to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the order, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/orders/{clientid}/basket")
+    public ResponseEntity<Order> getOrder(@PathVariable Long clientid) {
+        log.debug("REST request to get Basket");
+        // Optional<Order> order = orderService.findOne(0l);
+        // List<Order> orderlist = orderRepository.findAll(Sort.by("basket").descending());
+        // Optional<Order> order = orderlist.get(0).getBasket() ? Optional.of(orderlist.get(0)) : Optional.empty();
+
+        Set<Order> orderlist = clientRepository.findById(clientid).get().getOrders();
+        Optional<Order> order = orderlist.stream().filter(o -> o.getBasket() == true).findFirst();
+
+        return ResponseUtil.wrapOrNotFound(order);
+    }
+
+    //#endregion
 
     /**
      * {@code POST  /orders} : Create a new order.
@@ -156,13 +212,13 @@ public class OrderResource {
      * @param id the id of the order to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the order, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/orders/{id}")
+    /*   @GetMapping("/orders/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable Long id) {
         log.debug("REST request to get Order : {}", id);
         Optional<Order> order = orderService.findOne(id);
         return ResponseUtil.wrapOrNotFound(order);
     }
-
+*/
     /**
      * {@code DELETE  /orders/:id} : delete the "id" order.
      *

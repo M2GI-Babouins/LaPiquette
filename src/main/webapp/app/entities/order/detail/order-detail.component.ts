@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { OrderLine } from './../../order-line/order-line.model';
+import { OrderService } from './../service/order.service';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IOrder } from '../order.model';
@@ -7,51 +9,35 @@ import { IOrder } from '../order.model';
   selector: 'jhi-order-detail',
   templateUrl: './order-detail.component.html',
 })
-export class OrderDetailComponent implements OnInit {
-  order: IOrder = { id: -1 };
+export class OrderDetailComponent {
   openPayment = false;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected orderService: OrderService) {}
 
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ order }) => {
-      this.order = order;
-    });
+  getBasket(): IOrder {
+    // eslint-disable-next-line no-console
+    console.log(this.orderService.getBasket().orderLines);
+    return this.orderService.getBasket();
   }
 
   previousState(): void {
     window.history.back();
   }
 
-  setTotalPrice(): void {
-    this.order.orderLines?.map(orderline => {
-      if (orderline.quantity && orderline.unityPrice) {
-        orderline.totalPrice = orderline.quantity * orderline.unityPrice;
-      }
-    });
+  addOne(ol: OrderLine): void {
+    this.orderService.changeBasketQuantity(ol, ol.quantity + 1);
   }
 
-  addOne(idline: number | undefined): void {
-    const currentLine = this.order.orderLines?.find(orderLine => orderLine.id === idline);
-    if (currentLine?.quantity !== undefined) {
-      currentLine.quantity ? currentLine.quantity + 1 : 0;
-    }
-    this.setTotalPrice();
+  subOne(ol: OrderLine): void {
+    this.orderService.changeBasketQuantity(ol, ol.quantity - 1);
   }
 
-  subOne(idline: number | undefined): void {
-    const currentLine = this.order.orderLines?.find(orderLine => orderLine.id === idline);
-    if (currentLine?.quantity !== undefined) {
-      currentLine.quantity ? currentLine.quantity - 1 : 0;
-    }
-    this.setTotalPrice();
-  }
-
-  deleteOrderLine(idline: number | undefined): void {
-    this.order.orderLines = this.order.orderLines?.filter(orderLine => orderLine.id !== idline);
+  deleteOrderLine(ol: OrderLine): void {
+    this.orderService.deleteFromBasket(ol);
   }
 
   showPayment(): boolean {
+    this.orderService.setOrderDate();
     if (this.openPayment) {
       this.openPayment = false;
       return true;
@@ -60,6 +46,6 @@ export class OrderDetailComponent implements OnInit {
   }
 
   deleteOrder(): void {
-    this.order = { id: -1, totalPrice: 0 };
+    this.orderService.deleteAllBasket();
   }
 }

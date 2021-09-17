@@ -16,6 +16,10 @@ export class ClientService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
+  getClient(): IClient | null {
+    return null;
+  }
+
   create(client: IClient): Observable<EntityResponseType> {
     return this.http.post<IClient>(this.resourceUrl, client, { observe: 'response' });
   }

@@ -1,8 +1,10 @@
+
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
+import { OrderService } from './../../order/service/order.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -23,7 +25,11 @@ export class ProductService {
   filterType = '';
   nameSearched: string | undefined;
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+    protected orderService: OrderService
+  ) {}
 
   ajouterPanier(product: IProduct, quantity: number): void {
     let panierLocal = JSON.parse(localStorage.getItem('panier')!);
@@ -32,17 +38,19 @@ export class ProductService {
     }
     let found = false;
     panierLocal.forEach((order: OrderLine) => {
-      if (order.product!.id === product.id) {
-        order.quantity! += quantity;
+      if (order.product.id === product.id) {
+        order.quantity += quantity;
         found = true;
       }
     });
     if (!found) {
-      const orderline = new OrderLine(null, quantity, product.price, product, null);
+      const orderline = { product, quantity, unityPrice: product.price };
       panierLocal.push(orderline);
       console.log(orderline);
     }
     localStorage.setItem('panier', JSON.stringify(panierLocal));
+
+    this.orderService.addToBasket(product, quantity);
   }
 
   getPanier(): any {
@@ -57,7 +65,7 @@ export class ProductService {
   removeFromPanier(produit: IProduct): void {
     const panier = JSON.parse(localStorage.getItem('panier')!);
     panier.forEach((order: OrderLine) => {
-      if (order.product!.id === produit.id) {
+      if (order.product.id === produit.id) {
         panier.splice(panier.indexOf(order), 1);
       }
     });
@@ -68,7 +76,7 @@ export class ProductService {
     const panier = JSON.parse(localStorage.getItem('panier')!);
     let found = false;
     panier.forEach((order: OrderLine) => {
-      if (order.product!.id === produit.id) {
+      if (order.product.id === produit.id) {
         found = true;
       }
     });

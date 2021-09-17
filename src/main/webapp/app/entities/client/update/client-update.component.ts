@@ -40,11 +40,11 @@ export class ClientUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const client = this.createFromForm();
-    if (client.id !== undefined) {
-      this.subscribeToSaveResponse(this.clientService.update(client));
-    } else {
-      this.subscribeToSaveResponse(this.clientService.create(client));
-    }
+    // if (client.id !== undefined) {
+    //  this.subscribeToSaveResponse(this.clientService.update(client));
+    // } else {
+    this.subscribeToSaveResponse(this.clientService.create(client));
+    // }
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IClient>>): void {
