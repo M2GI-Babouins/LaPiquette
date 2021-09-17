@@ -21,6 +21,12 @@
         </div>
       </div>
       <br />-->
+
+<div id="ajoutProduit" class="col-12">
+  <button class="btn-success col-12" *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/product/new']">
+    <span>Ajouter un Nouveau Produit</span>
+  </button>
+</div>
 <div>
   <jhi-alert-error></jhi-alert-error>
 

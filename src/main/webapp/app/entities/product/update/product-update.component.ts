@@ -81,6 +81,10 @@ export class ProductUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  nouveauProduit(): IProduct {
+    return { ...new Product() };
+  }
+
   save(): void {
     this.isSaving = true;
     const product = this.createFromForm();

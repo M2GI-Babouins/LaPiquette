@@ -19,10 +19,6 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-1">
-        <label for="id">Id</label>
-        <input type="text" class="form-control" id="id" value="1" required formControlName="id" [readonly]="true" />
-      </div>
       <div class="form-group col-9">
         <label for="name">Nom</label>
         <input type="text" class="form-control" id="name" value="" required data-cy="name" formControlName="name" />
@@ -35,6 +31,10 @@
           </div>
           <input type="number" class="form-control" id="prix" step="0.01" required data-cy="price" formControlName="price" />
         </div>
+      </div>
+      <div class="col-1">
+        <label for="stock">Stock</label>
+        <input type="number" class="form-control" id="stock" step="1" min="0" required data-cy="stock" formControlName="stock" />
       </div>
     </div>
     <div class="form-row">
@@ -59,12 +59,13 @@
             id="alcool"
             step="0.1"
             min="0"
+            max="100"
             required
             data-cy="alcoholPer"
             formControlName="alcoholPer"
           />
           <div class="input-group-prepend">
-            <span class="input-group-text" id="alcool">°C</span>
+            <span class="input-group-text" id="alcool">%</span>
           </div>
         </div>
       </div>
@@ -90,7 +91,7 @@
         </div>
         <div class="col-12">
           <label for="img">Image</label>
-          <input type="file" class="form-control" id="img" required data-cy="image" formControlName="image" />
+          <input type="file" class="form-control" id="img" data-cy="image" formControlName="image" />
         </div>
       </div>
       <div class="form-group col-10">
