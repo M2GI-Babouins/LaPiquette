@@ -47,11 +47,15 @@
     <div class="form-row">
       <div class="form-group col-2">
         <label for="id">Region</label>
-        <input type="text" class="form-control" id="id" required data-cy="region" formControlName="region" />
+        <select class="form-control" id="id" required data-cy="region" formControlName="region">
+          <option *ngFor="let region of valuesRegion()">{{ region }}</option>
+        </select>
       </div>
       <div class="form-group col-2">
         <label for="type">Type</label>
-        <input type="text" class="form-control" id="type" required data-cy="type" formControlName="type" />
+        <select class="form-control" id="type" required data-cy="type" formControlName="type">
+          <option *ngFor="let type of valuesType()">{{ type }}</option>
+        </select>
       </div>
       <div class="form-group col-2">
         <label for="annee">Année</label>

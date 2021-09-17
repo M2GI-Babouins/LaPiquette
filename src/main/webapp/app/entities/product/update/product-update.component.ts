@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Type } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { IProduct, Product } from '../product.model';
+import { IProduct, Product, Region, TypeVin } from '../product.model';
 import { ProductService } from '../service/product.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -19,6 +19,9 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 export class ProductUpdateComponent implements OnInit {
   isSaving = false;
   formInvalid = false;
+
+  regions = Region;
+  type = TypeVin;
 
   editForm = this.fb.group({
     id: [null, []],
@@ -51,6 +54,16 @@ export class ProductUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ product }) => {
       this.updateForm(product);
     });
+  }
+
+  valuesRegion(): Array<string> {
+    const keys = Object.values(this.regions);
+    return keys;
+  }
+
+  valuesType(): Array<string> {
+    const keys = Object.values(this.type);
+    return keys;
   }
 
   byteSize(base64String: string): string {
