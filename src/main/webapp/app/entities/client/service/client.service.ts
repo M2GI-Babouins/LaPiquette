@@ -7,7 +7,6 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IClient, getClientIdentifier } from '../client.model';
 import { OrderService } from './../../order/service/order.service';
-import { Account } from './../../../core/auth/account.model';
 
 export type EntityResponseType = HttpResponse<IClient>;
 export type EntityArrayResponseType = HttpResponse<IClient[]>;
