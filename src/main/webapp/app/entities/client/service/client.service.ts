@@ -6,6 +6,8 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IClient, getClientIdentifier } from '../client.model';
+import { OrderService } from './../../order/service/order.service';
+import { Account } from './../../../core/auth/account.model';
 
 export type EntityResponseType = HttpResponse<IClient>;
 export type EntityArrayResponseType = HttpResponse<IClient[]>;
@@ -14,10 +16,38 @@ export type EntityArrayResponseType = HttpResponse<IClient[]>;
 export class ClientService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/clients');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  protected client: IClient | null = null;
 
-  getClient(): IClient | null {
-    return null;
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+    protected orderService: OrderService
+  ) {}
+
+  logClient(email: string | null): void {
+    // eslint-disable-next-line no-console
+    console.log(email);
+    if (email == null) {
+      this.client = null;
+      return;
+    }
+
+    this.http
+      .get<IClient>(`${this.resourceUrl}/getbyemail/${email}`, { observe: 'response' })
+      .subscribe(reponse => this.authenticateClient(reponse.body));
+  }
+
+  authenticateClient(client: IClient | null): void {
+    // eslint-disable-next-line no-console
+    console.log(client);
+
+    if (client == null) {
+      // TODO si le client n'est pas trouvé
+      return;
+    }
+
+    this.client = client;
+    this.orderService.setClient(this.client);
   }
 
   create(client: IClient): Observable<EntityResponseType> {

@@ -15,8 +15,6 @@ export class OrderDetailComponent {
   constructor(protected activatedRoute: ActivatedRoute, protected orderService: OrderService) {}
 
   getBasket(): IOrder {
-    // eslint-disable-next-line no-console
-    console.log(this.orderService.getBasket().orderLines);
     return this.orderService.getBasket();
   }
 

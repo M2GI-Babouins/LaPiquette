@@ -1,3 +1,4 @@
+import { IClient } from './../../client/client.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -11,7 +12,6 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { IOrder, getOrderIdentifier } from '../order.model';
 import { IOrderLine } from './../../order-line/order-line.model';
 import { IProduct } from './../../product/product.model';
-import { ClientService } from './../../client/service/client.service';
 
 export type EntityResponseType = HttpResponse<IOrder>;
 export type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -22,13 +22,7 @@ export class OrderService {
 
   protected basket: IOrder = { id: 0, orderLines: [], totalPrice: 0, basket: true };
 
-  constructor(
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
-    protected clientService: ClientService
-  ) {
-    this.findBasket();
-  }
+  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   // #region Basket
   getBasket(): IOrder {
@@ -79,7 +73,7 @@ export class OrderService {
   }
 
   updateBasket(): void {
-    if (this.notClient()) {
+    if (this.basket.client == null) {
       return;
     }
 
@@ -92,13 +86,12 @@ export class OrderService {
   }
 
   findBasket(): void {
-    if (this.notClient()) {
+    if (this.basket.client == null) {
       return;
     }
-    const clientid = this.clientService.getClient()!.id;
 
     this.http
-      .get<IOrder>(`${this.resourceUrl}/${clientid}/basket`, { observe: 'response' })
+      .get<IOrder>(`${this.resourceUrl}/${this.basket.client.id}/basket`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
       .subscribe(data => {
         // eslint-disable-next-line no-console
@@ -112,9 +105,11 @@ export class OrderService {
       });
   }
 
-  notClient(): boolean {
-    return this.clientService.getClient() == null;
+  setClient(client: IClient): void {
+    this.basket.client = client;
+    this.findBasket();
   }
+
   // #endregion Basket
 
   create(order: IOrder): Observable<EntityResponseType> {
