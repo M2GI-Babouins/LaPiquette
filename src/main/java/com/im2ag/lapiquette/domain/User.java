@@ -2,7 +2,6 @@ package com.im2ag.lapiquette.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.im2ag.lapiquette.config.Constants;
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
