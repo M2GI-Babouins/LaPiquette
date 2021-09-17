@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -17,6 +18,7 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 })
 export class ProductUpdateComponent implements OnInit {
   isSaving = false;
+  formInvalid = false;
 
   editForm = this.fb.group({
     id: [null, []],
@@ -80,17 +82,27 @@ export class ProductUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  nouveauProduit(): IProduct {
+    return { ...new Product() };
+  }
+
   save(): void {
+    console.log('save');
     this.isSaving = true;
-    const product = this.createFromForm();
-    if (product.id !== undefined) {
-      this.subscribeToSaveResponse(this.productService.update(product));
+    if (this.editForm.invalid) {
+      this.formInvalid = true;
     } else {
-      this.subscribeToSaveResponse(this.productService.create(product));
+      const product = this.createFromForm();
+      if (product.id !== undefined) {
+        this.subscribeToSaveResponse(this.productService.update(product));
+      } else {
+        this.subscribeToSaveResponse(this.productService.create(product));
+      }
     }
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IProduct>>): void {
+    console.log('save 2');
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
@@ -98,6 +110,7 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
+    console.log('save 3');
     this.previousState();
   }
 
@@ -110,6 +123,7 @@ export class ProductUpdateComponent implements OnInit {
   }
 
   protected updateForm(product: IProduct): void {
+    console.log('save 4');
     this.editForm.patchValue({
       id: product.id,
       name: product.name,

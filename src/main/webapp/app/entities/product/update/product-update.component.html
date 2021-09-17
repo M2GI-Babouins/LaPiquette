@@ -1,193 +1,110 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-product-heading" data-cy="ProductCreateUpdateHeading" jhiTranslate="laPiquetteApp.product.home.createOrEditLabel">
-        Create or edit a Product
-      </h2>
+<div *ngIf="formInvalid" class="alert alert-danger alert-dismissible fade show" role="alert">
+  Le formulaire n'est pas valide
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
 
-      <div>
-        <jhi-alert-error></jhi-alert-error>
+<div class="col-10 row justify-content-center">
+  <form class="col-12" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <div class="form-row">
+      <div class="form-group col-1">
+        <button type="submit" class="btn btn-outline-info" type="submit" [routerLink]="['/product']" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
+        </button>
+      </div>
+      <div class="form-group col-2">
+        <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" class="btn btn-success">
+          <fa-icon icon="save"></fa-icon>
+          Sauvegarder
+        </button>
+      </div>
+      <div class="form-group col-1">
+        <button type="reset" data-cy="entityCreateSaveButton" class="btn btn-warning">Annuler</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-9">
+        <label for="name">Nom</label>
+        <input type="text" class="form-control" id="name" value="" required data-cy="name" formControlName="name" />
+      </div>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.id" for="field_id">Id</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          <div *ngIf="editForm.get('id')!.invalid && (editForm.get('id')!.dirty || editForm.get('id')!.touched)">
-            <small class="form-text text-danger" [hidden]="!editForm.get('id')?.errors?.number" jhiTranslate="entity.validation.number">
-              This field should be a number.
-            </small>
+      <div class="forme-groupe col-2">
+        <label for="prix">Prix</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="prix">€</span>
           </div>
+          <input type="number" class="form-control" id="prix" step="0.01" min="0" required data-cy="price" formControlName="price" />
         </div>
+      </div>
 
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.name" for="field_name">Name</label>
-          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.year" for="field_year">Year</label>
-          <input type="number" class="form-control" name="year" id="field_year" data-cy="year" formControlName="year" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.region" for="field_region">Region</label>
-          <input type="text" class="form-control" name="region" id="field_region" data-cy="region" formControlName="region" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.type" for="field_type">Type</label>
-          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.price" for="field_price">Price</label>
-          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.description" for="field_description">Description</label>
-          <input
-            type="text"
-            class="form-control"
-            name="description"
-            id="field_description"
-            data-cy="description"
-            formControlName="description"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.alcoholPer" for="field_alcoholPer">Alcohol Per</label>
+      <div class="col-1">
+        <label for="stock">Stock</label>
+        <input type="number" class="form-control" id="stock" step="1" min="0" required data-cy="stock" formControlName="stock" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-2">
+        <label for="id">Region</label>
+        <input type="text" class="form-control" id="id" required data-cy="region" formControlName="region" />
+      </div>
+      <div class="form-group col-2">
+        <label for="type">Type</label>
+        <input type="text" class="form-control" id="type" required data-cy="type" formControlName="type" />
+      </div>
+      <div class="form-group col-2">
+        <label for="annee">Année</label>
+        <input type="number" class="form-control" id="annee" step="1" min="0" max="2021" required data-cy="year" formControlName="year" />
+      </div>
+      <div class="form-group col-2">
+        <label for="alcool">Alcool</label>
+        <div class="input-group">
           <input
             type="number"
             class="form-control"
-            name="alcoholPer"
-            id="field_alcoholPer"
+            id="alcool"
+            step="0.1"
+            min="0"
+            max="100"
+            required
             data-cy="alcoholPer"
             formControlName="alcoholPer"
           />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.recommandation" for="field_recommandation"
-            >Recommandation</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="recommandation"
-            id="field_recommandation"
-            data-cy="recommandation"
-            formControlName="recommandation"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.ageLimit" for="field_ageLimit">Age Limit</label>
-          <input type="number" class="form-control" name="ageLimit" id="field_ageLimit" data-cy="ageLimit" formControlName="ageLimit" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.temperature" for="field_temperature">Temperature</label>
-          <input
-            type="number"
-            class="form-control"
-            name="temperature"
-            id="field_temperature"
-            data-cy="temperature"
-            formControlName="temperature"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.percentPromo" for="field_percentPromo">Percent Promo</label>
-          <input
-            type="number"
-            class="form-control"
-            name="percentPromo"
-            id="field_percentPromo"
-            data-cy="percentPromo"
-            formControlName="percentPromo"
-          />
-          <div
-            *ngIf="editForm.get('percentPromo')!.invalid && (editForm.get('percentPromo')!.dirty || editForm.get('percentPromo')!.touched)"
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('percentPromo')?.errors?.max"
-              jhiTranslate="entity.validation.max"
-              [translateValues]="{ max: 1 }"
-            >
-              This field cannot be more than 1.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('percentPromo')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="alcool">%</span>
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.stock" for="field_stock">Stock</label>
-          <input type="number" class="form-control" name="stock" id="field_stock" data-cy="stock" formControlName="stock" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="laPiquetteApp.product.image" for="field_image">Image</label>
-          <div>
-            <img
-              [src]="'data:' + editForm.get('imageContentType')!.value + ';base64,' + editForm.get('image')!.value"
-              style="max-height: 100px"
-              *ngIf="editForm.get('image')!.value"
-              alt="product image"
-            />
-            <div *ngIf="editForm.get('image')!.value" class="form-text text-danger clearfix">
-              <span class="pull-left">{{ editForm.get('imageContentType')!.value }}, {{ byteSize(editForm.get('image')!.value) }}</span>
-              <button
-                type="button"
-                (click)="clearInputImage('image', 'imageContentType', 'file_image')"
-                class="btn btn-secondary btn-xs pull-right"
-              >
-                <fa-icon icon="times"></fa-icon>
-              </button>
-            </div>
-            <input
-              type="file"
-              id="file_image"
-              data-cy="image"
-              (change)="setFileData($event, 'image', true)"
-              accept="image/*"
-              jhiTranslate="entity.action.addimage"
-            />
+      </div>
+      <div class="form-group col-2">
+        <label for="age">Age de Garde</label>
+        <input type="number" class="form-control" id="age" step="1" min="0" required data-cy="ageLimit" formControlName="ageLimit" />
+      </div>
+      <div class="form-group col-2">
+        <label for="temp">Temperature Conso.</label>
+        <div class="input-group">
+          <input type="number" class="form-control" id="temp" step="1" required data-cy="temperature" formControlName="temperature" />
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="temp">°C</span>
           </div>
-          <input type="hidden" class="form-control" name="image" id="field_image" data-cy="image" formControlName="image" />
-          <input
-            type="hidden"
-            class="form-control"
-            name="imageContentType"
-            id="field_imageContentType"
-            formControlName="imageContentType"
-          />
         </div>
       </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-2">
+        <div class="col-12">
+          <label for="reco">Recommandation</label>
+          <input type="text" class="form-control" id="reco" required data-cy="recommandation" formControlName="recommandation" />
+        </div>
+        <div class="col-12">
+          <label for="img">Image</label>
+          <input type="file" class="form-control" id="img" data-cy="image" formControlName="image" />
+        </div>
       </div>
-    </form>
-  </div>
+      <div class="form-group col-10">
+        <label for="reco">Description</label>
+        <textarea class="form-control" id="reco" rows="5" required data-cy="description" formControlName="description"></textarea>
+      </div>
+    </div>
+  </form>
 </div>
