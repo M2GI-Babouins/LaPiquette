@@ -29,6 +29,7 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.products.length !== 0) {
+      this.wineData = {};
       this.fillYearMade();
       this.getRecommandations();
     }
