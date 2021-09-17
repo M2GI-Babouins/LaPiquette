@@ -46,7 +46,6 @@ public class ProductService {
      * @param product the entity to update partially.
      * @return the persisted entity.
      */
-    @Lock(javax.persistence.LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Product> partialUpdate(Product product) {
         log.debug("Request to partially update Product : {}", product);
 
