@@ -77,8 +77,8 @@ export class OrderService {
     const copy = this.convertDateFromClient(this.basket);
     this.http
       .put<IOrder>(`${this.resourceUrl}/basket`, copy, { observe: 'response' })
-      // eslint-disable-next-line no-console
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      // eslint-disable-next-line no-console
       .subscribe(data => console.log(data));
   }
 
