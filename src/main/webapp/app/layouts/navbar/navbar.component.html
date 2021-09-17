@@ -18,7 +18,7 @@
   </a>
   <div class="navbar-collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
     <ul class="navbar-nav">
-      <li class="nav-item col-sm-3" routerLinkActive="active">
+      <li class="nav-item col-sm-5" routerLinkActive="active">
         <input class="col-8 col-sm-6" type="text" value="Chercher un vin" name="name" [(ngModel)]="wineName" />
         <a class="nav-link col-4 col-sm-6" (click)="onSearch()">
           <span>
@@ -28,7 +28,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('')">
           <span>
             <fa-icon></fa-icon>
             <span>Tout Nos Vins</span>
@@ -36,7 +36,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('rouge')">
           <span>
             <fa-icon></fa-icon>
             <span>Vins Rouge</span>
@@ -44,7 +44,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('blanc')">
           <span>
             <fa-icon></fa-icon>
             <span>Vins Blanc</span>
@@ -52,7 +52,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('rosé')">
           <span>
             <fa-icon></fa-icon>
             <span>Vins Rosé</span>
@@ -60,15 +60,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
-          <span>
-            <fa-icon></fa-icon>
-            <span>Vins Mousseux</span>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/order/' + order.id + '/view']">
+        <a class="nav-link" routerLink="/order/basket">
           <span>
             <fa-icon></fa-icon>
             <span>Panier</span>

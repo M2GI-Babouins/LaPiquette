@@ -1,6 +1,8 @@
 .product {
+  border: 2px solid #831717;
   margin: 5px;
   padding: 5px;
+  background-color: #e0a8a8;
 }
 
 .btn {
@@ -10,20 +12,6 @@
 .table-responsive {
   margin-left: 27%; /* Same as the width of the sidebar */
   padding: 0px 10px;
-}
-
-.product-wrapper {
-  display: grid;
-  grid-template-columns: 21% 21% 21%;
-  grid-gap: 3%;
-}
-
-.product-box {
-  background-color: #e6d5d5;
-  border-color: #831717;
-  border-radius: 5px;
-  padding: 20px;
-  font-size: 150%;
 }
 
 /* The sidebar menu */

@@ -26,9 +26,9 @@ export class NavbarComponent implements OnInit {
   openAPIEnabled?: boolean;
   version = '';
   account: Account | null = null;
-  order: IOrder = { id: 2 };
   orderList: IOrder[] = [];
   wineName = '';
+  isLoading = false;
 
   constructor(
     private loginService: LoginService,
@@ -77,7 +77,14 @@ export class NavbarComponent implements OnInit {
 
   onSearch() {
     console.log(this.wineName);
-    // use productService
+    this.productService.setNameSearched(this.wineName);
+    this.productService.setFilterType('');
+    this.router.navigate(['/product']);
+  }
+
+  setType(type: string) {
+    this.productService.setFilterType(type);
+    this.productService.setNameSearched(undefined);
     this.router.navigate(['/product']);
   }
 }

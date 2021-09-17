@@ -31,7 +31,7 @@ public class Order implements Serializable {
     private LocalDate datePurchase;
 
     @Column(name = "basket")
-    private Boolean basket;
+    public Boolean basket;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "orders" }, allowSetters = true)

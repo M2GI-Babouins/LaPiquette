@@ -2,20 +2,20 @@ import { IProduct } from 'app/entities/product/product.model';
 import { IOrder } from 'app/entities/order/order.model';
 
 export interface IOrderLine {
-  id?: number | null;
-  quantity?: number | null;
-  unityPrice?: number | null;
-  product?: IProduct | null;
+  product: IProduct;
+  quantity: number;
+  unityPrice: number;
   order?: IOrder | null;
+  id?: number | null;
   totalPrice?: number;
 }
 
 export class OrderLine implements IOrderLine {
   constructor(
+    public product: IProduct,
+    public quantity: number = 1,
+    public unityPrice: number = 0,
     public id?: number | null,
-    public quantity?: number | null,
-    public unityPrice?: number | null,
-    public product?: IProduct | null,
     public order?: IOrder | null
   ) {}
 }

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable no-console */
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewInit, Component, DoCheck, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
@@ -15,8 +16,6 @@ import { IProduct, Recommandation, Region } from '../product.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { ProductService } from '../service/product.service';
 import { ProductDeleteDialogComponent } from '../delete/product-delete-dialog.component';
-import { Order } from 'app/entities/order/order.model';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-product',
@@ -25,15 +24,18 @@ import { first } from 'rxjs/operators';
 })
 export class ProductComponent implements OnInit {
   products: IProduct[] = [];
-  newProducts: IProduct[] = [];
+  baseProducts: IProduct[] = [];
 
   isLoading = false;
+  hasBeenChecked = true;
+  numberOfTimeChecked = 0;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
   page?: number;
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  productAdded = false;
 
   constructor(
     protected productService: ProductService,
@@ -84,7 +86,8 @@ export class ProductComponent implements OnInit {
   }
 
   public addToCart(product: any) {
-    console.log('Vive le scrumdaddy');
+    this.productAdded = true;
+    this.productService.ajouterPanier(product, 1);
   }
 
   public setNewProducts(products: IProduct[]) {
@@ -126,11 +129,29 @@ export class ProductComponent implements OnInit {
         },
       });
     }
+    this.baseProducts = data ?? [];
     this.products = data ?? [];
+    this.filterProductsByType(this.productService.getFilterType()!);
+    this.filterProductsByName(this.productService.getnameSearched()!);
     this.ngbPaginationPage = this.page;
   }
 
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
+  }
+
+  filterProductsByType(filter: string) {
+    if (filter !== '') {
+      this.baseProducts = this.baseProducts.filter(product => product.type === filter);
+      this.products = this.products.filter(product => product.type === filter);
+    }
+  }
+
+  filterProductsByName(filter: string) {
+    if (this.productService.getnameSearched()) {
+      filter = filter.toLowerCase();
+      this.baseProducts = this.baseProducts.filter(product => product.name?.toLocaleLowerCase() === filter);
+      this.products = this.products.filter(product => product.name?.toLocaleLowerCase() === filter);
+    }
   }
 }

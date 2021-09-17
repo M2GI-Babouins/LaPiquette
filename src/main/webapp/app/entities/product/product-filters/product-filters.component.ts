@@ -4,30 +4,35 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { map, tail, times, uniq } from 'lodash';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
+import { flattenDeep, uniq } from 'lodash';
 import { IProduct, Recommandation, Region } from '../product.model';
+import { ProductService } from '../service/product.service';
 
 @Component({
   selector: 'jhi-product-filters',
   templateUrl: './product-filters.component.html',
   styleUrls: ['./product-filters.component.scss'],
 })
-export class ProductFiltersComponent implements OnInit {
+export class ProductFiltersComponent implements OnInit, OnChanges {
   @Input() products: IProduct[] = [];
   @Output() newProducts = new EventEmitter<IProduct[]>();
 
-  recommandations = Recommandation;
   regions = Region;
+  yearMade: number[] = [];
   wineData: IProduct = {};
+  recommandations!: (string | undefined)[];
 
-  constructor() {}
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {}
 
-  valuesRecommandation(): Array<string> {
-    const keys = Object.values(this.recommandations);
-    return keys;
+  ngOnChanges() {
+    if (this.products.length !== 0) {
+      this.wineData = {};
+      this.fillYearMade();
+      this.getRecommandations();
+    }
   }
 
   valuesRegion(): Array<string> {
@@ -35,47 +40,60 @@ export class ProductFiltersComponent implements OnInit {
     return keys;
   }
 
-  onClickSubmit() {
-    let productRecommandation: IProduct[] = [];
-    let productRegion: IProduct[] = [];
-    let productPrice: IProduct[] = [];
-    let productsFiltered;
+  fillYearMade() {
+    const oldestWineYear = this.productService.getOlderWineYear(this.products);
+    this.yearMade.length = 2021 - oldestWineYear;
+    this.yearMade.fill(0);
+    this.yearMade = this.yearMade.map((year, i) => (year = oldestWineYear + i));
+  }
 
-    if (this.wineData.price) {
-      productPrice = this.products.filter(product => product.price! <= this.wineData.price!);
+  getRecommandations() {
+    const pReco = this.products.map(p => p.recommandation);
+    const recommandationsBis = flattenDeep(pReco.map(reco => reco?.split(',')));
+    const recoFinal = uniq(recommandationsBis.map(r => r?.toLowerCase()).map(r => r?.trim()));
+    this.recommandations = recoFinal;
+  }
+
+  filterRegion() {
+    if (this.wineData.region !== null) {
+      const productFiltered = this.products.filter(product => product.region === this.wineData.region);
+      this.newProducts.emit(productFiltered);
     }
-    if (this.wineData.region) {
-      if (productPrice.length === 0) {
-        productRegion = this.products.filter(product => product.region === this.wineData.region);
-      } else {
-        productRegion = productPrice.filter(product => product.region === this.wineData.region);
-      }
-    }
-    if (this.wineData.recommandation) {
-      if (productRegion.length !== 0) {
-        productRecommandation = productRegion.filter(product => product.recommandation === this.wineData.recommandation);
-      } else {
-        if (productPrice.length !== 0) {
-          productRecommandation = productPrice.filter(product => product.recommandation === this.wineData.recommandation);
+  }
+
+  filterRecommandation() {
+    if (this.wineData.recommandation !== null) {
+      const productFiltered = this.products.filter(product => {
+        const recos = product.recommandation
+          ?.split(',')
+          .map(r => r.toLowerCase())
+          .map(r => r.trim());
+        const alors = recos?.includes(this.wineData.recommandation!);
+        if (recos?.includes(this.wineData.recommandation!)) {
+          return true;
         } else {
-          productRecommandation = this.products.filter(product => product.recommandation === this.wineData.recommandation);
+          return false;
         }
-      }
+      });
+      this.newProducts.emit(productFiltered);
     }
+  }
 
-    if (productRecommandation.length !== 0) {
-      productsFiltered = productRecommandation;
-    } else if (productRegion.length !== 0) {
-      productsFiltered = productRegion;
-    } else if (productPrice.length !== 0) {
-      productsFiltered = productPrice;
-    } else {
-      productsFiltered = this.products;
+  filterYear() {
+    if (this.wineData.year !== null) {
+      const productFiltered = this.products.filter(product => product.year! <= this.wineData.year!);
+      this.newProducts.emit(productFiltered);
     }
+  }
 
-    console.log('new products : ');
-    console.log(productsFiltered);
+  filterPrice() {
+    if (this.wineData.price !== null) {
+      const productFiltered = this.products.filter(product => product.price! <= this.wineData.price!);
+      this.newProducts.emit(productFiltered);
+    }
+  }
 
-    this.newProducts.emit(productsFiltered);
+  reset() {
+    this.newProducts.emit(this.products);
   }
 }

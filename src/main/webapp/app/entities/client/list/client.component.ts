@@ -58,7 +58,7 @@ export class ClientComponent implements OnInit {
   }
 
   trackId(index: number, item: IClient): number {
-    return item.id!;
+    return item.id;
   }
 
   delete(client: IClient): void {

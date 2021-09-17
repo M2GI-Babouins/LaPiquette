@@ -9,3 +9,4 @@ id;first_name;last_name;email;adress;logged_in;password
 8;Ismérie;Gaillard;Audrey10@yahoo.fr;magenta;true;Fantastic
 9;Brunehilde;Mathieu;Galle_Dupont@gmail.com;Market Gorgeous;true;Niger Manager
 10;Séverine;Collet;Mahaut_Benoit57@hotmail.fr;Licensed Stagiaire Nauru;true;deposit Checking Shoes
+11;JHipsterUser;JU;user@localhost;default;false;Default JHipsterUser

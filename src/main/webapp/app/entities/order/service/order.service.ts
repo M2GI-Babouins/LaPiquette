@@ -1,3 +1,4 @@
+import { IClient } from './../../client/client.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -9,6 +10,8 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IOrder, getOrderIdentifier } from '../order.model';
+import { IOrderLine } from './../../order-line/order-line.model';
+import { IProduct } from './../../product/product.model';
 
 export type EntityResponseType = HttpResponse<IOrder>;
 export type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -17,7 +20,97 @@ export type EntityArrayResponseType = HttpResponse<IOrder[]>;
 export class OrderService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/orders');
 
+  protected basket: IOrder = { id: 0, orderLines: [], totalPrice: 0, basket: true };
+
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+
+  // #region Basket
+  getBasket(): IOrder {
+    return this.basket;
+  }
+
+  addToBasket(product: IProduct, quantity: number): void {
+    let orderline = this.basket.orderLines.find(ol => ol.product.id === product.id);
+    if (orderline != null) {
+      orderline.quantity += quantity;
+    } else {
+      orderline = { product, quantity, unityPrice: product.price! };
+      this.basket.orderLines.push(orderline);
+    }
+
+    this.calculateTotal();
+    this.updateBasket();
+  }
+
+  changeBasketQuantity(orderLine: IOrderLine, quantity: number): void {
+    orderLine.quantity = quantity;
+    this.calculateTotal();
+    this.updateBasket();
+  }
+
+  deleteFromBasket(orderLine: IOrderLine): void {
+    this.basket.orderLines.splice(this.basket.orderLines.findIndex(ol => ol === orderLine));
+    this.calculateTotal();
+    this.updateBasket();
+  }
+
+  deleteAllBasket(): void {
+    this.basket.orderLines = [];
+    this.calculateTotal();
+    this.updateBasket();
+  }
+
+  calculateTotal(): void {
+    this.basket.totalPrice = 0;
+
+    this.basket.orderLines.forEach(ol => {
+      this.basket.totalPrice += ol.unityPrice * ol.quantity;
+    });
+  }
+
+  setOrderDate(): void {
+    this.basket.datePurchase = dayjs();
+  }
+
+  updateBasket(): void {
+    if (this.basket.client == null) {
+      return;
+    }
+
+    const copy = this.convertDateFromClient(this.basket);
+    this.http
+      .put<IOrder>(`${this.resourceUrl}/basket`, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      // eslint-disable-next-line no-console
+      .subscribe(data => console.log(data));
+  }
+
+  findBasket(): void {
+    if (this.basket.client == null) {
+      return;
+    }
+
+    this.http
+      .get<IOrder>(`${this.resourceUrl}/${this.basket.client.id}/basket`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .subscribe(data => {
+        // eslint-disable-next-line no-console
+        console.log(data);
+        if (data.body) {
+          this.basket.id = data.body.id;
+          this.basket.datePurchase = data.body.datePurchase;
+          this.basket.totalPrice = data.body.totalPrice;
+          this.basket.orderLines = data.body.orderLines;
+        }
+      });
+  }
+
+  setClient(client: IClient): void {
+    this.basket.client = client;
+    this.findBasket();
+  }
+
+  // #endregion Basket
 
   create(order: IOrder): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(order);

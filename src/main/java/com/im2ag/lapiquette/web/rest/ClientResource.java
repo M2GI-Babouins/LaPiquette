@@ -48,6 +48,22 @@ public class ClientResource {
     }
 
     /**
+     * {@code GET  /clients/:email} : get the "email" client.
+     *
+     * @param email the email of the client to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the client, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/clients/getbyemail/{email}")
+    public ResponseEntity<Client> getClient(@PathVariable String email) {
+        log.debug("REST request to get Client with mail : {}", email);
+
+        List<Client> clientlist = clientRepository.findAll();
+        Optional<Client> client = clientlist.stream().filter(c -> c.getEmail().equals(email)).findFirst();
+
+        return ResponseUtil.wrapOrNotFound(client);
+    }
+
+    /**
      * {@code POST  /clients} : Create a new client.
      *
      * @param client the client to create.

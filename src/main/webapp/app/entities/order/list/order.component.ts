@@ -62,7 +62,7 @@ export class OrderComponent implements OnInit {
     ];
 
     this.orders = [
-      { id: 1, totalPrice: 27 },
+      { id: 1, totalPrice: 27, orderLines: [] },
       { id: 2, totalPrice: 27, orderLines: orderline },
     ];
   }

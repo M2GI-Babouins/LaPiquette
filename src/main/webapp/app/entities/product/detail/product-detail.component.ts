@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +10,7 @@ import { ProductService } from '../service/product.service';
 @Component({
   selector: 'jhi-product-detail',
   templateUrl: './product-detail.component.html',
+  styleUrls: ['../list/product.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
   quantity!: number;
@@ -18,6 +20,7 @@ export class ProductDetailComponent implements OnInit {
   panierLocal: any = [];
 
   productAdded = false;
+  productRemoved = false;
 
   constructor(protected activatedRoute: ActivatedRoute, protected dataUtils: DataUtils, protected productService: ProductService) {}
 
@@ -31,11 +34,16 @@ export class ProductDetailComponent implements OnInit {
 
   public addToCart(product: IProduct): void {
     this.productAdded = true;
+    this.productRemoved = false;
+    if (!this.quantity) {
+      this.quantity = 1;
+    }
     this.productService.ajouterPanier(product, this.quantity);
   }
 
   public removeFromCart(product: IProduct): void {
     this.productAdded = false;
+    this.productRemoved = true;
     this.productService.removeFromPanier(product);
   }
 
