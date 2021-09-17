@@ -1,3 +1,114 @@
+<div class="col-10 row justify-content-center">
+  <form class="col-12" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <div class="form-row">
+      <div class="form-group col-1">
+        <button type="submit" class="btn btn-warning" type="submit" [routerLink]="['/product']" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+      </div>
+      <div class="form-group col-1">
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-success"
+        >
+          <fa-icon icon="save"></fa-icon>
+        </button>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-1">
+        <label for="id">Id</label>
+        <input type="text" class="form-control" id="id" value="1" required formControlName="id" [readonly]="true" />
+      </div>
+      <div class="form-group col-9">
+        <label for="name">Nom</label>
+        <input type="text" class="form-control" id="name" value="" required data-cy="name" formControlName="name" />
+      </div>
+      <div class="forme-groupe col-2">
+        <label for="prix">Prix</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="prix">€</span>
+          </div>
+          <input type="number" class="form-control" id="prix" step="0.01" required data-cy="price" formControlName="price" />
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-2">
+        <label for="id">Region</label>
+        <input type="text" class="form-control" id="id" required data-cy="region" formControlName="region" />
+      </div>
+      <div class="form-group col-2">
+        <label for="type">Type</label>
+        <input type="text" class="form-control" id="type" required data-cy="type" formControlName="type" />
+      </div>
+      <div class="form-group col-2">
+        <label for="annee">Annee</label>
+        <input type="number" class="form-control" id="annee" step="1" required data-cy="year" formControlName="year" />
+      </div>
+      <div class="form-group col-2">
+        <label for="alcool">Alcool</label>
+        <div class="input-group">
+          <input
+            type="number"
+            class="form-control"
+            id="alcool"
+            step="0.1"
+            min="0"
+            required
+            data-cy="alcoholPer"
+            formControlName="alcoholPer"
+          />
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="alcool">°C</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-2">
+        <label for="age">Age de Garde</label>
+        <input type="number" class="form-control" id="age" step="1" min="0" required data-cy="ageLimit" formControlName="ageLimit" />
+      </div>
+      <div class="form-group col-2">
+        <label for="temp">Temperature Conso.</label>
+        <div class="input-group">
+          <input type="number" class="form-control" id="temp" step="1" required data-cy="temperature" formControlName="temperature" />
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="temp">°C</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-2">
+        <div class="col-12">
+          <label for="reco">Recommandation</label>
+          <input type="text" class="form-control" id="reco" required data-cy="recommandation" formControlName="recommandation" />
+        </div>
+        <div class="col-12">
+          <label for="img">Image</label>
+          <input type="file" class="form-control" id="img" required data-cy="image" formControlName="image" />
+        </div>
+      </div>
+      <div class="form-group col-10">
+        <label for="reco">Description</label>
+        <textarea class="form-control" id="reco" rows="5" required data-cy="description" formControlName="description"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--
+public id?: number,
+    public description?: string | null,
+    public percentPromo?: number | null,
+    public stock?: number | null,
+    public imageContentType?: string | null,
+    public image?: string | null,
+    public orderLine?: IOrderLine | null
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
@@ -191,3 +302,4 @@
     </form>
   </div>
 </div>
+-->

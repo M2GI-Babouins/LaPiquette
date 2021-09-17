@@ -47,8 +47,8 @@
     <div class="filtres col-2">
       <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
     </div>
-
-    <div class="col-10">
+    <!--View User-->
+    <div class="col-10" *jhiHasAnyAuthority="'ROLE_USER'">
       <div class="row" id="entities" *ngIf="products && products.length > 0">
         <div class="product col-lg-3" *ngFor="let product of products; trackBy: trackId">
           <div class="product-detail product-detail-container" style="display: flex">
@@ -88,6 +88,15 @@
             <button type="submit" (click)="addToCart(product)" class="btn btn-outline-success btn-sm" data-cy="entityBasketButton">
               <fa-icon icon="plus"></fa-icon>
               <span class="d-none d-md-inline">Acheter</span>
+            </button>
+            <button
+              *jhiHasAnyAuthority="'ROLE_ADMIN'"
+              type="submit"
+              [routerLink]="['/product', product.id, 'edit']"
+              class="btn btn-outline-info btn-sm"
+              data-cy="entityDetailsButton"
+            >
+              <span class="d-none d-md-inline">Modifier</span>
             </button>
           </div>
         </div>
