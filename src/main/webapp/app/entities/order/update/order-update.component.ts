@@ -57,7 +57,7 @@ export class OrderUpdateComponent implements OnInit {
   }
 
   trackClientById(index: number, item: IClient): number {
-    return item.id!;
+    return item.id;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IOrder>>): void {

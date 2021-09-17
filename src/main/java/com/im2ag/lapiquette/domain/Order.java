@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -32,7 +31,7 @@ public class Order implements Serializable {
     private LocalDate datePurchase;
 
     @Column(name = "basket")
-    private Boolean basket;
+    public Boolean basket;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "orders" }, allowSetters = true)
