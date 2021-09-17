@@ -55,9 +55,6 @@ class OrderResourceIT {
     private OrderRepository orderRepository;
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -390,45 +387,5 @@ class OrderResourceIT {
         // Validate the database contains one less item
         List<Order> orderList = orderRepository.findAll();
         assertThat(orderList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    void checkAnOrder() throws Exception {
-        Product p1 = new Product();
-        Product p2 = new Product();
-        p1.setName("vin 1");
-        p2.setName("vin 2");
-        p1.setPrice(3.5f);
-        p2.setPrice(7.3f);
-        p1.setPercentPromo(1f);
-        p2.setPercentPromo(0.5f);
-
-        Set<OrderLine> orderLines = new TreeSet<OrderLine>();
-
-        Order order = new Order();
-        order.setBasket(true);
-        order.setTotalPrice(15f);
-        order.setOrderLines(orderLines);
-
-        productRepository.saveAndFlush(p1);
-        productRepository.saveAndFlush(p2);
-        orderRepository.saveAndFlush(order);
-
-        List<Product> productlist = productRepository.findAll();
-        List<Order> orderlist = orderRepository.findAll();
-
-        Long id_first = orderlist.get(0).getId();
-
-        p1 = productlist.get(0);
-        p1.setPrice(20f);
-        productRepository.saveAndFlush(p1);
-
-        restOrderMockMvc.perform(patch(ENTITY_API_URL_ID + "/check", id_first)).andExpect(status().isOk());
-        // .andExpect(content().contentType("application/merge-patch+json"))
-        // .andExpect(jsonPath("$.totalPrice")..value(DEFAULT_TOTAL_PRICE.doubleValue()))
-        // .andExpect(jsonPath("$.datePurchase").value(DEFAULT_DATE_PURCHASE.toString()))
-        // .andExpect(jsonPath("$.basket").value(DEFAULT_BASKET.booleanValue()));
-
     }
 }
