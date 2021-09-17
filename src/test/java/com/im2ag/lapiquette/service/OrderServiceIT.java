@@ -11,10 +11,10 @@ import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.repository.ProductRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,14 @@ public class OrderServiceIT {
     private static final String NAME_1 = "vin 1";
     private static final float PRICE_1 = 5.9f;
     private static final float PROMO_1 = 1f;
+    private static final int QTE_1 = 2;
+    private static final int STOCK_1 = 10;
 
     private static final String NAME_2 = "vin 2";
     private static final float PRICE_2 = 10.9f;
-    private static final float PROMO_2 = 0.8f;
+    private static final float PROMO_2 = 0.5f;
+    private static final int QTE_2 = 3;
+    private static final int STOCK_2 = 4;
 
     private static final boolean BASKET = true;
     private static final float TOT_PRICE = 15f;
@@ -71,13 +75,28 @@ public class OrderServiceIT {
         product1.setName(NAME_1);
         product1.setPrice(PRICE_1);
         product1.setPercentPromo(PROMO_1);
+        product1.setStock(STOCK_1);
 
         product2 = new Product();
         product2.setName(NAME_2);
         product2.setPrice(PRICE_2);
         product2.setPercentPromo(PROMO_2);
+        product2.setStock(STOCK_2);
 
-        Set<OrderLine> orderLines = new TreeSet<OrderLine>();
+        Set<OrderLine> orderLines = new HashSet<OrderLine>();
+
+        OrderLine ol_new = new OrderLine();
+        ol_new.setProduct(product1);
+        ol_new.setQuantity(QTE_1);
+        ol_new.setUnityPrice(PRICE_2);
+
+        OrderLine ol_new_2 = new OrderLine();
+        ol_new_2.setProduct(product2);
+        ol_new_2.setQuantity(QTE_2);
+        ol_new_2.setUnityPrice(0f);
+
+        orderLines.add(ol_new);
+        orderLines.add(ol_new_2);
 
         order = new Order();
         order.setBasket(BASKET);
@@ -96,27 +115,91 @@ public class OrderServiceIT {
         assertThat(order).isNotNull();
     }
 
-    @Test
+    // @Test
     @Transactional
     public void checkAnOrder() {
         productService.save(product1);
         productService.save(product2);
-        orderService.save(order);
+        Order bd_order = orderService.save(order);
+
+        for (OrderLine ol : order.getOrderLines()) {
+            assertThat(ol).isNotNull();
+            assertThat(ol.getProduct()).isNotNull();
+        }
+
+        for (OrderLine ol : bd_order.getOrderLines()) {
+            assertThat(ol).isNotNull();
+            assertThat(ol.getProduct()).isNotNull();
+        }
 
         List<Product> productlist = productService.findAll(PageRequest.of(0, 2)).getContent();
-        List<Order> orderlist = orderService.findAll(PageRequest.of(0, 1)).getContent();
-
         assertThat(productlist.isEmpty()).isFalse();
-        assertThat(orderlist.isEmpty()).isFalse();
-
-        // Long id_first = orderlist.get(0).getId();
 
         product1 = productlist.get(0);
         product1.setPrice(20f);
         productService.save(product1);
 
-        Optional<Order> res_order = orderService.checkAnOrder(order);
+        float total_price = 0f;
+
+        for (OrderLine ol : bd_order.getOrderLines()) {
+            Optional<Float> res = productService.getUnitPrice(ol.getProduct().getId());
+            assertThat(res.isPresent()).isTrue();
+            total_price += ol.getQuantity() * res.get();
+        }
+
+        assertThat(total_price).isNotEqualTo(0f);
+
+        Order res_order = orderService.checkAnOrder(bd_order);
+
+        assertThat(res_order).isNotNull();
+
+        assertThat(res_order.getOrderLines().size()).isEqualTo(2);
+
+        for (OrderLine ol : res_order.getOrderLines()) {
+            assertThat(ol).isNotNull();
+            System.out.println(ol);
+            assertThat(ol.getProduct()).isNotNull();
+            assertThat(ol.getUnityPrice()).isEqualTo(ol.getProduct().getPrice());
+            //replace by getUnitPrice by ProductService
+        }
+
+        assertThat(res_order.getTotalPrice()).isEqualTo(total_price);
+    }
+
+    @Test
+    @Transactional
+    public void buyAnOrder() {
+        product1 = productService.save(product1);
+        product2 = productService.save(product2);
+        Order bd_order = orderService.save(order);
+
+        for (OrderLine ol : order.getOrderLines()) {
+            assertThat(ol).isNotNull();
+            assertThat(ol.getProduct()).isNotNull();
+        }
+
+        for (OrderLine ol : bd_order.getOrderLines()) {
+            assertThat(ol).isNotNull();
+            assertThat(ol.getProduct()).isNotNull();
+        }
+
+        Optional<Order> res_order = orderService.buyAnOrder(order);
 
         assertThat(res_order.isPresent()).isTrue();
+
+        assertThat(res_order.get().getBasket()).isFalse();
+
+        assertThat(res_order.get().getDatePurchase()).isToday();
+
+        List<Product> productlist = productService.findAll(PageRequest.of(0, 2)).getContent();
+
+        for (Product p : productlist) {
+            assertThat(p).isNotNull();
+            if (p.getStock() > 5) {
+                assertThat(p.getStock()).isEqualTo(STOCK_1 - QTE_1);
+            } else {
+                assertThat(p.getStock()).isEqualTo(STOCK_2 - QTE_2);
+            }
+        }
     }
 }
