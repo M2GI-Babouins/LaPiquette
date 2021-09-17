@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -34,6 +35,9 @@ export class ProductDetailComponent implements OnInit {
   public addToCart(product: IProduct): void {
     this.productAdded = true;
     this.productRemoved = false;
+    if (!this.quantity) {
+      this.quantity = 1;
+    }
     this.productService.ajouterPanier(product, this.quantity);
   }
 

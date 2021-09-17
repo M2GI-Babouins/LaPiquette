@@ -35,6 +35,7 @@ export class ProductComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  productAdded = false;
 
   constructor(
     protected productService: ProductService,
@@ -85,7 +86,8 @@ export class ProductComponent implements OnInit {
   }
 
   public addToCart(product: any) {
-    console.log('Vive le scrumdaddy');
+    this.productAdded = true;
+    this.productService.ajouterPanier(product, 1);
   }
 
   public setNewProducts(products: IProduct[]) {
