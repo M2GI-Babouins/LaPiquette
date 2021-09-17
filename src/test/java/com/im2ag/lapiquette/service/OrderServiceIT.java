@@ -115,12 +115,43 @@ public class OrderServiceIT {
         assertThat(order).isNotNull();
     }
 
+    @Test
+    public void testCompleteSave() {
+        Order bd_order = orderService.completeSave(order);
+
+        assertThat(bd_order.getId()).isEqualTo(order.getId());
+        assertThat(bd_order.getOrderLines().size()).isEqualTo(order.getOrderLines().size());
+
+        for (OrderLine ol : bd_order.getOrderLines()) {
+            assertThat(ol).isNotNull();
+            assertThat(ol.getQuantity()).isNotNull();
+            assertThat(ol.getUnityPrice()).isNotNull();
+        }
+    }
+
+    @Test
+    public void testFindById() {
+        Order o = orderService.completeSave(order);
+
+        Optional<Order> op_order = orderRepository.findById(o.getId());
+
+        assertThat(op_order.isPresent()).isTrue();
+        Order bd_order = op_order.get();
+
+        assertThat(bd_order.getId()).isEqualTo(order.getId());
+        assertThat(bd_order.getOrderLines().size()).isEqualTo(order.getOrderLines().size());
+
+        for (OrderLine ol : bd_order.getOrderLines()) {
+            assertThat(ol).isNotNull();
+            assertThat(ol.getQuantity()).isNotNull();
+            assertThat(ol.getUnityPrice()).isNotNull();
+        }
+    }
+
     // @Test
     @Transactional
     public void checkAnOrder() {
-        productService.save(product1);
-        productService.save(product2);
-        Order bd_order = orderService.save(order);
+        Order bd_order = orderService.completeSave(order);
 
         for (OrderLine ol : order.getOrderLines()) {
             assertThat(ol).isNotNull();
@@ -149,21 +180,32 @@ public class OrderServiceIT {
 
         assertThat(total_price).isNotEqualTo(0f);
 
-        Order res_order = orderService.checkAnOrder(bd_order);
+        Long id = bd_order.getId();
 
+        Optional<Order> res_order = orderService.checkAnOrder(bd_order);
+
+        res_order = orderRepository.findById(id);
         assertThat(res_order).isNotNull();
 
-        assertThat(res_order.getOrderLines().size()).isEqualTo(2);
+        // res_order = orderService.findOne(id);
+        // assertThat(res_order).isNotNull();
+        assertThat(res_order.get().getOrderLines().size()).isEqualTo(2);
 
-        for (OrderLine ol : res_order.getOrderLines()) {
+        productlist = productService.findAll(PageRequest.of(0, 2)).getContent();
+
+        Long p;
+        int i = 0;
+
+        for (OrderLine ol : res_order.get().getOrderLines()) {
             assertThat(ol).isNotNull();
-            System.out.println(ol);
-            assertThat(ol.getProduct()).isNotNull();
-            assertThat(ol.getUnityPrice()).isEqualTo(ol.getProduct().getPrice());
+
+            p = productlist.get(i).getId();
+            assertThat(ol.getUnityPrice()).isEqualTo(productService.getUnitPrice(p));
+            i++;
             //replace by getUnitPrice by ProductService
         }
 
-        assertThat(res_order.getTotalPrice()).isEqualTo(total_price);
+        assertThat(res_order.get().getTotalPrice()).isEqualTo(total_price);
     }
 
     @Test

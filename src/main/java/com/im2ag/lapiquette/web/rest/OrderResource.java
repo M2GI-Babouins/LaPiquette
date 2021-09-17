@@ -4,6 +4,7 @@ import com.im2ag.lapiquette.domain.Order;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.service.OrderService;
 import com.im2ag.lapiquette.web.rest.errors.BadRequestAlertException;
+import io.undertow.util.BadRequestException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -184,7 +185,10 @@ public class OrderResource {
         @NotNull @RequestBody Order order
     ) {
         log.debug("PATCH request to buy according to the order {}", id);
+        Optional<Order> bis_order = orderRepository.findById(id);
+        if (bis_order.isEmpty()) throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
 
+        order = bis_order.get();
         if (order.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -195,6 +199,8 @@ public class OrderResource {
         if (!orderRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+
+        if (order.getOrderLines().size() == 0) throw new BadRequestAlertException("Empty basket", ENTITY_NAME, "emptyorder");
 
         if (!order.getBasket()) throw new BadRequestAlertException("Basket already payed", ENTITY_NAME, "idpayed");
 
@@ -226,10 +232,10 @@ public class OrderResource {
 
         if (!order.getBasket()) throw new BadRequestAlertException("Basket already payed", ENTITY_NAME, "idpayed");
 
-        Order result = orderService.checkAnOrder(order);
+        Optional<Order> result = orderService.checkAnOrder(order);
 
         return ResponseUtil.wrapOrNotFound(
-            Optional.of(result),
+            result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, order.getId().toString())
         );
     }
