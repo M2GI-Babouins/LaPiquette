@@ -27,7 +27,7 @@ public class OrderLine implements Serializable {
     private Float unityPrice;
 
     @JsonIgnoreProperties(value = { "orderLine" }, allowSetters = true)
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private Product product;
 

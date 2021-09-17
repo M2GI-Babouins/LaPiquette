@@ -37,7 +37,7 @@ public class Order implements Serializable {
     @JsonIgnoreProperties(value = { "orders" }, allowSetters = true)
     private Client client;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "product", "order" }, allowSetters = true)
     private Set<OrderLine> orderLines = new HashSet<>();
