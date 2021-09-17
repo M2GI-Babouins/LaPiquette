@@ -14,7 +14,6 @@ import com.im2ag.lapiquette.security.AuthoritiesConstants;
 import com.im2ag.lapiquette.service.UserService;
 import com.im2ag.lapiquette.service.dto.AdminUserDTO;
 import com.im2ag.lapiquette.service.dto.PasswordChangeDTO;
-import com.im2ag.lapiquette.service.dto.UserDTO;
 import com.im2ag.lapiquette.web.rest.vm.KeyAndPasswordVM;
 import com.im2ag.lapiquette.web.rest.vm.ManagedUserVM;
 import java.time.Instant;

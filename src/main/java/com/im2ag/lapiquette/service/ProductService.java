@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,7 @@ public class ProductService {
      * @param product the entity to update partially.
      * @return the persisted entity.
      */
+    @Lock(javax.persistence.LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Product> partialUpdate(Product product) {
         log.debug("Request to partially update Product : {}", product);
 
@@ -146,5 +148,18 @@ public class ProductService {
     public void delete(Long id) {
         log.debug("Request to delete Product : {}", id);
         productRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Float> getUnitPrice(Long id) {
+        log.debug("Request to get last price of Product : {}", id);
+        Optional<Product> pres = productRepository.findById(id);
+        Optional<Float> res = Optional.ofNullable(null);
+        if (pres.isPresent()) {
+            Product product = pres.get();
+            float result = product.getPercentPromo() * product.getPrice();
+            res = Optional.of(result);
+        }
+        return res;
     }
 }

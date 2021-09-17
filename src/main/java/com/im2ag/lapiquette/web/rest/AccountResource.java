@@ -7,7 +7,6 @@ import com.im2ag.lapiquette.service.MailService;
 import com.im2ag.lapiquette.service.UserService;
 import com.im2ag.lapiquette.service.dto.AdminUserDTO;
 import com.im2ag.lapiquette.service.dto.PasswordChangeDTO;
-import com.im2ag.lapiquette.service.dto.UserDTO;
 import com.im2ag.lapiquette.web.rest.errors.*;
 import com.im2ag.lapiquette.web.rest.vm.KeyAndPasswordVM;
 import com.im2ag.lapiquette.web.rest.vm.ManagedUserVM;

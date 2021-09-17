@@ -1,6 +1,5 @@
 package com.im2ag.lapiquette;
 
-import com.im2ag.lapiquette.LaPiquetteApp;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
