@@ -79,7 +79,7 @@ export class NavbarComponent implements OnInit {
   onSearch() {
     console.log(this.wineName);
     this.productService.setNameSearched(this.wineName);
-    this.productService.setFilterType('all');
+    this.productService.setFilterType('');
     this.router.navigate(['/product']);
   }
 

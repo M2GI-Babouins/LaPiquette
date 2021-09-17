@@ -129,12 +129,8 @@ export class ProductComponent implements OnInit {
     }
     this.baseProducts = data ?? [];
     this.products = data ?? [];
-    if (this.productService.getFilterType() !== 'all') {
-      this.filterProductsByType(this.productService.getFilterType()!);
-    }
-    if (this.productService.getnameSearched()) {
-      this.filterProductsByName(this.productService.getnameSearched()!);
-    }
+    this.filterProductsByType(this.productService.getFilterType()!);
+    this.filterProductsByName(this.productService.getnameSearched()!);
     this.ngbPaginationPage = this.page;
   }
 
@@ -143,13 +139,17 @@ export class ProductComponent implements OnInit {
   }
 
   filterProductsByType(filter: string) {
-    this.baseProducts = this.baseProducts.filter(product => product.type === filter);
-    this.products = this.products.filter(product => product.type === filter);
+    if (filter !== '') {
+      this.baseProducts = this.baseProducts.filter(product => product.type === filter);
+      this.products = this.products.filter(product => product.type === filter);
+    }
   }
 
   filterProductsByName(filter: string) {
-    filter = filter.toLowerCase();
-    this.baseProducts = this.baseProducts.filter(product => product.name?.toLocaleLowerCase() === filter);
-    this.products = this.products.filter(product => product.name?.toLocaleLowerCase() === filter);
+    if (this.productService.getnameSearched()) {
+      filter = filter.toLowerCase();
+      this.baseProducts = this.baseProducts.filter(product => product.name?.toLocaleLowerCase() === filter);
+      this.products = this.products.filter(product => product.name?.toLocaleLowerCase() === filter);
+    }
   }
 }
