@@ -1,3 +1,9 @@
+
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { OrderService } from './../../order/service/order.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
@@ -8,6 +14,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IProduct, getProductIdentifier } from '../product.model';
 import { OrderLine } from 'app/entities/order-line/order-line.model';
+import { min } from 'lodash';
 
 export type EntityResponseType = HttpResponse<IProduct>;
 export type EntityArrayResponseType = HttpResponse<IProduct[]>;
@@ -15,6 +22,8 @@ export type EntityArrayResponseType = HttpResponse<IProduct[]>;
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/products');
+  filterType = '';
+  nameSearched: string | undefined;
 
   constructor(
     protected http: HttpClient,
@@ -34,11 +43,9 @@ export class ProductService {
         found = true;
       }
     });
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!found) {
       const orderline = { product, quantity, unityPrice: product.price };
       panierLocal.push(orderline);
-      // eslint-disable-next-line no-console
       console.log(orderline);
     }
     localStorage.setItem('panier', JSON.stringify(panierLocal));
@@ -46,14 +53,11 @@ export class ProductService {
     this.orderService.addToBasket(product, quantity);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  getPanier() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  getPanier(): any {
     return JSON.parse(localStorage.getItem('panier')!);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  removePanier() {
+  removePanier(): void {
     const panier: never[] = [];
     localStorage.setItem('panier', JSON.stringify(panier));
   }
@@ -79,6 +83,28 @@ export class ProductService {
     return found;
   }
 
+  getOlderWineYear(products: IProduct[]): number {
+    const productsYear = products.map(p => p.year);
+    const olderWineYear = min(productsYear);
+    return olderWineYear!;
+  }
+
+  setFilterType(type: string): void {
+    this.filterType = type;
+  }
+
+  getFilterType() {
+    return this.filterType;
+  }
+
+  setNameSearched(name: string | undefined) {
+    this.nameSearched = name;
+  }
+
+  getnameSearched() {
+    return this.nameSearched;
+  }
+
   loadAll(): Observable<EntityArrayResponseType> {
     return this.http.get<IProduct[]>(`${this.resourceUrl}`, { observe: 'response' });
   }
@@ -102,7 +128,9 @@ export class ProductService {
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
+    const oui = this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
+    console.log(oui);
+    return oui;
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

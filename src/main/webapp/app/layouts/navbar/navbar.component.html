@@ -28,7 +28,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('')">
           <span>
             <fa-icon></fa-icon>
             <span>Tout Nos Vins</span>
@@ -36,7 +36,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('rouge')">
           <span>
             <fa-icon></fa-icon>
             <span>Vins Rouge</span>
@@ -44,7 +44,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('blanc')">
           <span>
             <fa-icon></fa-icon>
             <span>Vins Blanc</span>
@@ -52,7 +52,7 @@
         </a>
       </li>
       <li class="nav-item col-2" routerLinkActive="active">
-        <a class="nav-link" routerLink="/product">
+        <a class="nav-link" (click)="setType('rosé')">
           <span>
             <fa-icon></fa-icon>
             <span>Vins Rosé</span>
