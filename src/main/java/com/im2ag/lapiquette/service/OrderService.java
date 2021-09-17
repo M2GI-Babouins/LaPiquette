@@ -6,7 +6,9 @@ import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.repository.ProductRepository;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
@@ -46,6 +48,7 @@ public class OrderService {
      */
     public Order save(Order order) {
         log.debug("Request to save Order : {}", order);
+        // order.getOrderLines().forEach(ol -> ol.setOrder(order));
         return orderRepository.save(order);
     }
 
@@ -139,16 +142,36 @@ public class OrderService {
 
     @Transactional(readOnly = false)
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
-    public Optional<Order> checkAnOrder(Order order) {
+    public Order checkAnOrder(Order order) {
         Product product;
         Optional<Float> current_price;
+        Set<OrderLine> new_ol_set = new HashSet<OrderLine>();
+        OrderLine new_ol;
 
-        for (OrderLine ol : order.getOrderLines()) {
+        Set<OrderLine> old_set = order.getOrderLines();
+        // order.setOrderLines(null);
+
+        for (OrderLine ol : old_set) {
             product = ol.getProduct();
+            if (product == null) throw new IdNotFoundException("Product undefined");
             current_price = productRepository.getUnitPrice(product.getId());
             if (current_price.isEmpty()) throw new IdNotFoundException("This product not exists currently id=", product.getId());
-            ol.setUnityPrice(current_price.get());
+            product = productRepository.save(product);
+
+            new_ol = new OrderLine();
+            new_ol.setProduct(product);
+            new_ol.setQuantity(ol.getQuantity());
+            new_ol.setUnityPrice(current_price.get());
+            new_ol_set.add(new_ol);
         }
-        return Optional.ofNullable(orderRepository.save(order));
+
+        order.setOrderLines(new_ol_set);
+
+        for (OrderLine ol : order.getOrderLines()) {
+            if (ol.getProduct() == null) {
+                System.out.println("already wrong");
+            }
+        }
+        return (this.save(order));
     }
 }
