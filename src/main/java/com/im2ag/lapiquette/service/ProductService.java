@@ -158,7 +158,6 @@ public class ProductService {
         if (pres.isPresent()) {
             Product product = pres.get();
             float result = product.getPercentPromo() * product.getPrice();
-            System.out.println("product trouve");
             res = Optional.of(result);
         }
         return res;

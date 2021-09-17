@@ -226,10 +226,10 @@ public class OrderResource {
 
         if (!order.getBasket()) throw new BadRequestAlertException("Basket already payed", ENTITY_NAME, "idpayed");
 
-        Optional<Order> result = orderService.checkAnOrder(order);
+        Order result = orderService.checkAnOrder(order);
 
         return ResponseUtil.wrapOrNotFound(
-            result,
+            Optional.of(result),
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, order.getId().toString())
         );
     }
