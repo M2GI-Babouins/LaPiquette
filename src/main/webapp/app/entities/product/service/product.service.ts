@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -129,7 +128,7 @@ export class ProductService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     const oui = this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
-    console.log(oui);
+    console.log('query has been executed');
     return oui;
   }
 

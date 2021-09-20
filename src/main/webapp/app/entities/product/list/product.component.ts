@@ -37,6 +37,8 @@ export class ProductComponent implements OnInit {
   ngbPaginationPage = 1;
   productAdded = false;
 
+  filters = {};
+
   constructor(
     protected productService: ProductService,
     protected activatedRoute: ActivatedRoute,
@@ -48,11 +50,13 @@ export class ProductComponent implements OnInit {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
 
+    console.log('load with filters ', this.filters);
     this.productService
       .query({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
+        ...this.filters,
       })
       .subscribe(
         (res: HttpResponse<IProduct[]>) => {
@@ -88,6 +92,12 @@ export class ProductComponent implements OnInit {
   public addToCart(product: any) {
     this.productAdded = true;
     this.productService.ajouterPanier(product, 1);
+  }
+
+  public setFilter(value: any) {
+    this.filters = value;
+    this.loadPage();
+    console.log('filter = ', this.filters);
   }
 
   public setNewProducts(products: IProduct[]) {

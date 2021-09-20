@@ -1,14 +1,28 @@
 <div class="filters">
-  <form>
+  <form [formGroup]="filtres">
     <title>Filtres</title>
 
     <div class="mb-3 col-6">
       <label for="price" class="form-label">Prix Maximum:</label>
-      <input class="btn btn-outline-info" type="number" name="price" min="0" [(ngModel)]="wineData.price" (keydown.enter)="filterPrice()" />
+      <input
+        formControlName="price"
+        jhi-bindQueryParam="price"
+        class="btn btn-outline-info"
+        type="number"
+        name="price"
+        min="0"
+        [(ngModel)]="wineData.price"
+      />
     </div>
 
     <div class="mb-3 col-6">
-      <select class="btn btn-outline-info dropdown-toggle" name="year" [(ngModel)]="wineData.year" (ngModelChange)="filterYear()">
+      <select
+        formControlName="year"
+        jhi-bindQueryParam="year"
+        class="btn btn-outline-info dropdown-toggle"
+        name="year"
+        [(ngModel)]="wineData.year"
+      >
         <option>Année de Fabrication avant</option>
         <option *ngFor="let year of yearMade">{{ year }}</option>
       </select>
@@ -16,10 +30,11 @@
 
     <div class="mb-3 col-6">
       <select
+        formControlName="reco"
+        jhi-bindQueryParam="reco"
         class="btn btn-outline-info dropdown-toggle"
         name="recommandation"
         [(ngModel)]="wineData.recommandation"
-        (ngModelChange)="filterRecommandation()"
       >
         <option>Recommandations</option>
         <option *ngFor="let r of recommandations">{{ r }}</option>
@@ -28,7 +43,13 @@
 
     <div class="mb-3 col-6">
       <label for="region" class="form-label">Region :</label>
-      <select class="btn btn-outline-info dropdown-toggle" name="region" [(ngModel)]="wineData.region" (ngModelChange)="filterRegion()">
+      <select
+        formControlName="region"
+        jhi-bindQueryParam="region"
+        class="btn btn-outline-info dropdown-toggle"
+        name="region"
+        [(ngModel)]="wineData.region"
+      >
         <option>Region</option>
         <option *ngFor="let region of valuesRegion()">{{ region }}</option>
       </select>

@@ -18,6 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select (p.price*p.percentPromo) from #{#entityName} p where p.id=:id") // p.percentPromo
     public Optional<Float> getUnitPrice(@Param("id") Long id);
 
-    @Query("select p from #{#entityName} p where (:type is null or p.type=:type)")
-    public Page<Product> findSome(Pageable pageable, @Param("type") String type);
+    @Query("select p from #{#entityName} p where (:type is null or p.type=:type) and (:year is null or p.year <= :year)")
+    public Page<Product> findSome(Pageable pageable, @Param("type") String type, @Param("year") Integer year);
 }

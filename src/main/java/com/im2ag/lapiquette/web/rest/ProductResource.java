@@ -1,6 +1,5 @@
 package com.im2ag.lapiquette.web.rest;
 
-import ch.qos.logback.core.joran.conditional.ElseAction;
 import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.ProductRepository;
 import com.im2ag.lapiquette.service.ProductService;
@@ -143,25 +142,50 @@ public class ProductResource {
      * retourne tout les produit en base, paginé
      *
      */
-    @GetMapping("/products")
+    // @GetMapping("/products")
     public ResponseEntity<List<Product>> findAllProduct(Pageable pageable, @RequestParam(required = false) String type) {
         log.debug("acces a tout les produit - get");
-        Page<Product> page;
-        if (type == null) page = productService.findAll(pageable); else page = productService.findSome(pageable, type);
+        Page<Product> page = productService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    // @GetMapping("/products")
+    @GetMapping("/products")
     public ResponseEntity<List<Product>> findSomeProduct(
         Pageable pageable,
-        // @RequestParam(required = false, defaultValue = "0") int year,
-        // @RequestParam(required = false, defaultValue = "0f") float price,
-        // @RequestParam(required = false) String reco,
-        // @RequestParam(required = false) String region,
+        @RequestParam(required = false) String year,
+        @RequestParam(required = false) String price,
+        @RequestParam(required = false) String reco,
+        @RequestParam(required = false) String region,
         @RequestParam(required = false) String type
     ) {
-        Page<Product> page = productService.findSome(pageable, type);
+        log.debug("acces a certains produits - get");
+        Page<Product> page;
+        boolean allnull = true;
+        if (reco == null || reco.equals("null") || reco.equals("undefined")) {
+            allnull = false;
+            reco = null;
+        }
+        if (year == null || year.equals("null") || year.equals("undefined")) {
+            allnull = false;
+            year = null;
+        }
+        if (price == null || price.equals("null") || price.equals("undefined")) {
+            allnull = false;
+            price = null;
+        }
+        if (region == null || region.equals("null") || region.equals("undefined")) {
+            allnull = false;
+            region = null;
+        }
+        if (type == null || type.equals("null") || type.equals("undefined")) {
+            allnull = false;
+            type = null;
+        }
+        if (allnull) {
+            log.debug("request all data - param null");
+            page = productService.findAll(pageable);
+        } else page = productService.findSome(pageable, type, year);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
