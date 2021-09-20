@@ -7,16 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.im2ag.lapiquette.IntegrationTest;
 import com.im2ag.lapiquette.domain.Order;
-import com.im2ag.lapiquette.domain.OrderLine;
-import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.OrderRepository;
-import com.im2ag.lapiquette.repository.ProductRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;

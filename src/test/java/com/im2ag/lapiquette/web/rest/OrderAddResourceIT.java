@@ -1,7 +1,6 @@
 package com.im2ag.lapiquette.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -12,27 +11,19 @@ import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.repository.ProductRepository;
 import com.im2ag.lapiquette.service.OrderService;
-import com.im2ag.lapiquette.service.ProductService;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
-import org.assertj.core.error.AssertJMultipleFailuresError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +53,7 @@ public class OrderAddResourceIT {
     private static final LocalDate LOCAL_DATE = LocalDate.of(2021, 9, 2);
 
     private static final String ENTITY_API_URL = "/api/orders";
-    private static final String ENTITY_API_URL_CK = ENTITY_API_URL + "/{id}/check";
+    // private static final String ENTITY_API_URL_CK = ENTITY_API_URL + "/{id}/check";
     private static final String ENTITY_API_URL_BL = ENTITY_API_URL + "/{id}/bill";
 
     @Autowired

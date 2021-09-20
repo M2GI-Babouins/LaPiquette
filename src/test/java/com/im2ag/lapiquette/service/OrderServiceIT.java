@@ -280,9 +280,7 @@ public class OrderServiceIT {
         try {
             executor.awaitTermination(1, TimeUnit.MINUTES);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             assertThat(false).isTrue();
-            e1.printStackTrace();
         }
 
         //product minus order_1_qte

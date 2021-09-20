@@ -5,8 +5,6 @@ import com.im2ag.lapiquette.repository.ClientRepository;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.service.OrderService;
 import com.im2ag.lapiquette.web.rest.errors.BadRequestAlertException;
-import io.undertow.util.BadRequestException;
-import java.io.Console;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
