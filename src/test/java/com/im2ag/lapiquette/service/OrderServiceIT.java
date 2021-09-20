@@ -15,6 +15,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +72,7 @@ public class OrderServiceIT {
 
     private Product product1, product2;
 
-    private Order order;
+    private Order order, order2;
 
     @BeforeEach
     public void init() {
@@ -103,6 +108,12 @@ public class OrderServiceIT {
         order.setTotalPrice(TOT_PRICE);
         order.setDatePurchase(LOCAL_DATE);
         order.setOrderLines(orderLines);
+
+        order2 =
+            new Order()
+                .basket(BASKET)
+                .datePurchase(LOCAL_DATE)
+                .addOrderLine(new OrderLine().product(product2).quantity(QTE_1).unityPrice(PRICE_2));
 
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
         auditingHandler.setDateTimeProvider(dateTimeProvider);
@@ -242,6 +253,98 @@ public class OrderServiceIT {
             } else {
                 assertThat(p.getStock()).isEqualTo(STOCK_2 - QTE_2);
             }
+        }
+    }
+
+    @Test
+    @Transactional
+    public void buyAnOrder_concurrency() {
+        order = orderService.completeSave(order);
+        order2 = orderService.save(order2);
+
+        final ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        Future<Optional<Order>> res_order = executor.submit(
+            () -> {
+                return orderService.buyAnOrder(order);
+            }
+        );
+        Future<Optional<Order>> res_order2 = executor.submit(
+            () -> {
+                return orderService.buyAnOrder(order2);
+            }
+        );
+
+        executor.shutdown();
+
+        try {
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            assertThat(false).isTrue();
+            e1.printStackTrace();
+        }
+
+        //product minus order_1_qte
+        Product product = null;
+        List<Product> productlist = productService.findAll(PageRequest.of(0, 2)).getContent();
+        for (Product p : productlist) {
+            if (p.getName().equals(NAME_2)) {
+                product = p;
+            }
+        }
+        assertThat(product).isNotNull();
+        assertThat(product.getStock()).isIn(STOCK_2 - QTE_1, STOCK_2 - QTE_2);
+
+        int order_pass = 0;
+
+        if (product.getStock() == STOCK_2 - QTE_1) {
+            order_pass = 2;
+        }
+
+        if (product.getStock() == STOCK_2 - QTE_2) {
+            order_pass = 1;
+        }
+
+        assertThat(order_pass).isIn(1, 2);
+
+        Optional<Order> pass_o;
+        Optional<Order> fail_o;
+
+        if (order_pass == 1) {
+            pass_o = orderService.findOne(order.getId());
+            fail_o = orderService.findOne(order2.getId());
+        } else {
+            pass_o = orderService.findOne(order2.getId());
+            fail_o = orderService.findOne(order.getId());
+        }
+
+        assertThat(pass_o.isPresent()).isTrue();
+        assertThat(pass_o.get().getBasket()).isFalse();
+        assertThat(pass_o.get().getDatePurchase()).isToday();
+
+        assertThat(fail_o.isPresent()).isTrue();
+        assertThat(fail_o.get().getBasket()).isTrue();
+        assertThat(fail_o.get().getDatePurchase()).isEqualTo(LOCAL_DATE);
+
+        try {
+            Optional<Order> rs = res_order.get();
+            if (order_pass == 1) assertThat(rs.isPresent()).isTrue();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            if (order_pass == 1) assertThat(false).isTrue();
+            if (order_pass == 2) assertThat(e.getCause()).isInstanceOf(ProductNotAvailable.class);
+        }
+
+        try {
+            Optional<Order> rs2 = res_order2.get();
+            if (order_pass == 2) assertThat(rs2.isPresent()).isTrue();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            if (order_pass == 2) assertThat(false).isTrue();
+            if (order_pass == 1) assertThat(e.getCause()).isInstanceOf(ProductNotAvailable.class);
         }
     }
 }
