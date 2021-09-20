@@ -48,7 +48,14 @@ public class OrderService {
      */
     public Order save(Order order) {
         log.debug("Request to save Order : {}", order);
-        // order.getOrderLines().forEach(ol -> ol.setOrder(order));
+        return orderRepository.save(order);
+    }
+
+    public Order completeSave(Order order) {
+        log.debug("Request to completely save Order : {}", order);
+        for (OrderLine ol : order.getOrderLines()) {
+            productRepository.save(ol.getProduct());
+        }
         return orderRepository.save(order);
     }
 
@@ -124,6 +131,7 @@ public class OrderService {
 
         for (OrderLine ol : order.getOrderLines()) {
             product = ol.getProduct();
+            if (product == null) throw new ProductNotAvailable("Product not found");
             want_qt = ol.getQuantity();
             old_qt = product.getStock();
             if (want_qt > old_qt) {
@@ -137,17 +145,15 @@ public class OrderService {
         order.setBasket(false);
         order.setTotalPrice(tot_price);
         order.setDatePurchase(LocalDate.now());
-        return Optional.ofNullable(orderRepository.save(order));
+        return Optional.of(orderRepository.save(order));
     }
 
     @Transactional(readOnly = false)
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
-    public Order checkAnOrder(Order order) {
+    public Optional<Order> checkAnOrder(Order order) {
         Product product;
         Optional<Float> current_price;
         Set<OrderLine> new_ol_set = new HashSet<OrderLine>();
-        OrderLine new_ol;
-
         Set<OrderLine> old_set = order.getOrderLines();
         // order.setOrderLines(null);
 
@@ -156,22 +162,11 @@ public class OrderService {
             if (product == null) throw new IdNotFoundException("Product undefined");
             current_price = productRepository.getUnitPrice(product.getId());
             if (current_price.isEmpty()) throw new IdNotFoundException("This product not exists currently id=", product.getId());
-            product = productRepository.save(product);
 
-            new_ol = new OrderLine();
-            new_ol.setProduct(product);
-            new_ol.setQuantity(ol.getQuantity());
-            new_ol.setUnityPrice(current_price.get());
-            new_ol_set.add(new_ol);
+            new_ol_set.add(new OrderLine().product(product).quantity(ol.getQuantity()).unityPrice(current_price.get()));
         }
 
         order.setOrderLines(new_ol_set);
-
-        for (OrderLine ol : order.getOrderLines()) {
-            if (ol.getProduct() == null) {
-                System.out.println("already wrong");
-            }
-        }
-        return (this.save(order));
+        return Optional.of(orderRepository.save(order));
     }
 }

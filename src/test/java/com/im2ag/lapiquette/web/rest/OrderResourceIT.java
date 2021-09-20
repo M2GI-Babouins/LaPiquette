@@ -7,16 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.im2ag.lapiquette.IntegrationTest;
 import com.im2ag.lapiquette.domain.Order;
-import com.im2ag.lapiquette.domain.OrderLine;
-import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.OrderRepository;
-import com.im2ag.lapiquette.repository.ProductRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,9 +48,6 @@ class OrderResourceIT {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private EntityManager em;
@@ -390,45 +382,5 @@ class OrderResourceIT {
         // Validate the database contains one less item
         List<Order> orderList = orderRepository.findAll();
         assertThat(orderList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    void checkAnOrder() throws Exception {
-        Product p1 = new Product();
-        Product p2 = new Product();
-        p1.setName("vin 1");
-        p2.setName("vin 2");
-        p1.setPrice(3.5f);
-        p2.setPrice(7.3f);
-        p1.setPercentPromo(1f);
-        p2.setPercentPromo(0.5f);
-
-        Set<OrderLine> orderLines = new TreeSet<OrderLine>();
-
-        Order order = new Order();
-        order.setBasket(true);
-        order.setTotalPrice(15f);
-        order.setOrderLines(orderLines);
-
-        productRepository.saveAndFlush(p1);
-        productRepository.saveAndFlush(p2);
-        orderRepository.saveAndFlush(order);
-
-        List<Product> productlist = productRepository.findAll();
-        List<Order> orderlist = orderRepository.findAll();
-
-        Long id_first = orderlist.get(0).getId();
-
-        p1 = productlist.get(0);
-        p1.setPrice(20f);
-        productRepository.saveAndFlush(p1);
-
-        restOrderMockMvc.perform(patch(ENTITY_API_URL_ID + "/check", id_first)).andExpect(status().isOk());
-        // .andExpect(content().contentType("application/merge-patch+json"))
-        // .andExpect(jsonPath("$.totalPrice")..value(DEFAULT_TOTAL_PRICE.doubleValue()))
-        // .andExpect(jsonPath("$.datePurchase").value(DEFAULT_DATE_PURCHASE.toString()))
-        // .andExpect(jsonPath("$.basket").value(DEFAULT_BASKET.booleanValue()));
-
     }
 }
