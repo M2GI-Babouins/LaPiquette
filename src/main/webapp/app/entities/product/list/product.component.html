@@ -63,7 +63,15 @@
           <div class="product-detail product-detail-container" style="display: flex">
             <div class="product-detail product-detail-child" style="flex: 1">
               <div class="logo" style="display: inline">
-                <img *ngIf="product.image === null; else logoTemplate" [src]="product.image" />
+                <div *ngIf="product.image; else logoTemplate" class="product-detail product-detail-child" style="flex: 1">
+                  <a (click)="openFile(product.image, product.imageContentType)">
+                    <img
+                      [src]="'data:' + product.imageContentType + ';base64,' + product.image"
+                      style="max-width: 100%"
+                      alt="product image"
+                    />
+                  </a>
+                </div>
                 <ng-template #logoTemplate>
                   <span class="logo-img"></span>
                 </ng-template>
