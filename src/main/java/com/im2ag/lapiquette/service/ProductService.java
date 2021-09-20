@@ -139,6 +139,11 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Page<Product> findSome(Pageable pageable, String type) {
+        return productRepository.findSome(pageable, type);
+    }
+
     /**
      * Delete the product by id.
      *

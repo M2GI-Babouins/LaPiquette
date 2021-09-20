@@ -1,5 +1,6 @@
 package com.im2ag.lapiquette.web.rest;
 
+import ch.qos.logback.core.joran.conditional.ElseAction;
 import com.im2ag.lapiquette.domain.Product;
 import com.im2ag.lapiquette.repository.ProductRepository;
 import com.im2ag.lapiquette.service.ProductService;
@@ -143,9 +144,24 @@ public class ProductResource {
      *
      */
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> findAllProduct(Pageable pageable) {
+    public ResponseEntity<List<Product>> findAllProduct(Pageable pageable, @RequestParam(required = false) String type) {
         log.debug("acces a tout les produit - get");
-        Page<Product> page = productService.findAll(pageable);
+        Page<Product> page;
+        if (type == null) page = productService.findAll(pageable); else page = productService.findSome(pageable, type);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    // @GetMapping("/products")
+    public ResponseEntity<List<Product>> findSomeProduct(
+        Pageable pageable,
+        // @RequestParam(required = false, defaultValue = "0") int year,
+        // @RequestParam(required = false, defaultValue = "0f") float price,
+        // @RequestParam(required = false) String reco,
+        // @RequestParam(required = false) String region,
+        @RequestParam(required = false) String type
+    ) {
+        Page<Product> page = productService.findSome(pageable, type);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
