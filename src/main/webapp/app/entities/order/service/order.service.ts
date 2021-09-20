@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { IClient } from './../../client/client.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
@@ -49,7 +50,7 @@ export class OrderService {
   }
 
   deleteFromBasket(orderLine: IOrderLine): void {
-    this.basket.orderLines.splice(this.basket.orderLines.findIndex(ol => ol === orderLine));
+    this.basket.orderLines = this.basket.orderLines.filter(order => order !== orderLine);
     this.calculateTotal();
     this.updateBasket();
   }
