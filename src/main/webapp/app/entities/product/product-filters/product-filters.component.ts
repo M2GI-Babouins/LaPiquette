@@ -22,6 +22,7 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
   yearMade: number[] = [];
   wineData: IProduct = {};
   recommandations!: (string | undefined)[];
+  tri = 'nouveaute';
 
   constructor(private productService: ProductService) {}
 
@@ -52,6 +53,29 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
     const recommandationsBis = flattenDeep(pReco.map(reco => reco?.split(',')));
     const recoFinal = uniq(recommandationsBis.map(r => r?.toLowerCase()).map(r => r?.trim()));
     this.recommandations = recoFinal;
+  }
+
+  trier() {
+    console.log('by ' + this.tri);
+    let productSorted: IProduct[] = [];
+    switch (this.tri) {
+      case 'nouveaute':
+        productSorted = this.products;
+        break;
+      case 'annee':
+        productSorted = this.products.sort((p1, p2) => p1.year! - p2.year!);
+        break;
+      case 'priceDown':
+        productSorted = this.products.sort((p1, p2) => p1.price! - p2.price!);
+        break;
+      case 'priceUp':
+        productSorted = this.products.sort((p1, p2) => p2.price! - p1.price!);
+        break;
+      default:
+        productSorted = this.products;
+        break;
+    }
+    this.newProducts.emit(productSorted);
   }
 
   filterRegion() {
