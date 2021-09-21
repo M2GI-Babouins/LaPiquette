@@ -71,14 +71,13 @@ class ClientResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Client createEntity() {
-        Client client = new Client()
+        return new Client()
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
             .email(DEFAULT_EMAIL)
             .adress(DEFAULT_ADRESS)
             .loggedIn(DEFAULT_LOGGED_IN)
             .password(DEFAULT_PASSWORD);
-        return client;
     }
 
     /**
@@ -88,14 +87,13 @@ class ClientResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Client createUpdatedEntity() {
-        Client client = new Client()
+        return new Client()
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .email(UPDATED_EMAIL)
             .adress(UPDATED_ADRESS)
             .loggedIn(UPDATED_LOGGED_IN)
             .password(UPDATED_PASSWORD);
-        return client;
     }
 
     @BeforeEach

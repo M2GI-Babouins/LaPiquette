@@ -95,7 +95,7 @@ class ProductResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Product createEntity() {
-        Product product = new Product()
+        return new Product()
             .name(DEFAULT_NAME)
             .year(DEFAULT_YEAR)
             .region(DEFAULT_REGION)
@@ -110,7 +110,6 @@ class ProductResourceIT {
             .stock(DEFAULT_STOCK)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
-        return product;
     }
 
     /**
@@ -120,7 +119,7 @@ class ProductResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Product createUpdatedEntity() {
-        Product product = new Product()
+        return new Product()
             .name(UPDATED_NAME)
             .year(UPDATED_YEAR)
             .region(UPDATED_REGION)
@@ -135,7 +134,6 @@ class ProductResourceIT {
             .stock(UPDATED_STOCK)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
-        return product;
     }
 
     @BeforeEach

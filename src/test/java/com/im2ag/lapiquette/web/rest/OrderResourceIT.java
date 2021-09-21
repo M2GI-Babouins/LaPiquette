@@ -64,8 +64,7 @@ class OrderResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Order createEntity() {
-        Order order = new Order().totalPrice(DEFAULT_TOTAL_PRICE).datePurchase(DEFAULT_DATE_PURCHASE).basket(DEFAULT_BASKET);
-        return order;
+        return new Order().totalPrice(DEFAULT_TOTAL_PRICE).datePurchase(DEFAULT_DATE_PURCHASE).basket(DEFAULT_BASKET);
     }
 
     /**
@@ -75,8 +74,7 @@ class OrderResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Order createUpdatedEntity() {
-        Order order = new Order().totalPrice(UPDATED_TOTAL_PRICE).datePurchase(UPDATED_DATE_PURCHASE).basket(UPDATED_BASKET);
-        return order;
+        return new Order().totalPrice(UPDATED_TOTAL_PRICE).datePurchase(UPDATED_DATE_PURCHASE).basket(UPDATED_BASKET);
     }
 
     @BeforeEach

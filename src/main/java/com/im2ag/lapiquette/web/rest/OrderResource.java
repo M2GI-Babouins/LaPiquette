@@ -96,7 +96,7 @@ public class OrderResource {
         // Optional<Order> order = orderlist.get(0).getBasket() ? Optional.of(orderlist.get(0)) : Optional.empty();
 
         Set<Order> orderlist = clientRepository.findById(clientid).get().getOrders();
-        Optional<Order> order = orderlist.stream().filter(o -> o.getBasket() == true).findFirst();
+        Optional<Order> order = orderlist.stream().filter(o -> o.getBasket()).findFirst();
 
         return ResponseUtil.wrapOrNotFound(order);
     }
@@ -235,15 +235,13 @@ public class OrderResource {
     }
 
     @PatchMapping(value = "/orders/{id}/bill", consumes = "application/merge-patch+json")
-    public ResponseEntity<Order> buyAnOrder(
-        @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Order order
-    ) {
+    public ResponseEntity<Order> buyAnOrder(@PathVariable(value = "id", required = false) final Long id) {
         log.debug("PATCH request to buy according to the order {}", id);
         Optional<Order> bis_order = orderRepository.findById(id);
         if (bis_order.isEmpty()) throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
 
-        order = bis_order.get();
+        @NotNull
+        Order order = bis_order.get();
         if (order.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
