@@ -139,7 +139,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Product> findSome(Pageable pageable, String type, String year, String price, String region, String reco) {
+    public Page<Product> findSome(Pageable pageable, String type, String year, String price, String region, String reco, String search) {
         log.debug("Request to get Products with param year", year);
         Integer yy = null;
         try {
@@ -149,7 +149,7 @@ public class ProductService {
         try {
             pp = Float.parseFloat(price);
         } catch (NullPointerException | NumberFormatException e) {}
-        return productRepository.findSome(pageable, type, yy, pp, region, reco);
+        return productRepository.findSome(pageable, type, yy, pp, region, reco, search);
     }
 
     /**

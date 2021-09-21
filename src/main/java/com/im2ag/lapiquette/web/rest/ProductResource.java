@@ -157,7 +157,8 @@ public class ProductResource {
         @RequestParam(required = false) String price,
         @RequestParam(required = false) String reco,
         @RequestParam(required = false) String region,
-        @RequestParam(required = false) String type
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) String search
     ) {
         log.debug("acces a certains produits - get");
         Page<Product> page;
@@ -182,10 +183,14 @@ public class ProductResource {
             allnull = false;
             type = null;
         }
+        if (search == null || search.equals("") || search.equals("null") || search.equals("undefined")) {
+            allnull = false;
+            search = null;
+        }
         if (allnull) {
             log.debug("request all data - param null");
             page = productService.findAll(pageable);
-        } else page = productService.findSome(pageable, type, year, price, region, reco);
+        } else page = productService.findSome(pageable, type, year, price, region, reco, search);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

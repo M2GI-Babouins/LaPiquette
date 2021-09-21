@@ -49,7 +49,7 @@ export class ProductComponent implements OnInit {
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
-
+    console.log('load page');
     this.productService
       .query({
         page: pageToLoad - 1,
@@ -139,27 +139,10 @@ export class ProductComponent implements OnInit {
     }
     this.baseProducts = data ?? [];
     this.products = data ?? [];
-    this.filterProductsByType(this.productService.getFilterType()!);
-    this.filterProductsByName(this.productService.getnameSearched()!);
     this.ngbPaginationPage = this.page;
   }
 
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
-  }
-
-  filterProductsByType(filter: string) {
-    if (filter !== '') {
-      this.baseProducts = this.baseProducts.filter(product => product.type === filter);
-      this.products = this.products.filter(product => product.type === filter);
-    }
-  }
-
-  filterProductsByName(filter: string) {
-    if (this.productService.getnameSearched()) {
-      filter = filter.toLowerCase();
-      this.baseProducts = this.baseProducts.filter(product => product.name?.toLocaleLowerCase() === filter);
-      this.products = this.products.filter(product => product.name?.toLocaleLowerCase() === filter);
-    }
   }
 }

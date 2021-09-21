@@ -24,7 +24,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         " (:year is null or p.year <= :year) and " +
         " (:price is null or p.price <= :price) and " +
         " (:region is null or p.region=:region) and " +
-        " (:reco is null or p.recommandation like %:reco%)"
+        " (:reco is null or p.recommandation like %:reco%) and " +
+        " (:search is null or lower(p.name) like lower(concat('%',:search,'%'))) "
     )
     public Page<Product> findSome(
         Pageable pageable,
@@ -32,6 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         @Param("year") Integer year,
         @Param("price") Float price,
         @Param("region") String region,
-        @Param("reco") String reco
+        @Param("reco") String reco,
+        @Param("search") String search
     );
 }

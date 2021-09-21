@@ -71,4 +71,8 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
   reset() {
     this.filtres.reset();
   }
+
+  setType(type_value: string) {
+    this.filtres.setValue({ type: type_value });
+  }
 }
