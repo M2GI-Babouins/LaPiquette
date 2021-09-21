@@ -46,6 +46,27 @@ public class Client implements Serializable {
     @JsonIgnoreProperties(value = { "client", "orderLines" }, allowSetters = true)
     private Set<Order> orders = new HashSet<>();
 
+    public Client(
+        Long id,
+        String login,
+        String firstName,
+        String lastName,
+        String email,
+        String adresse,
+        Boolean loggedIn,
+        String password
+    ) {
+        this.id = id;
+        this.loggedIn = loggedIn;
+        this.adress = adresse;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
+    public Client() {}
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;

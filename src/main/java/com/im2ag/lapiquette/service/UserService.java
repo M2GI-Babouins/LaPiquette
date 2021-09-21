@@ -41,16 +41,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final ClientService clientService;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        ClientService clientService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.clientService = clientService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -142,6 +146,9 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+        // currently no need to confirm email
+        this.activateRegistration(newUser.getActivationKey());
+        this.clientService.createClient(newUser);
         return newUser;
     }
 
@@ -157,6 +164,9 @@ public class UserService {
 
     public User createUser(AdminUserDTO userDTO) {
         User user = new User();
+        Long id = userRepository.count() + 1;
+        log.debug("ID : {}", id);
+        user.setId(id);
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
