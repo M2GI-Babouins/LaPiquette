@@ -10,8 +10,7 @@ import { RaveOptions } from 'angular-rave';
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss'],
 })
-export class PaymentComponent implements OnInit {
-  order: IOrder = { id: -1, totalPrice: 0.001, orderLines: [] };
+export class PaymentComponent {
   paymentOptions: RaveOptions = {
     customer: { name: 'Default', email: 'Default@mail.fr', phonenumber: '0600000000' },
     amount: 0.01,
@@ -19,17 +18,11 @@ export class PaymentComponent implements OnInit {
     customizations: { title: 'Paiement du panier' },
   };
 
-  constructor(private orderService: OrderService, protected activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ order }) => {
-      this.order = order;
-    });
-  }
+  constructor(private orderService: OrderService) {}
 
   paymentInit(): void {
-    this.paymentOptions.amount = this.order.totalPrice;
-    this.paymentOptions.tx_ref = 'LPK-${this.order.id}';
+    this.paymentOptions.amount = this.orderService.getBasket().totalPrice;
+    this.paymentOptions.tx_ref = 'LPK-${this.orderService.getBasket().id.toString()}';
   }
 
   paymentSuccess(res: RavePaymentData): void {

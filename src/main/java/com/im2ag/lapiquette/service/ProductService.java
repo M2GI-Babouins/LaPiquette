@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +45,6 @@ public class ProductService {
      * @param product the entity to update partially.
      * @return the persisted entity.
      */
-    @Lock(javax.persistence.LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Product> partialUpdate(Product product) {
         log.debug("Request to partially update Product : {}", product);
 
@@ -138,6 +136,20 @@ public class ProductService {
     public Optional<Product> findOne(Long id) {
         log.debug("Request to get Product : {}", id);
         return productRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Product> findSome(Pageable pageable, String type, String year, String price, String region, String reco, String search) {
+        log.debug("Request to get Products with param year", year);
+        Integer yy = null;
+        try {
+            yy = Integer.parseInt(year);
+        } catch (NumberFormatException e) {}
+        Float pp = null;
+        try {
+            pp = Float.parseFloat(price);
+        } catch (NullPointerException | NumberFormatException e) {}
+        return productRepository.findSome(pageable, type, yy, pp, region, reco, search);
     }
 
     /**
