@@ -143,7 +143,7 @@ public class ProductResource {
      *
      */
     // @GetMapping("/products")
-    public ResponseEntity<List<Product>> findAllProduct(Pageable pageable) {
+    public ResponseEntity<List<Product>> findAllProduct(Pageable pageable, @RequestParam(required = false) String type) {
         log.debug("acces a tout les produit - get");
         Page<Product> page = productService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

@@ -70,7 +70,7 @@ class ClientResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Client createEntity() {
+    public static Client createEntity(EntityManager em) {
         return new Client()
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
@@ -86,7 +86,7 @@ class ClientResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Client createUpdatedEntity() {
+    public static Client createUpdatedEntity(EntityManager em) {
         return new Client()
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
@@ -98,7 +98,7 @@ class ClientResourceIT {
 
     @BeforeEach
     public void initTest() {
-        client = createEntity();
+        client = createEntity(em);
     }
 
     @Test

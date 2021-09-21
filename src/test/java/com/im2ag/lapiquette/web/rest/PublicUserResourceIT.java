@@ -52,7 +52,7 @@ class PublicUserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = UserResourceIT.initTestUser(em);
+        user = UserResourceIT.initTestUser(userRepository, em);
     }
 
     @Test

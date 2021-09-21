@@ -66,7 +66,7 @@ public class Product implements Serializable {
     @Column(name = "image_content_type")
     private String imageContentType;
 
-    @JsonIgnoreProperties(value = { "product", "order" })
+    @JsonIgnoreProperties(value = { "product", "order" }, allowSetters = false)
     @OneToOne(mappedBy = "product")
     private OrderLine orderLine;
 

@@ -94,7 +94,7 @@ class ProductResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Product createEntity() {
+    public static Product createEntity(EntityManager em) {
         return new Product()
             .name(DEFAULT_NAME)
             .year(DEFAULT_YEAR)
@@ -118,7 +118,7 @@ class ProductResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Product createUpdatedEntity() {
+    public static Product createUpdatedEntity(EntityManager em) {
         return new Product()
             .name(UPDATED_NAME)
             .year(UPDATED_YEAR)
@@ -138,7 +138,7 @@ class ProductResourceIT {
 
     @BeforeEach
     public void initTest() {
-        product = createEntity();
+        product = createEntity(em);
     }
 
     @Test
