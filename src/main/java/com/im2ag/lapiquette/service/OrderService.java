@@ -122,7 +122,7 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = false, rollbackFor = ProductNotAvailable.class)
+    @Transactional(rollbackFor = ProductNotAvailable.class)
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Order> buyAnOrder(Order order) {
         Product product;
@@ -148,7 +148,7 @@ public class OrderService {
         return Optional.of(orderRepository.save(order));
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Optional<Order> checkAnOrder(Order order) {
         Product product;

@@ -73,7 +73,7 @@ public class OrderAddResourceIT {
 
     private Order order;
 
-    public static Order createEntity(EntityManager em) {
+    public static Order createEntity() {
         Set<OrderLine> orderLines = new HashSet<OrderLine>();
 
         Product product1 = new Product().name(NAME_1).price(PRICE_1).percentPromo(PROMO_1).stock(STOCK_1);
@@ -88,7 +88,7 @@ public class OrderAddResourceIT {
 
     @BeforeEach
     public void initTest() {
-        order = createEntity(em);
+        order = createEntity();
     }
 
     @Test
@@ -116,7 +116,7 @@ public class OrderAddResourceIT {
 
     @Test
     @Transactional
-    public void buyAnOrder() throws IOException, Exception {
+    public void buyAnOrder() throws Exception {
         orderService.completeSave(order);
 
         int databaseSizeBeforeUpdate = orderRepository.findAll().size();

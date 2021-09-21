@@ -63,7 +63,7 @@ class OrderResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Order createEntity(EntityManager em) {
+    public static Order createEntity() {
         Order order = new Order().totalPrice(DEFAULT_TOTAL_PRICE).datePurchase(DEFAULT_DATE_PURCHASE).basket(DEFAULT_BASKET);
         return order;
     }
@@ -74,14 +74,14 @@ class OrderResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Order createUpdatedEntity(EntityManager em) {
+    public static Order createUpdatedEntity() {
         Order order = new Order().totalPrice(UPDATED_TOTAL_PRICE).datePurchase(UPDATED_DATE_PURCHASE).basket(UPDATED_BASKET);
         return order;
     }
 
     @BeforeEach
     public void initTest() {
-        order = createEntity(em);
+        order = createEntity();
     }
 
     @Test

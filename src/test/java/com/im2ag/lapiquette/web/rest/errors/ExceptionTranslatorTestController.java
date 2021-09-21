@@ -1,6 +1,5 @@
 package com.im2ag.lapiquette.web.rest.errors;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.HttpStatus;
@@ -18,13 +17,13 @@ public class ExceptionTranslatorTestController {
     }
 
     @PostMapping("/method-argument")
-    public void methodArgument(@Valid @RequestBody TestDTO testDTO) {}
+    public void methodArgument() {}
 
     @GetMapping("/missing-servlet-request-part")
-    public void missingServletRequestPartException(@RequestPart String part) {}
+    public void missingServletRequestPartException() {}
 
     @GetMapping("/missing-servlet-request-parameter")
-    public void missingServletRequestParameterException(@RequestParam String param) {}
+    public void missingServletRequestParameterException() {}
 
     @GetMapping("/access-denied")
     public void accessdenied() {
