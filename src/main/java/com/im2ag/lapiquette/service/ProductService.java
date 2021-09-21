@@ -120,10 +120,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> findAllWhereOrderLineIsNull() {
         log.debug("Request to get all products where OrderLine is null");
-        return StreamSupport
-            .stream(productRepository.findAll().spliterator(), false)
-            .filter(product -> product.getOrderLine() == null)
-            .collect(Collectors.toList());
+        return productRepository.findAll().stream().filter(product -> product.getOrderLine() == null).collect(Collectors.toList());
     }
 
     /**
