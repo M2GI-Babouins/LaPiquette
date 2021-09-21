@@ -70,6 +70,9 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.productService.getFilterChange()) {
+      this.filters = this.productService.getFilters();
+    }
     this.handleNavigation();
   }
 
@@ -95,10 +98,12 @@ export class ProductComponent implements OnInit {
 
   public setFilter(value: any) {
     this.filters = value;
+    this.productService.setFilterChange(true);
+    this.productService.setFilters(this.filters);
     this.loadPage();
   }
 
-  public setNewProducts(products: IProduct[]) {
+  public setProductsSorted(products: IProduct[]) {
     this.products = products;
   }
 

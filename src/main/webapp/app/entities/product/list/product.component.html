@@ -31,7 +31,11 @@
 
   <div class="row align-items-start">
     <div class="filtres col-2">
-      <jhi-product-filters [products]="baseProducts" (newFilters)="setFilter($event)"></jhi-product-filters>
+      <jhi-product-filters
+        [products]="baseProducts"
+        (newFilters)="setFilter($event)"
+        (sortBy)="setProductsSorted($event)"
+      ></jhi-product-filters>
     </div>
     <!--View User-->
     <div class="col-10">

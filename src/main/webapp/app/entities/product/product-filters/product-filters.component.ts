@@ -18,6 +18,7 @@ import { ProductService } from '../service/product.service';
 export class ProductFiltersComponent implements OnInit, OnChanges {
   @Input() products: IProduct[] = [];
   @Output() newFilters = new EventEmitter<IProduct[]>();
+  @Output() sortBy = new EventEmitter<IProduct[]>();
 
   regions = Region;
   yearMade: number[] = [];
@@ -69,6 +70,14 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
     this.recommandations = recoFinal;
   }
 
+  reset() {
+    this.filtres.reset();
+  }
+
+  setType(type_value: string) {
+    this.filtres.setValue({ type: type_value });
+  }
+
   trier() {
     console.log('by ' + this.tri);
     let productSorted: IProduct[] = [];
@@ -89,49 +98,6 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
         productSorted = this.products;
         break;
     }
-    this.newFilters.emit(productSorted);
-  }
-
-  filterRegion() {
-    if (this.wineData.region !== null) {
-      const productFiltered = this.products.filter(product => product.region === this.wineData.region);
-      this.newFilters.emit(productFiltered);
-    }
-  }
-
-  filterRecommandation() {
-    if (this.wineData.recommandation !== null) {
-      const productFiltered = this.products.filter(product => {
-        const recos = product.recommandation
-          ?.split(',')
-          .map(r => r.toLowerCase())
-          .map(r => r.trim());
-        const alors = recos?.includes(this.wineData.recommandation!);
-        if (recos?.includes(this.wineData.recommandation!)) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      this.newFilters.emit(productFiltered);
-    }
-  }
-
-  filterYear() {
-    if (this.wineData.year !== null) {
-      const productFiltered = this.products.filter(product => product.year! <= this.wineData.year!);
-      this.newFilters.emit(productFiltered);
-    }
-  }
-
-  filterPrice() {
-    if (this.wineData.price !== null) {
-      const productFiltered = this.products.filter(product => product.price! <= this.wineData.price!);
-      this.newFilters.emit(productFiltered);
-    }
-  }
-
-  setType(type_value: string) {
-    this.filtres.setValue({ type: type_value });
+    this.sortBy.emit(productSorted);
   }
 }

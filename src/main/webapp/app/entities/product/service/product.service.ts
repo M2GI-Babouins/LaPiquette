@@ -23,6 +23,8 @@ export class ProductService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/products');
   filterType = '';
   nameSearched = '';
+  filterChanged = false;
+  filters = {};
 
   constructor(
     protected http: HttpClient,
@@ -103,6 +105,22 @@ export class ProductService {
 
   getnameSearched() {
     return this.nameSearched;
+  }
+
+  setFilterChange(filter: boolean) {
+    this.filterChanged = filter;
+  }
+
+  getFilterChange() {
+    return this.filterChanged;
+  }
+
+  getFilters() {
+    return this.filters;
+  }
+
+  setFilters(filters: any) {
+    this.filters = filters;
   }
 
   loadAll(): Observable<EntityArrayResponseType> {

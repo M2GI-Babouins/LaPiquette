@@ -1,13 +1,15 @@
 <div class="filters">
-  <form>
-    <div class="mb-3 col-6">
-      <label for="tri" class="form-label">Trié par:</label>
-      <select class="btn btn-outline-info dropdown-toggle" name="tri" [(ngModel)]="tri" (ngModelChange)="trier()">
-        <option value="annee">Année</option>
-        <option value="priceDown">Prix décroissant</option>
-        <option value="priceUp">Prix Croissant</option>
-      </select>
-    </div>
+  <div class="mb-3 col-6">
+    <label for="tri" class="form-label">Trié par:</label>
+    <select class="btn btn-outline-info dropdown-toggle" name="tri" [(ngModel)]="tri" (ngModelChange)="trier()">
+      <option value="annee">Année</option>
+      <option value="priceDown">Prix décroissant</option>
+      <option value="priceUp">Prix Croissant</option>
+    </select>
+  </div>
+
+  <form [formGroup]="filtres">
+    <title>Filtres</title>
 
     <div class="mb-3 col-6">
       <label for="price" class="form-label">Prix maximum:</label>
