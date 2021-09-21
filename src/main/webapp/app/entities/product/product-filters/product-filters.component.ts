@@ -17,7 +17,6 @@ import { ProductService } from '../service/product.service';
 })
 export class ProductFiltersComponent implements OnInit, OnChanges {
   @Input() products: IProduct[] = [];
-  @Output() newProducts = new EventEmitter<IProduct[]>();
   @Output() newFilters = new EventEmitter<IProduct[]>();
 
   regions = Region;
@@ -28,22 +27,17 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
   filtres = new FormGroup({
     type: new FormControl(),
     price: new FormControl(),
-    year: new FormControl(''),
+    year: new FormControl(),
     reco: new FormControl(),
     region: new FormControl(),
   });
 
   constructor(private productService: ProductService) {}
 
-  loadProduct(value?: any): void {
-    // this.newProducts.emit(this.productService.findSome(value));
-  }
-
   ngOnInit(): void {
     this.filtres.valueChanges.subscribe(value => {
-      // this.loadProduct(value);
       this.newFilters.emit(value);
-      console.log('fetch data with new value', value);
+      console.log('filters : fetch data with new value', value);
     });
   }
 
@@ -74,46 +68,7 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
     this.recommandations = recoFinal;
   }
 
-  // filterRegion() {
-  //   if (this.wineData.region !== null) {
-  //     const productFiltered = this.products.filter(product => product.region === this.wineData.region);
-  //     this.newProducts.emit(productFiltered);
-  //   }
-  // }
-
-  // filterRecommandation() {
-  //   if (this.wineData.recommandation !== null) {
-  //     const productFiltered = this.products.filter(product => {
-  //       const recos = product.recommandation
-  //         ?.split(',')
-  //         .map(r => r.toLowerCase())
-  //         .map(r => r.trim());
-  //       const alors = recos?.includes(this.wineData.recommandation!);
-  //       if (recos?.includes(this.wineData.recommandation!)) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     });
-  //     this.newProducts.emit(productFiltered);
-  //   }
-  // }
-
-  // filterYear() {
-  //   if (this.wineData.year !== null) {
-  //     const productFiltered = this.products.filter(product => product.year! <= this.wineData.year!);
-  //     this.newProducts.emit(productFiltered);
-  //   }
-  // }
-
-  // filterPrice() {
-  //   if (this.wineData.price !== null) {
-  //     const productFiltered = this.products.filter(product => product.price! <= this.wineData.price!);
-  //     this.newProducts.emit(productFiltered);
-  //   }
-  // }
-
   reset() {
-    this.newProducts.emit(this.products);
+    this.filtres.reset();
   }
 }

@@ -162,30 +162,30 @@ public class ProductResource {
         log.debug("acces a certains produits - get");
         Page<Product> page;
         boolean allnull = true;
-        if (reco == null || reco.equals("null") || reco.equals("undefined")) {
+        if (reco == null || reco.equals("") || reco.equals("null") || reco.equals("undefined")) {
             allnull = false;
             reco = null;
         }
-        if (year == null || year.equals("null") || year.equals("undefined")) {
+        if (year == null || year.equals("") || year.equals("null") || year.equals("undefined")) {
             allnull = false;
             year = null;
         }
-        if (price == null || price.equals("null") || price.equals("undefined")) {
+        if (price == null || price.equals("") || price.equals("null") || price.equals("undefined")) {
             allnull = false;
             price = null;
         }
-        if (region == null || region.equals("null") || region.equals("undefined")) {
+        if (region == null || region.equals("") || region.equals("null") || region.equals("undefined")) {
             allnull = false;
             region = null;
         }
-        if (type == null || type.equals("null") || type.equals("undefined")) {
+        if (type == null || type.equals("") || type.equals("null") || type.equals("undefined")) {
             allnull = false;
             type = null;
         }
         if (allnull) {
             log.debug("request all data - param null");
             page = productService.findAll(pageable);
-        } else page = productService.findSome(pageable, type, year);
+        } else page = productService.findSome(pageable, type, year, price, region, reco);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

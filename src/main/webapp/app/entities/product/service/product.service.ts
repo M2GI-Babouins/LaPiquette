@@ -128,7 +128,6 @@ export class ProductService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     const oui = this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
-    console.log('query has been executed');
     return oui;
   }
 

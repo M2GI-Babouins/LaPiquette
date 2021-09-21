@@ -50,7 +50,6 @@ export class ProductComponent implements OnInit {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
 
-    console.log('load with filters ', this.filters);
     this.productService
       .query({
         page: pageToLoad - 1,
@@ -97,7 +96,6 @@ export class ProductComponent implements OnInit {
   public setFilter(value: any) {
     this.filters = value;
     this.loadPage();
-    console.log('filter = ', this.filters);
   }
 
   public setNewProducts(products: IProduct[]) {
