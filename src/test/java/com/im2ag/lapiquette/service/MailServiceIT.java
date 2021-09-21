@@ -214,6 +214,7 @@ class MailServiceIT {
 
             String propertyFilePath = "i18n/messages_" + getJavaLocale(langKey) + ".properties";
             URL resource = this.getClass().getClassLoader().getResource(propertyFilePath);
+            assert resource != null;
             File file = new File(new URI(resource.getFile()).getPath());
             Properties properties = new Properties();
             properties.load(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));

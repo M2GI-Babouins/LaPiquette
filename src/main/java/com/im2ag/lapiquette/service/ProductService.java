@@ -162,7 +162,7 @@ public class ProductService {
     public Optional<Float> getUnitPrice(Long id) {
         log.debug("Request to get last price of Product : {}", id);
         Optional<Product> pres = productRepository.findById(id);
-        Optional<Float> res = Optional.ofNullable(null);
+        Optional<Float> res = Optional.empty();
         if (pres.isPresent()) {
             Product product = pres.get();
             float result = product.getPercentPromo() * product.getPrice();
