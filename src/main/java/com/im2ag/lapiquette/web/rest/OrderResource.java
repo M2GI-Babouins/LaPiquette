@@ -235,13 +235,14 @@ public class OrderResource {
     }
 
     @PatchMapping(value = "/orders/{id}/bill", consumes = "application/merge-patch+json")
-    public ResponseEntity<Order> buyAnOrder(@PathVariable(value = "id", required = false) final Long id) {
+    public ResponseEntity<Order> buyAnOrder(@PathVariable(value = "id", required = false) final Long id,
+                                           @NotNull @RequestBody Order order) {
         log.debug("PATCH request to buy according to the order {}", id);
-        Optional<Order> bis_order = orderRepository.findById(id);
-        if (bis_order.isEmpty()) throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        // Optional<Order> bis_order = orderRepository.findById(id);
+        // if (bis_order.isEmpty()) throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
 
-        @NotNull
-        Order order = bis_order.get();
+        // order = bis_order.get();
+
         if (order.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }

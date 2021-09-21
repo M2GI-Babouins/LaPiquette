@@ -43,12 +43,16 @@
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
     </button>
 
-    <button type="button" (click)="openPayment = true" class="btn btn-success"><fa-icon icon="check"></fa-icon><span>Acheter</span></button>
+    <button type="button" (click)="putPayment()" class="btn btn-success" *ngIf="this.openPayment == true">
+      <fa-icon icon="check"></fa-icon><span>Acheter</span>
+    </button>
 
     <button type="button" (click)="deleteOrder()" class="btn btn-danger"><fa-icon icon="times"></fa-icon><span>Supprimer</span></button>
+
+    <p *ngIf="this.openPayment == false">Panier payé</p>
   </div>
 </div>
 
-<div *ngIf="showPayment()">
-  <jhi-payment></jhi-payment>
+<div *ngIf="this.openPayment == true">
+  <!-- <jhi-payment></jhi-payment> -->
 </div>
