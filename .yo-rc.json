@@ -45,6 +45,9 @@
     "languages": ["fr"],
     "applicationIndex": 0,
     "entities": ["Product", "Order", "OrderLine", "Client"],
-    "lastLiquibaseTimestamp": 1631259447000
+    "lastLiquibaseTimestamp": 1631259447000,
+    "herokuAppName": "la-piquette",
+    "herokuDeployType": "git",
+    "herokuJavaVersion": "11"
   }
 }
