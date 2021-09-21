@@ -1,5 +1,9 @@
+.0
 <div class="row justify-content-center">
-  <div class="col-8">
+  <div class="col-8" *ngIf="this.getBasket().id === 0">
+    <p>Panier vide</p>
+  </div>
+  <div class="col-8" *ngIf="this.getBasket().id !== 0">
     <h2 data-cy="orderDetailsHeading"><span>Panier</span></h2>
     <h4>Cout Total : {{ getBasket().totalPrice }} euros</h4>
 
