@@ -5,7 +5,6 @@ import com.im2ag.lapiquette.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -120,10 +119,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> findAllWhereOrderLineIsNull() {
         log.debug("Request to get all products where OrderLine is null");
-        return StreamSupport
-            .stream(productRepository.findAll().spliterator(), false)
-            .filter(product -> product.getOrderLine() == null)
-            .collect(Collectors.toList());
+        return productRepository.findAll().stream().filter(product -> product.getOrderLine() == null).collect(Collectors.toList());
     }
 
     /**
@@ -140,15 +136,15 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Page<Product> findSome(Pageable pageable, String type, String year, String price, String region, String reco, String search) {
-        log.debug("Request to get Products with param year", year);
+        log.debug("Request to get Products with param year");
         Integer yy = null;
         try {
             yy = Integer.parseInt(year);
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException ignored) {}
         Float pp = null;
         try {
             pp = Float.parseFloat(price);
-        } catch (NullPointerException | NumberFormatException e) {}
+        } catch (NullPointerException | NumberFormatException ignored) {}
         return productRepository.findSome(pageable, type, yy, pp, region, reco, search);
     }
 
@@ -166,7 +162,7 @@ public class ProductService {
     public Optional<Float> getUnitPrice(Long id) {
         log.debug("Request to get last price of Product : {}", id);
         Optional<Product> pres = productRepository.findById(id);
-        Optional<Float> res = Optional.ofNullable(null);
+        Optional<Float> res = Optional.empty();
         if (pres.isPresent()) {
             Product product = pres.get();
             float result = product.getPercentPromo() * product.getPrice();

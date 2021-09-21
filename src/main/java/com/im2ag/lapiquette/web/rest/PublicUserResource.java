@@ -3,7 +3,6 @@ package com.im2ag.lapiquette.web.rest;
 import com.im2ag.lapiquette.service.UserService;
 import com.im2ag.lapiquette.service.dto.UserDTO;
 import java.util.*;
-import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
