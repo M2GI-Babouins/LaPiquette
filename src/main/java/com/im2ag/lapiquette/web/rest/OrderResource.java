@@ -85,7 +85,7 @@ public class OrderResource {
     /**
      * {@code GET  /orders/:id} : get the "id" order.
      *
-     * @param id the id of the order to retrieve.
+     * @param clientid the id of the client owner of the basket
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the order, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/orders/{clientid}/basket")
@@ -211,13 +211,13 @@ public class OrderResource {
      * @param id the id of the order to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the order, or with status {@code 404 (Not Found)}.
      */
-    /*   @GetMapping("/orders/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable Long id) {
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<Order> getAnOrder(@PathVariable Long id) {
         log.debug("REST request to get Order : {}", id);
         Optional<Order> order = orderService.findOne(id);
         return ResponseUtil.wrapOrNotFound(order);
     }
-*/
+
     /**
      * {@code DELETE  /orders/:id} : delete the "id" order.
      *
