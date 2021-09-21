@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
@@ -16,6 +17,7 @@ import { IProduct, Recommandation, Region } from '../product.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { ProductService } from '../service/product.service';
 import { ProductDeleteDialogComponent } from '../delete/product-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-product',
@@ -43,7 +45,8 @@ export class ProductComponent implements OnInit {
     protected productService: ProductService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected dataUtils: DataUtils
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -149,5 +152,29 @@ export class ProductComponent implements OnInit {
 
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
+  }
+
+
+  filterProductsByType(filter: string) {
+    if (filter !== '') {
+      this.baseProducts = this.baseProducts.filter(product => product.type === filter);
+      this.products = this.products.filter(product => product.type === filter);
+    }
+  }
+
+  filterProductsByName(filter: string) {
+    if (this.productService.getnameSearched()) {
+      filter = filter.toLowerCase();
+      this.baseProducts = this.baseProducts.filter(product => product.name?.toLocaleLowerCase() === filter);
+      this.products = this.products.filter(product => product.name?.toLocaleLowerCase() === filter);
+    }
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 }
