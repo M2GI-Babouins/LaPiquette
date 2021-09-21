@@ -142,10 +142,55 @@ public class ProductResource {
      * retourne tout les produit en base, paginé
      *
      */
-    @GetMapping("/products")
-    public ResponseEntity<List<Product>> findAllProduct(Pageable pageable) {
+    // @GetMapping("/products")
+    public ResponseEntity<List<Product>> findAllProduct(Pageable pageable, @RequestParam(required = false) String type) {
         log.debug("acces a tout les produit - get");
         Page<Product> page = productService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> findSomeProduct(
+        Pageable pageable,
+        @RequestParam(required = false) String year,
+        @RequestParam(required = false) String price,
+        @RequestParam(required = false) String reco,
+        @RequestParam(required = false) String region,
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) String search
+    ) {
+        log.debug("acces a certains produits - get");
+        Page<Product> page;
+        boolean allnull = true;
+        if (reco == null || reco.equals("") || reco.equals("null") || reco.equals("undefined")) {
+            allnull = false;
+            reco = null;
+        }
+        if (year == null || year.equals("") || year.equals("null") || year.equals("undefined")) {
+            allnull = false;
+            year = null;
+        }
+        if (price == null || price.equals("") || price.equals("null") || price.equals("undefined")) {
+            allnull = false;
+            price = null;
+        }
+        if (region == null || region.equals("") || region.equals("null") || region.equals("undefined")) {
+            allnull = false;
+            region = null;
+        }
+        if (type == null || type.equals("") || type.equals("null") || type.equals("undefined")) {
+            allnull = false;
+            type = null;
+        }
+        if (search == null || search.equals("") || search.equals("null") || search.equals("undefined")) {
+            allnull = false;
+            search = null;
+        }
+        if (allnull) {
+            log.debug("request all data - param null");
+            page = productService.findAll(pageable);
+        } else page = productService.findSome(pageable, type, year, price, region, reco, search);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

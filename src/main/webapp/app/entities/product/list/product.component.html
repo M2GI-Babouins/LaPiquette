@@ -1,27 +1,3 @@
-<!--<div class="row align-items-start">
-  <div class="filtres col-3">
-    <jhi-product-filters [products]="products" (newProducts)="setNewProducts($event)"></jhi-product-filters>
-  </div>
-
-  <div class="col-9">
-    <div class="row">
-      <div class="col-lg-3" *ngFor="let product of products">
-        <div class="product">
-          <h5>
-            <strong>{{ product.name }}</strong>
-          </h5>
-          <p>
-            <em>{{ product.price }} euros</em>
-          </p>
-          <p *ngIf="product.year">Year : {{ product.year }}</p>
-          <p *ngIf="product.region">Region : {{ product.region }}</p>
-          <p *ngIf="product.recommandation">Recommandation : {{ product.recommandation }}</p>
-          <button type="button" class="btn btn-outline-success" (click)="addToCart(product)">Ajouter au panier</button>
-          <a [routerLink]="['/product/' + product.id + '/view']" class="btn btn-outline-primary">Voir Détail</a>
-        </div>
-      </div>
-      <br />-->
-
 <div id="ajoutProduit" class="col-12">
   <button class="btn-success col-12" *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/product/new']">
     <span>Ajouter un Nouveau Produit</span>
@@ -39,22 +15,10 @@
   <div class="alert alert-success" *ngIf="productAdded">
     <span><strong>Le produit a bien été ajouté au panier</strong> </span>
   </div>
-  <!--<div class="product-sidenav">
-      <button
-        type="submit"
-        [routerLink]="['/product', 'new']"
-        class="btn btn-info btn-sm"
-        data-cy="entityDetailsButton"
-        *jhiHasAnyAuthority="'ROLE_ADMIN'"
-      >
-        <fa-icon icon="eye"></fa-icon>
-        <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Nouveau produit</span>
-      </button>
-    </div>-->
 
   <div class="row align-items-start">
     <div class="filtres col-2">
-      <jhi-product-filters [products]="baseProducts" (newProducts)="setNewProducts($event)"></jhi-product-filters>
+      <jhi-product-filters [products]="baseProducts" (newFilters)="setFilter($event)"></jhi-product-filters>
     </div>
     <!--View User-->
     <div class="col-10">
