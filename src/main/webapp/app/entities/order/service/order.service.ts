@@ -119,6 +119,14 @@ export class OrderService {
 
   // #endregion Basket
 
+  payment(order: IOrder): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(order);
+    console.log('execute');
+    return this.http
+      .patch<IOrder>(`${this.resourceUrl}/${getOrderIdentifier(order) as number}/bill`, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   create(order: IOrder): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(order);
     return this.http

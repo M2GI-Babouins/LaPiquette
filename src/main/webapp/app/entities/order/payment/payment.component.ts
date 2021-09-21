@@ -1,8 +1,6 @@
-import { IOrder } from './../order.model';
 import { OrderService } from './../service/order.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RavePaymentData } from 'angular-rave';
-import { ActivatedRoute } from '@angular/router';
 import { RaveOptions } from 'angular-rave';
 
 @Component({
@@ -23,6 +21,8 @@ export class PaymentComponent {
   paymentInit(): void {
     this.paymentOptions.amount = this.orderService.getBasket().totalPrice;
     this.paymentOptions.tx_ref = 'LPK-${this.orderService.getBasket().id.toString()}';
+    // eslint-disable-next-line no-console
+    console.log('init');
   }
 
   paymentSuccess(res: RavePaymentData): void {

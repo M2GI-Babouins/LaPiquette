@@ -34,6 +34,11 @@ export class OrderDetailComponent {
     this.orderService.deleteFromBasket(ol);
   }
 
+  putPayment(): void {
+    this.orderService.payment(this.orderService.getBasket());
+    console.log('envoie payement');
+  }
+
   showPayment(): boolean {
     this.orderService.setOrderDate();
     if (this.openPayment) {
