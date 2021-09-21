@@ -6,7 +6,7 @@ services:
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - Default:Default@cluster0.yv4tr.mongodb.net/LaPiquette:27017:27017
+      - 27017:27017
     command: mongos --configdb csvr/lapiquette-mongodb-config --bind_ip 0.0.0.0
   lapiquette-mongodb-node:
     build:

@@ -654,8 +654,8 @@
                     <configuration>
                         <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
                         <diffChangeLogFile>${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                        <driver>org.mongodb</driver>
-                        <url>jdbc:mongodb+srv://Default:Default@cluster0.yv4tr.mongodb.net/LaPiquette?retryWrites=true&amp;w=majority</url>
+                        <driver>org.h2.Driver</driver>
+                        <url>jdbc:h2:file:${project.build.directory}/h2db/db/lapiquette</url>
                         <defaultSchemaName></defaultSchemaName>
                         <username>laPiquette</username>
                         <password></password>
