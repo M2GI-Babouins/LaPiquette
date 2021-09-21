@@ -84,7 +84,12 @@ export class NavbarComponent implements OnInit {
 
   setType(type: string) {
     this.productService.setFilterType(type);
-    this.productService.setNameSearched(undefined);
+    this.productService.setFilterChange(false);
+    this.productService.setNameSearched('');
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+    this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['/product']);
   }
 }

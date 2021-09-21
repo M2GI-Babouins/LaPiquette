@@ -1,35 +1,51 @@
 <div class="filters">
-  <form>
+  <div class="mb-3 col-6">
+    <label for="tri" class="form-label">Trié par:</label>
+    <select class="btn btn-outline-info dropdown-toggle" name="tri" [(ngModel)]="tri" (ngModelChange)="trier()">
+      <option value="annee">Année</option>
+      <option value="priceDown">Prix décroissant</option>
+      <option value="priceUp">Prix Croissant</option>
+    </select>
+  </div>
+
+  <form [formGroup]="filtres">
     <title>Filtres</title>
 
     <div class="mb-3 col-6">
-      <label for="price" class="form-label">Prix Maximum:</label>
-      <input class="btn btn-outline-info" type="number" name="price" min="0" [(ngModel)]="wineData.price" (keydown.enter)="filterPrice()" />
+      <label for="price" class="form-label">Prix maximum:</label>
+      <input
+        formControlName="price"
+        jhi-bindQueryParam="price"
+        type="range"
+        name="price"
+        id="price-range"
+        min="0"
+        max="300"
+        value="300"
+        step="1"
+        oninput="this.nextElementSibling.value = this.value"
+      />
+      <output id="price-output"></output><span>€</span>
     </div>
 
     <div class="mb-3 col-6">
-      <select class="btn btn-outline-info dropdown-toggle" name="year" [(ngModel)]="wineData.year" (ngModelChange)="filterYear()">
-        <option>Année de Fabrication avant</option>
+      <select formControlName="year" jhi-bindQueryParam="year" class="btn btn-outline-info dropdown-toggle" name="year">
+        <option value="">Année de Fabrication avant</option>
         <option *ngFor="let year of yearMade">{{ year }}</option>
       </select>
     </div>
 
     <div class="mb-3 col-6">
-      <select
-        class="btn btn-outline-info dropdown-toggle"
-        name="recommandation"
-        [(ngModel)]="wineData.recommandation"
-        (ngModelChange)="filterRecommandation()"
-      >
-        <option>Recommandations</option>
+      <select formControlName="reco" jhi-bindQueryParam="reco" class="btn btn-outline-info dropdown-toggle">
+        <option value="">Recommandation</option>
         <option *ngFor="let r of recommandations">{{ r }}</option>
       </select>
     </div>
 
     <div class="mb-3 col-6">
       <label for="region" class="form-label">Region :</label>
-      <select class="btn btn-outline-info dropdown-toggle" name="region" [(ngModel)]="wineData.region" (ngModelChange)="filterRegion()">
-        <option>Region</option>
+      <select formControlName="region" jhi-bindQueryParam="region" class="btn btn-outline-info dropdown-toggle">
+        <option value="">Region</option>
         <option *ngFor="let region of valuesRegion()">{{ region }}</option>
       </select>
     </div>

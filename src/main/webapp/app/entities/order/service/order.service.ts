@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import { IClient } from './../../client/client.model';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
@@ -21,6 +22,7 @@ export class OrderService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/orders');
 
   protected basket: IOrder = { id: 0, orderLines: [], totalPrice: 0, basket: true };
+  protected basket_paid = false;
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -30,6 +32,17 @@ export class OrderService {
   }
 
   addToBasket(product: IProduct, quantity: number): void {
+    if (this.basket.id === 0) {
+      this.create(this.basket)
+        .pipe(finalize(() => console.log('finish')))
+        .subscribe(
+          data => {
+            this.basket.id = !(data.body === null) ? data.body.id : 0;
+          },
+          () => console.log('pas moyen de creer le panier')
+        );
+    }
+
     let orderline = this.basket.orderLines.find(ol => ol.product.id === product.id);
     if (orderline != null) {
       orderline.quantity += quantity;
@@ -37,9 +50,9 @@ export class OrderService {
       orderline = { product, quantity, unityPrice: product.price! };
       this.basket.orderLines.push(orderline);
     }
-
     this.calculateTotal();
     this.updateBasket();
+    this.update(this.basket);
   }
 
   changeBasketQuantity(orderLine: IOrderLine, quantity: number): void {
@@ -49,13 +62,14 @@ export class OrderService {
   }
 
   deleteFromBasket(orderLine: IOrderLine): void {
-    this.basket.orderLines.splice(this.basket.orderLines.findIndex(ol => ol === orderLine));
+    this.basket.orderLines = this.basket.orderLines.filter(order => order !== orderLine);
     this.calculateTotal();
     this.updateBasket();
   }
 
   deleteAllBasket(): void {
     this.basket.orderLines = [];
+    this.basket.id = 0;
     this.calculateTotal();
     this.updateBasket();
   }
@@ -81,8 +95,11 @@ export class OrderService {
     this.http
       .put<IOrder>(`${this.resourceUrl}/basket`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      // eslint-disable-next-line no-console
-      .subscribe(data => console.log(data));
+      .subscribe(data => {
+        if (data.ok && data.body) {
+          this.basket.id = data.body.id;
+        }
+      });
   }
 
   findBasket(): void {
@@ -111,6 +128,15 @@ export class OrderService {
   }
 
   // #endregion Basket
+
+  payment(order: IOrder): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(order);
+    const headers_val = new HttpHeaders({ 'Content-Type': 'application/merge-patch+json' });
+    console.log('execute');
+    return this.http
+      .patch<IOrder>(`${this.resourceUrl}/${getOrderIdentifier(order) as number}/bill`, copy, { headers: headers_val, observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 
   create(order: IOrder): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(order);

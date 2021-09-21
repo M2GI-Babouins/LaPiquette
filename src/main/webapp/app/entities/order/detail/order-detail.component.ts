@@ -1,16 +1,19 @@
 import { OrderLine } from './../../order-line/order-line.model';
-import { OrderService } from './../service/order.service';
+import { EntityResponseType, OrderService } from './../service/order.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IOrder } from '../order.model';
+import { finalize } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'jhi-order-detail',
   templateUrl: './order-detail.component.html',
 })
 export class OrderDetailComponent {
-  openPayment = false;
+  openPayment = true;
+  isSaving = false;
 
   constructor(protected activatedRoute: ActivatedRoute, protected orderService: OrderService) {}
 
@@ -34,6 +37,13 @@ export class OrderDetailComponent {
     this.orderService.deleteFromBasket(ol);
   }
 
+  putPayment(): void {
+    // const res = this.orderService.payment(this.orderService.getBasket());
+    this.subscribeToSaveResponse(this.orderService.payment(this.orderService.getBasket()));
+    // eslint-disable-next-line no-console
+    console.log('envoie payement');
+  }
+
   showPayment(): boolean {
     this.orderService.setOrderDate();
     if (this.openPayment) {
@@ -45,5 +55,28 @@ export class OrderDetailComponent {
 
   deleteOrder(): void {
     this.orderService.deleteAllBasket();
+  }
+
+  protected subscribeToSaveResponse(result: Observable<EntityResponseType>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      data => this.onSaveSuccess(data),
+      err => this.onSaveError(err)
+    );
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
+  }
+
+  protected onSaveSuccess(data: any): void {
+    // eslint-disable-next-line no-console
+    console.log('success ', data);
+    this.openPayment = false;
+  }
+
+  protected onSaveError(err: any): void {
+    // Api for inheritance.
+    // eslint-disable-next-line no-console
+    console.log('failed ', err);
   }
 }

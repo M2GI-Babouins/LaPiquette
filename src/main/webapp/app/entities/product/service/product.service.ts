@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -23,7 +22,9 @@ export type EntityArrayResponseType = HttpResponse<IProduct[]>;
 export class ProductService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/products');
   filterType = '';
-  nameSearched: string | undefined;
+  nameSearched = '';
+  filterChanged = false;
+  filters = {};
 
   constructor(
     protected http: HttpClient,
@@ -91,18 +92,35 @@ export class ProductService {
 
   setFilterType(type: string): void {
     this.filterType = type;
+    console.log('filter type = ', this.filterType);
   }
 
   getFilterType() {
     return this.filterType;
   }
 
-  setNameSearched(name: string | undefined) {
+  setNameSearched(name: string) {
     this.nameSearched = name;
   }
 
   getnameSearched() {
     return this.nameSearched;
+  }
+
+  setFilterChange(filter: boolean) {
+    this.filterChanged = filter;
+  }
+
+  getFilterChange() {
+    return this.filterChanged;
+  }
+
+  getFilters() {
+    return this.filters;
+  }
+
+  setFilters(filters: any) {
+    this.filters = filters;
   }
 
   loadAll(): Observable<EntityArrayResponseType> {
@@ -127,9 +145,15 @@ export class ProductService {
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
+    let options = createRequestOption(req);
+    if (this.filterType.length !== 0) {
+      options = options.set('type', this.filterType);
+    }
+    if (this.nameSearched !== '') {
+      options = options.set('search', this.nameSearched);
+    }
     const oui = this.http.get<IProduct[]>(this.resourceUrl, { params: options, observe: 'response' });
-    console.log(oui);
+    console.log('query executed');
     return oui;
   }
 

@@ -5,7 +5,6 @@ import com.im2ag.lapiquette.repository.ClientRepository;
 import com.im2ag.lapiquette.repository.OrderRepository;
 import com.im2ag.lapiquette.service.OrderService;
 import com.im2ag.lapiquette.web.rest.errors.BadRequestAlertException;
-import java.io.Console;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -86,7 +85,7 @@ public class OrderResource {
     /**
      * {@code GET  /orders/:id} : get the "id" order.
      *
-     * @param id the id of the order to retrieve.
+     * @param clientid the id of the client owner of the basket
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the order, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/orders/{clientid}/basket")
@@ -97,7 +96,7 @@ public class OrderResource {
         // Optional<Order> order = orderlist.get(0).getBasket() ? Optional.of(orderlist.get(0)) : Optional.empty();
 
         Set<Order> orderlist = clientRepository.findById(clientid).get().getOrders();
-        Optional<Order> order = orderlist.stream().filter(o -> o.getBasket() == true).findFirst();
+        Optional<Order> order = orderlist.stream().filter(o -> o.getBasket()).findFirst();
 
         return ResponseUtil.wrapOrNotFound(order);
     }
@@ -212,13 +211,13 @@ public class OrderResource {
      * @param id the id of the order to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the order, or with status {@code 404 (Not Found)}.
      */
-    /*   @GetMapping("/orders/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable Long id) {
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<Order> getAnOrder(@PathVariable Long id) {
         log.debug("REST request to get Order : {}", id);
         Optional<Order> order = orderService.findOne(id);
         return ResponseUtil.wrapOrNotFound(order);
     }
-*/
+
     /**
      * {@code DELETE  /orders/:id} : delete the "id" order.
      *
@@ -241,6 +240,10 @@ public class OrderResource {
         @NotNull @RequestBody Order order
     ) {
         log.debug("PATCH request to buy according to the order {}", id);
+        // Optional<Order> bis_order = orderRepository.findById(id);
+        // if (bis_order.isEmpty()) throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+
+        // order = bis_order.get();
 
         if (order.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -252,6 +255,8 @@ public class OrderResource {
         if (!orderRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+
+        if (order.getOrderLines().size() == 0) throw new BadRequestAlertException("Empty basket", ENTITY_NAME, "emptyorder");
 
         if (!order.getBasket()) throw new BadRequestAlertException("Basket already payed", ENTITY_NAME, "idpayed");
 
@@ -283,10 +288,10 @@ public class OrderResource {
 
         if (!order.getBasket()) throw new BadRequestAlertException("Basket already payed", ENTITY_NAME, "idpayed");
 
-        Order result = orderService.checkAnOrder(order);
+        Optional<Order> result = orderService.checkAnOrder(order);
 
         return ResponseUtil.wrapOrNotFound(
-            Optional.of(result),
+            result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, order.getId().toString())
         );
     }
