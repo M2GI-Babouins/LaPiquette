@@ -92,13 +92,10 @@ export class OrderService {
     }
 
     const copy = this.convertDateFromClient(this.basket);
-    console.log(copy);
     this.http
       .put<IOrder>(`${this.resourceUrl}/basket`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      // eslint-disable-next-line no-console
       .subscribe(data => {
-        console.log(data);
         if (data.ok && data.body) {
           this.basket.id = data.body.id;
         }

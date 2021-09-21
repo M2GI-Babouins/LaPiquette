@@ -50,8 +50,8 @@ class ClientResourceIT {
     private static final String ENTITY_API_URL = "/api/clients";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong count = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     @Autowired
     private ClientRepository clientRepository;
@@ -71,14 +71,13 @@ class ClientResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Client createEntity(EntityManager em) {
-        Client client = new Client()
+        return new Client()
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
             .email(DEFAULT_EMAIL)
             .adress(DEFAULT_ADRESS)
             .loggedIn(DEFAULT_LOGGED_IN)
             .password(DEFAULT_PASSWORD);
-        return client;
     }
 
     /**
@@ -88,14 +87,13 @@ class ClientResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Client createUpdatedEntity(EntityManager em) {
-        Client client = new Client()
+        return new Client()
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
             .email(UPDATED_EMAIL)
             .adress(UPDATED_ADRESS)
             .loggedIn(UPDATED_LOGGED_IN)
             .password(UPDATED_PASSWORD);
-        return client;
     }
 
     @BeforeEach

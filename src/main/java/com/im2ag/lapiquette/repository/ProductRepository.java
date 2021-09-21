@@ -1,7 +1,6 @@
 package com.im2ag.lapiquette.repository;
 
 import com.im2ag.lapiquette.domain.Product;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select (p.price*p.percentPromo) from #{#entityName} p where p.id=:id") // p.percentPromo
-    public Optional<Float> getUnitPrice(@Param("id") Long id);
+    Optional<Float> getUnitPrice(@Param("id") Long id);
 
     @Query(
         "select p from #{#entityName} p where" +
@@ -27,7 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         " (:reco is null or p.recommandation like %:reco%) and " +
         " (:search is null or lower(p.name) like lower(concat('%',:search,'%'))) "
     )
-    public Page<Product> findSome(
+    Page<Product> findSome(
         Pageable pageable,
         @Param("type") String type,
         @Param("year") Integer year,

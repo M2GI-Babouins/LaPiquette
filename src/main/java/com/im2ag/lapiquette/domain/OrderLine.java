@@ -109,9 +109,6 @@ public class OrderLine implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof OrderLine)) {
-            return false;
-        }
         return false;
     }
 

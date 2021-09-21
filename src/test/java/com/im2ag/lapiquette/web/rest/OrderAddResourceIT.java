@@ -82,8 +82,7 @@ public class OrderAddResourceIT {
         orderLines.add(new OrderLine().product(product1).quantity(QTE_1).unityPrice(PRICE_2));
         orderLines.add(new OrderLine().product(product2).quantity(QTE_2).unityPrice(PRICE_1));
 
-        Order order = new Order().totalPrice(TOT_PRICE).datePurchase(LOCAL_DATE).basket(BASKET).orderLines(orderLines);
-        return order;
+        return new Order().totalPrice(TOT_PRICE).datePurchase(LOCAL_DATE).basket(BASKET).orderLines(orderLines);
     }
 
     @BeforeEach
