@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         " (:price is null or p.price <= :price) and " +
         " (:region is null or p.region=:region) and " +
         " (:reco is null or p.recommandation like %:reco%) and " +
-        " (:search is null or lower(p.name) like lower(concat('%',:search,'%'))) "
+        " (:search is null or p.name ilike concat('%',:search,'%')) "
     )
     Page<Product> findSome(
         Pageable pageable,
