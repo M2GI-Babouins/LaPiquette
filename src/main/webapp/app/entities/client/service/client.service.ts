@@ -23,6 +23,10 @@ export class ClientService {
     protected orderService: OrderService
   ) {}
 
+  getClient(): IClient | null {
+    return this.client;
+  }
+
   logClient(email: string | null): void {
     // eslint-disable-next-line no-console
     console.log(email);

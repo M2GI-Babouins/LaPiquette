@@ -90,13 +90,13 @@ public class OrderResource {
      */
     @GetMapping("/orders/{clientid}/basket")
     public ResponseEntity<Order> getOrder(@PathVariable Long clientid) {
-        log.debug("REST request to get Basket");
+        log.debug("REST request to get Basket of {}", clientid);
         // Optional<Order> order = orderService.findOne(0l);
         // List<Order> orderlist = orderRepository.findAll(Sort.by("basket").descending());
         // Optional<Order> order = orderlist.get(0).getBasket() ? Optional.of(orderlist.get(0)) : Optional.empty();
 
         Set<Order> orderlist = clientRepository.findById(clientid).get().getOrders();
-        Optional<Order> order = orderlist.stream().filter(o -> o.getBasket()).findFirst();
+        Optional<Order> order = orderlist.stream().filter(Order::getBasket).findFirst();
 
         return ResponseUtil.wrapOrNotFound(order);
     }
