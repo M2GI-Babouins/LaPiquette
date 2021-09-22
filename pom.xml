@@ -89,6 +89,8 @@
         <!-- jhipster-needle-maven-property -->
         <mongodb.spring-data.v3.version>3.0.6.RELEASE</mongodb.spring-data.v3.version>
         <mongodb.driver-sync.version>4.0.5</mongodb.driver-sync.version>
+        <sonar.organization>m2gi-babouins</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencyManagement>
