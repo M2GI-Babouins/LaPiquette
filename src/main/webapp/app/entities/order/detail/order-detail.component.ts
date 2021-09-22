@@ -40,6 +40,7 @@ export class OrderDetailComponent {
   putPayment(): void {
     // const res = this.orderService.payment(this.orderService.getBasket());
     this.subscribeToSaveResponse(this.orderService.payment(this.orderService.getBasket()));
+    this.orderService.getBasket().orderLines.length = 0;
     // eslint-disable-next-line no-console
     console.log('envoie payement');
   }
