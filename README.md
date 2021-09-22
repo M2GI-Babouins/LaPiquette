@@ -42,7 +42,7 @@ Projet EconoCom de début de M2 GI. L'objectif est de réaliser une application 
 
 ### 🟥 Tests de performance
 
-### 🟥 Intégration continue
+### 🟩 Intégration continue
 [![Build status](https://dev.azure.com/CochonCorp/LaPiquette/_apis/build/status/Build%20Project)](https://dev.azure.com/CochonCorp/LaPiquette/_build/latest?definitionId=4)
 
 ### 🟩 Livraison continue
