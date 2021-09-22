@@ -30,6 +30,7 @@ export class ProductDetailComponent implements OnInit {
     });
 
     this.panierLocal = this.productService.getPanier();
+    this.quantity = 1;
   }
 
   public addToCart(product: IProduct): void {
