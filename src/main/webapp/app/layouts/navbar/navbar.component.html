@@ -60,12 +60,10 @@
   </div>
 
   <div class="my-2 my-lg-0 row">
-    <form class="form-inline" onsubmit="onSearch()">
-      <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Search" [(ngModel)]="wineName" />
-      <button class="btn btn-outline-light my-2 my-sm-0" type="submit" (click)="onSearch()">
-        <fa-icon icon="search" [fixedWidth]="true"></fa-icon>
-      </button>
-    </form>
+    <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Search" [(ngModel)]="wineName" />
+    <button class="btn btn-outline-light my-2 my-sm-0" type="submit" (click)="onSearch()">
+      <fa-icon icon="search" [fixedWidth]="true"></fa-icon>
+    </button>
 
     <!--menu user/log-->
     <div class="navbar-collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
