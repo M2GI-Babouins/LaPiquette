@@ -1,36 +1,23 @@
-<div id="ajoutProduit" class="col-12">
-  <button class="btn-success col-12" *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/product/new']">
-    <span>Ajouter un Nouveau Produit</span>
-  </button>
-</div>
-<div>
+<div class="container col-12">
+  <!--Alertes-->
   <jhi-alert-error></jhi-alert-error>
-
   <jhi-alert></jhi-alert>
-
   <div class="alert alert-warning" id="no-result" *ngIf="products?.length === 0">
     <span>Pas de Produits trouvés</span>
   </div>
-
   <div class="alert alert-success" *ngIf="productAdded">
     <span><strong>Le produit a bien été ajouté au panier</strong> </span>
   </div>
 
-  <!--<div class="product-sidenav">
-      <button
-        type="submit"
-        [routerLink]="['/product', 'new']"
-        class="btn btn-info btn-sm"
-        data-cy="entityDetailsButton"
-        *jhiHasAnyAuthority="'ROLE_ADMIN'"
-      >
-        <fa-icon icon="eye"></fa-icon>
-        <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Nouveau produit</span>
-      </button>
-    </div>-->
-
+  <!--contenu page-->
   <div class="row align-items-start">
-    <div class="filtres col-2">
+    <!--filtre-->
+    <div class="col-2">
+      <div id="ajoutProduit" class="col-12" style="margin-bottom: 5%">
+        <button class="btn-outline-dark col-12" *jhiHasAnyAuthority="'ROLE_ADMIN'" type="submit" [routerLink]="['/product/new']">
+          <span>Nouveau Produit</span>
+        </button>
+      </div>
       <jhi-product-filters
         [products]="baseProducts"
         (newFilters)="setFilter($event)"
@@ -38,85 +25,76 @@
       ></jhi-product-filters>
     </div>
     <!--View User-->
-    <div class="col-10">
+    <div class="col-10 row">
+      <!--mini fiche produit-->
       <div class="row" id="entities" *ngIf="products && products.length > 0">
-        <div class="product col-lg-3" *ngFor="let product of products; trackBy: trackId">
-          <div class="product-detail product-detail-container" style="display: flex">
-            <div class="product-detail product-detail-child" style="flex: 1">
-              <div class="logo" style="display: inline">
-                <div *ngIf="product.image; else logoTemplate" class="product-detail product-detail-child" style="flex: 1">
-                  <a (click)="openFile(product.image, product.imageContentType)">
-                    <img
-                      [src]="'data:' + product.imageContentType + ';base64,' + product.image"
-                      style="max-width: 100%"
-                      alt="product image"
-                    />
-                  </a>
-                </div>
-                <ng-template #logoTemplate>
-                  <span class="logo-img"></span>
-                </ng-template>
-              </div>
+        <div class="card col-6 flex-md-row mb-4 box-shadow h-md-250" *ngFor="let product of products; trackBy: trackId">
+          <div class="card-body d-flex flex-column align-items-start">
+            <strong class="d-inline-block mb-2 text-primary">{{ product.type }}</strong>
+            <strong class="d-inline-block mb-2 text-primary">{{ product.stock }} bouteilles restante(s)</strong>
+            <h3 class="mb-0 text-dark">{{ product.name }} - {{ product.year }}</h3>
+            <h4 class="mb-1 text-info">{{ product.price }} €</h4>
+            <p class="card-text mb-1 text-muted">Avec quoi le boire :</p>
+            <p class="card-text mb-auto">{{ product.recommandation }}</p>
+            <!--boutons petite fiche-->
+            <div class="product-list-interact">
+              <button
+                type="submit"
+                [routerLink]="['/product', product.id, 'view']"
+                class="btn btn-outline-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">Voir Détail</span>
+              </button>
+              <button
+                type="submit"
+                (click)="addToCart(product)"
+                class="btn btn-outline-success btn-sm"
+                data-cy="entityBasketButton"
+                [disabled]="product.stock! <= 0"
+              >
+                <fa-icon icon="plus"></fa-icon>
+                <span class="d-none d-md-inline">Acheter</span>
+              </button>
+              <button
+                *jhiHasAnyAuthority="'ROLE_ADMIN'"
+                type="submit"
+                [routerLink]="['/product', product.id, 'edit']"
+                class="btn btn-outline-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <span class="d-none d-md-inline">Modifier</span>
+              </button>
             </div>
-
-            <div class="product-detail product-detail-child" style="flex: 2">
-              <h5>
-                {{ product.name }} - <em>{{ product.price }} €</em>
-              </h5>
-              <p>{{ product.year }} - Vin {{ product.type }}</p>
-            </div>
           </div>
-
-          <div class="product-list-info" style="clear: left">
-            <p>Region : {{ product.region }}</p>
-            <p>Avec quoi le boire : {{ product.recommandation }}</p>
-          </div>
-
-          <div class="product-list-interact">
-            <button
-              type="submit"
-              [routerLink]="['/product', product.id, 'view']"
-              class="btn btn-outline-info btn-sm"
-              data-cy="entityDetailsButton"
-            >
-              <fa-icon icon="eye"></fa-icon>
-              <span class="d-none d-md-inline">Voir Détail</span>
-            </button>
-
-            <button type="submit" (click)="addToCart(product)" class="btn btn-outline-success btn-sm" data-cy="entityBasketButton">
-              <fa-icon icon="plus"></fa-icon>
-              <span class="d-none d-md-inline">Acheter</span>
-            </button>
-            <button
-              *jhiHasAnyAuthority="'ROLE_ADMIN'"
-              type="submit"
-              [routerLink]="['/product', product.id, 'edit']"
-              class="btn btn-outline-info btn-sm"
-              data-cy="entityDetailsButton"
-            >
-              <span class="d-none d-md-inline">Modifier</span>
-            </button>
-          </div>
+          <img
+            class="card-img-right flex-auto d-none d-md-block"
+            data-src="holder.js/200x250?theme=thumb"
+            alt="Thumbnail"
+            style="width: 200px; height: 250px"
+            data-holder-rendered="true"
+            [src]="'data:' + product.imageContentType + ';base64,' + product.image"
+          />
         </div>
       </div>
-    </div>
-  </div>
-
-  <div *ngIf="products && products.length > 0">
-    <div class="row justify-content-center">
-      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-    </div>
-
-    <div class="row justify-content-center">
-      <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
-        [pageSize]="itemsPerPage"
-        [maxSize]="5"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
-      ></ngb-pagination>
+      <!--changement de page-->
+      <div class="col-12" *ngIf="products && products.length > 0">
+        <div class="row justify-content-center">
+          <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+          <ngb-pagination
+            [collectionSize]="totalItems"
+            [(page)]="ngbPaginationPage"
+            [pageSize]="itemsPerPage"
+            [maxSize]="5"
+            [rotate]="true"
+            [boundaryLinks]="true"
+            (pageChange)="loadPage($event)"
+          ></ngb-pagination>
+        </div>
+      </div>
     </div>
   </div>
 </div>
