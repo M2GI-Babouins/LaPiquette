@@ -1,7 +1,9 @@
 package com.im2ag.lapiquette.service;
 
 import com.im2ag.lapiquette.domain.Client;
+import com.im2ag.lapiquette.domain.User;
 import com.im2ag.lapiquette.repository.ClientRepository;
+import com.im2ag.lapiquette.repository.UserRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +22,11 @@ public class ClientService {
     private final Logger log = LoggerFactory.getLogger(ClientService.class);
 
     private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, UserRepository userRepository) {
         this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -34,6 +38,30 @@ public class ClientService {
     public Client save(Client client) {
         log.debug("Request to save Client : {}", client);
         return clientRepository.save(client);
+    }
+
+    /**
+     * Create a client from a user
+     * @param user
+     * @return client
+     */
+    public void createClient(User user) {
+        log.debug("CREATE A CLIENT FROM A USER : {}", user);
+        log.debug("USER ID  :{}", user.getId());
+
+        Client newClient = new Client(
+            user.getId(),
+            user.getLogin(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmail(),
+            "dummyAdresse",
+            false,
+            user.getPassword()
+        );
+
+        this.save(newClient);
+        log.debug("NEW CLIENT ID : {}", newClient.getId());
     }
 
     /**

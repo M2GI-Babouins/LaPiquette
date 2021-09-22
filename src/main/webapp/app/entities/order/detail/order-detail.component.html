@@ -15,26 +15,31 @@
         <h2>Produits Sélectionnés :</h2>
         <div class="col-10">
           <div class="col-12"></div>
-          <table class="table table-striped">
-            <th><em>Nom du produit</em></th>
-            <td><em>Quantité</em></td>
-            <td><em>Prix unitaire</em></td>
-            <td><em>Prix Total</em></td>
-            <td><em>Actions</em></td>
-            <tr *ngFor="let orderLine of getBasket().orderLines">
-              <th scope="row">{{ orderLine.product.name }}</th>
-              <td>{{ orderLine.quantity }}</td>
-              <td>{{ orderLine.unityPrice }}</td>
-              <td>{{ orderLine.quantity * orderLine.unityPrice }}</td>
-              <td>
-                <div class="btn-group" role="group" aria-label="Basic example">
-                  <button (click)="addOne(orderLine)"><b>+</b></button>
-                  <button *ngIf="orderLine.quantity !== 1" (click)="subOne(orderLine)"><b>-</b></button>
-                  <button (click)="deleteOrderLine(orderLine)"><b>x</b></button>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <div *ngIf="getBasket().orderLines.length !== 0; else emptyBasketTemplate">
+            <table class="table table-striped">
+              <th><em>Nom du produit</em></th>
+              <td><em>Quantité</em></td>
+              <td><em>Prix unitaire</em></td>
+              <td><em>Prix Total</em></td>
+              <td><em>Actions</em></td>
+              <tr *ngFor="let orderLine of getBasket().orderLines">
+                <th scope="row">{{ orderLine.product.name }}</th>
+                <td>{{ orderLine.quantity }}</td>
+                <td>{{ orderLine.unityPrice }}</td>
+                <td>{{ orderLine.quantity * orderLine.unityPrice }}</td>
+                <td>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button class="btn btn-outline-success" (click)="addOne(orderLine)"><b>+</b></button>
+                    <button class="btn btn-outline-warning" *ngIf="orderLine.quantity !== 1" (click)="subOne(orderLine)"><b>-</b></button>
+                    <button class="btn btn-outline-danger" (click)="deleteOrderLine(orderLine)"><b>x</b></button>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <ng-template #emptyBasketTemplate>
+            <div class="card-body">Pas de produits dans le panier</div>
+          </ng-template>
         </div>
       </div>
     </div>
@@ -43,6 +48,8 @@
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
     </button>
 
+
+    <button type="button" (click)="openPayment = true" class="btn btn-success" [disabled]="getBasket().orderLines.length <= 0">Acheter1</button>
     <button type="button" (click)="putPayment()" class="btn btn-success" *ngIf="this.openPayment == true">
       <fa-icon icon="check"></fa-icon><span>Acheter</span>
     </button>
