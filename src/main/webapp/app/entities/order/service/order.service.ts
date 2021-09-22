@@ -13,7 +13,6 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { IOrder, getOrderIdentifier } from '../order.model';
 import { IOrderLine } from './../../order-line/order-line.model';
 import { IProduct } from './../../product/product.model';
-import { ClientService } from 'app/entities/client/service/client.service';
 
 export type EntityResponseType = HttpResponse<IOrder>;
 export type EntityArrayResponseType = HttpResponse<IOrder[]>;
@@ -25,11 +24,7 @@ export class OrderService {
   protected basket: IOrder = { id: 0, orderLines: [], totalPrice: 0, basket: true };
   protected basket_paid = false;
 
-  constructor(
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
-    protected clientService: ClientService
-  ) {}
+  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   // #region Basket
   getBasket(): IOrder {
@@ -108,23 +103,21 @@ export class OrderService {
   }
 
   findBasket(): void {
-    if (this.clientService.getClient() == null) {
+    if (this.basket.client == null) {
       return;
     }
 
     this.http
-      .get<IOrder>(`${this.resourceUrl}/${this.basket.client!.id}/basket`, { observe: 'response' })
+      .get<IOrder>(`${this.resourceUrl}/${this.basket.client.id}/basket`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
       .subscribe(data => {
         // eslint-disable-next-line no-console
         console.log(data);
-        if (data.ok && data.body) {
+        if (data.body) {
           this.basket.id = data.body.id;
           this.basket.datePurchase = data.body.datePurchase;
           this.basket.totalPrice = data.body.totalPrice;
           this.basket.orderLines = data.body.orderLines;
-        } else {
-          this.setClient(this.clientService.getClient()!);
         }
       });
   }
