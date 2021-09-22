@@ -48,13 +48,15 @@
       <div class="form-group col-2">
         <label for="id">Region</label>
         <select class="form-control" id="id" required data-cy="region" formControlName="region">
-          <option *ngFor="let region of valuesRegion()">{{ region }}</option>
+          <option disabled>Region</option>
+          <option *ngFor="let region of valuesRegion()" [value]="region">{{ region }}</option>
         </select>
       </div>
       <div class="form-group col-2">
         <label for="type">Type</label>
         <select class="form-control" id="type" required data-cy="type" formControlName="type">
-          <option *ngFor="let type of valuesType()">{{ type }}</option>
+          <option disabled>Type</option>
+          <option *ngFor="let type of valuesType()" [value]="type">{{ type }}</option>
         </select>
       </div>
       <div class="form-group col-2">
