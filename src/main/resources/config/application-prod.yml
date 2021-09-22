@@ -33,14 +33,15 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/laPiquette
-    username: laPiquette
-    password:
+    uri: postgres://ociivpiqwgvqbj:545a01a191766261211f54865446d829ede3973286c38f94e88da865d7dd80e5@ec2-54-78-36-245.eu-west-1.compute.amazonaws.com:5432/d38lh01v049hgb
     hikari:
       poolName: Hikari
       auto-commit: false
   jpa:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod, faker
