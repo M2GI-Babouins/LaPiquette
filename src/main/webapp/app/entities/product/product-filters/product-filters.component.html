@@ -1,46 +1,64 @@
-<div class="filters">
-  <form>
-    <div class="mb-3 col-6">
-      <label for="tri" class="form-label">Trié par:</label>
-      <select class="btn btn-outline-info dropdown-toggle" name="tri" [(ngModel)]="tri" (ngModelChange)="trier()">
-        <option value="annee">Année</option>
-        <option value="priceDown">Prix décroissant</option>
-        <option value="priceUp">Prix Croissant</option>
+<div class="col-12 container" style="border: 2px solid #dbb1aa; padding-top: 5%; border-radius: 5px; background-color: #dbb1aa">
+  <h3>Filtres</h3>
+  <hr class="featurette-divider" />
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <label for="tri" class="input-group-text">Trié par :</label>
+    </div>
+    <select class="custom-select" id="tri" [(ngModel)]="tri" (ngModelChange)="trier()">
+      <option value="annee">Année</option>
+      <option value="priceDown">Prix Croissant</option>
+      <option value="priceUp">Prix Décroissant</option>
+    </select>
+  </div>
+  <hr class="featurette-divider" />
+  <form [formGroup]="filtres" class="col-12">
+    <title>Filtres</title>
+
+    <div class="form-groupe">
+      <label for="price">Prix maximum:</label>
+      <input
+        class="form-control"
+        formControlName="price"
+        jhi-bindQueryParam="price"
+        type="range"
+        name="price"
+        id="price-range"
+        min="0"
+        max="300"
+        value="300"
+        step="1"
+        oninput="this.nextElementSibling.value = this.value"
+      />
+      <output id="price-output"></output><span>€</span>
+    </div>
+    <hr class="featurette-divider" />
+    <div class="form-groupe">
+      <label for="year">Année Maximum</label>
+      <select formControlName="year" jhi-bindQueryParam="year" class="custom-select" id="year" name="year" placeholder="Maximum">
+        <option *ngFor="let year of yearMade" [value]="year">{{ year }}</option>
       </select>
     </div>
-
-    <div class="mb-3 col-6">
-      <label for="price" class="form-label">Prix Maximum:</label>
-      <input class="btn btn-outline-info" type="number" name="price" min="0" [(ngModel)]="wineData.price" (keydown.enter)="filterPrice()" />
-    </div>
-
-    <div class="mb-3 col-6">
-      <select class="btn btn-outline-info dropdown-toggle" name="year" [(ngModel)]="wineData.year" (ngModelChange)="filterYear()">
-        <option>Année de Fabrication avant</option>
-        <option *ngFor="let year of yearMade">{{ year }}</option>
+    <hr class="featurette-divider" />
+    <div class="form-groupe">
+      <label for="reco">Recommandation</label>
+      <select formControlName="reco" jhi-bindQueryParam="reco" id="reco" class="custom-select">
+        <option disabled>Recommandation</option>
+        <option *ngFor="let r of recommandations" [value]="r">{{ r }}</option>
       </select>
     </div>
-
-    <div class="mb-3 col-6">
-      <select
-        class="btn btn-outline-info dropdown-toggle"
-        name="recommandation"
-        [(ngModel)]="wineData.recommandation"
-        (ngModelChange)="filterRecommandation()"
-      >
-        <option>Recommandations</option>
-        <option *ngFor="let r of recommandations">{{ r }}</option>
-      </select>
-    </div>
-
-    <div class="mb-3 col-6">
+    <hr class="featurette-divider" />
+    <div class="form-groupe">
       <label for="region" class="form-label">Region :</label>
-      <select class="btn btn-outline-info dropdown-toggle" name="region" [(ngModel)]="wineData.region" (ngModelChange)="filterRegion()">
-        <option>Region</option>
-        <option *ngFor="let region of valuesRegion()">{{ region }}</option>
+      <select formControlName="region" jhi-bindQueryParam="region" class="custom-select">
+        <option disabled>Region</option>
+        <option *ngFor="let region of valuesRegion()" [value]="region">{{ region }}</option>
       </select>
     </div>
-
-    <button type="reset" class="btn btn-info" (click)="reset()">Vider Filtres</button>
+    <br />
+    <div class="form-groupe col-12">
+      <button type="reset" class="btn btn-outline-dark col-12" (click)="reset()">Vider Filtres</button>
+    </div>
+    <br />
   </form>
 </div>

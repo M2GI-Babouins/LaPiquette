@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
@@ -16,6 +17,7 @@ import { IProduct, Recommandation, Region } from '../product.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { ProductService } from '../service/product.service';
 import { ProductDeleteDialogComponent } from '../delete/product-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-product',
@@ -37,22 +39,26 @@ export class ProductComponent implements OnInit {
   ngbPaginationPage = 1;
   productAdded = false;
 
+  filters = {};
+
   constructor(
     protected productService: ProductService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected dataUtils: DataUtils
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;
-
+    console.log('load page');
     this.productService
       .query({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
+        ...this.filters,
       })
       .subscribe(
         (res: HttpResponse<IProduct[]>) => {
@@ -67,6 +73,9 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.productService.getFilterChange()) {
+      this.filters = this.productService.getFilters();
+    }
     this.handleNavigation();
   }
 
@@ -90,7 +99,14 @@ export class ProductComponent implements OnInit {
     this.productService.ajouterPanier(product, 1);
   }
 
-  public setNewProducts(products: IProduct[]) {
+  public setFilter(value: any) {
+    this.filters = value;
+    this.productService.setFilterChange(true);
+    this.productService.setFilters(this.filters);
+    this.loadPage();
+  }
+
+  public setProductsSorted(products: IProduct[]) {
     this.products = products;
   }
 
@@ -131,14 +147,13 @@ export class ProductComponent implements OnInit {
     }
     this.baseProducts = data ?? [];
     this.products = data ?? [];
-    this.filterProductsByType(this.productService.getFilterType()!);
-    this.filterProductsByName(this.productService.getnameSearched()!);
     this.ngbPaginationPage = this.page;
   }
 
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
   }
+
 
   filterProductsByType(filter: string) {
     if (filter !== '') {
@@ -153,5 +168,13 @@ export class ProductComponent implements OnInit {
       this.baseProducts = this.baseProducts.filter(product => product.name?.toLocaleLowerCase() === filter);
       this.products = this.products.filter(product => product.name?.toLocaleLowerCase() === filter);
     }
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 }

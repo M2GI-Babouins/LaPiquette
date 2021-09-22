@@ -1,17 +1,94 @@
-<div>
-  <h1>La Piquette <span class="logo-img"></span></h1>
-  <p>
-    Notre site vous propose des vins français a tout les prix. Vous pouvez retouver notre large sélection de vin sur notre site et dans nos
-    Recommandations. Vous pouvez également profiter de nos promotions
-  </p>
-</div>
-
-<div>
-  <h2>Recommandation</h2>
-  <p>On en a pas</p>
-</div>
-
-<div>
-  <h2>Promotion</h2>
-  <p>On en a pas non plus</p>
+<div class="col-12 row">
+  <h1 class="col-12">La Piquette <span class="logo-img"></span></h1>
+  <hr class="featurette-divider" />
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="row featurette shadow p-3 mb-5 bg-body rounded">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Consultez nos Vins !</h2>
+        <br />
+        <p class="lead">Ils sont beaux, ils sont frais, consultez la carte !</p>
+        <br />
+        <button class="mx-auto btn btn-outline-dark" (click)="setType('')">Consulter !</button>
+      </div>
+      <div class="col-md-5">
+        <img
+          class="featurette-image img-fluid mx-auto"
+          data-src="holder.js/500x500/auto"
+          alt="500x500"
+          style="width: 500px; height: 500px"
+          src="../../content/images/vin1.jpg"
+          data-holder-rendered="true"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="row featurette shadow p-3 mb-5 bg-body rounded">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Consultez nos Vins Rouge!</h2>
+        <br />
+        <p class="lead">Ils sont beaux, ils sont frais, ils sont rouge ! Consultez la carte !</p>
+        <br />
+        <button class="mx-auto btn btn-outline-dark" (click)="setType('rouge')">Consulter !</button>
+      </div>
+      <div class="col-md-5">
+        <img
+          class="featurette-image img-fluid mx-auto"
+          data-src="holder.js/500x500/auto"
+          alt="500x500"
+          style="width: 500px; height: 500px"
+          src="../../content/images/vin2.jpg"
+          data-holder-rendered="true"
+        />
+      </div>
+    </div>
+  </div>
+  <hr class="featurette-divider" />
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="row featurette shadow p-3 mb-5 bg-body rounded">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Consultez nos Vins Blancs !</h2>
+        <br />
+        <p class="lead">Ils sont beaux, ils sont frais, consultez la carte !</p>
+        <br />
+        <button class="mx-auto btn btn-outline-dark" (click)="setType('blanc')">Consulter !</button>
+      </div>
+      <div class="col-md-5">
+        <img
+          class="featurette-image img-fluid mx-auto"
+          data-src="holder.js/500x500/auto"
+          alt="500x500"
+          style="width: 500px; height: 500px"
+          src="../../content/images/raisin.jpg"
+          data-holder-rendered="true"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="row featurette shadow p-3 mb-5 bg-body rounded">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Le Choix du Patron ! !</h2>
+        <br />
+        <p class="lead">
+          Vous ne savez pas quoi prendre ? Suivezles recommendation de notre oenologue préféré ! François-Xavieer Gros repond a toutes vos
+          demandes concernant la biture.
+        </p>
+        <p class="lead">Suivez nos conseils pour un repas reussi !</p>
+        <br />
+        <button class="mx-auto btn btn-outline-dark">Consulter !</button>
+      </div>
+      <div class="col-md-5">
+        <img
+          inactive
+          class="featurette-image img-fluid mx-auto"
+          data-src="holder.js/500x500/auto"
+          alt="500x500"
+          style="width: 500px; height: 500px"
+          src="../../content/images/blanc1.jpg"
+          data-holder-rendered="true"
+        />
+      </div>
+    </div>
+  </div>
 </div>

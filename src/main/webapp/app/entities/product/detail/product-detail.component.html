@@ -13,16 +13,10 @@
         class="product-detail product-detail-container"
         style="display: flex; border: 2px solid #831717; margin-right: 20px; padding: 10px"
       >
-        <div class="product-detail product-detail-child" style="flex: 1">
-          <img
-            *ngIf="product.image === null; else logoTemplate"
-            [src]="'data:' + product.imageContentType + ';base64,' + product.image"
-            style="max-width: 100%"
-            alt="product image"
-          />
-          <ng-template #logoTemplate>
-            <span class="logo-img"></span>
-          </ng-template>
+        <div *ngIf="product.image" class="product-detail product-detail-child" style="flex: 1">
+          <a (click)="openFile(product.image, product.imageContentType)">
+            <img [src]="'data:' + product.imageContentType + ';base64,' + product.image" style="max-width: 100%" alt="product image" />
+          </a>
         </div>
 
         <div class="product-detail product-detail-child" style="flex: 9; margin-right: 20px; padding: 10px">
@@ -53,8 +47,16 @@
       <!--Validation Commande-->
       <div class="row col-12" style="margin-top: 5%">
         <form (ngSubmit)="addToCart(product)">
-          <button type="submit" class="btn btn-outline-success">Ajouter au panier</button>
-          <input name="quantity" class="quantity" min="0" max="{{ product.stock }}" [(ngModel)]="quantity" value="1" type="number" />
+          <button type="submit" class="btn btn-outline-success" [disabled]="product.stock! <= 0">Ajouter au panier</button>
+          <input
+            name="quantity"
+            class="quantity"
+            min="1"
+            max="{{ product.stock }}"
+            [(ngModel)]="quantity"
+            type="number"
+            [disabled]="product.stock! <= 0"
+          />
           <button *ngIf="afficherSuppression(product)" class="btn btn-outline-danger" (click)="removeFromCart(product)">
             Retirer du Panier
           </button>

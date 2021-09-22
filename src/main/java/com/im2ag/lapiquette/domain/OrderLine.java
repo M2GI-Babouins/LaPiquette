@@ -28,7 +28,7 @@ public class OrderLine implements Serializable {
 
     @JsonIgnoreProperties(value = { "orderLine" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "product_id", unique = true, nullable = false)
     private Product product;
 
     @ManyToOne
@@ -108,9 +108,6 @@ public class OrderLine implements Serializable {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
-        }
-        if (!(o instanceof OrderLine)) {
-            return false;
         }
         return false;
     }

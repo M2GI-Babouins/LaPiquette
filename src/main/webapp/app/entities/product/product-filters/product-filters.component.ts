@@ -5,6 +5,7 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { flattenDeep, uniq } from 'lodash';
 import { IProduct, Recommandation, Region } from '../product.model';
 import { ProductService } from '../service/product.service';
@@ -16,7 +17,8 @@ import { ProductService } from '../service/product.service';
 })
 export class ProductFiltersComponent implements OnInit, OnChanges {
   @Input() products: IProduct[] = [];
-  @Output() newProducts = new EventEmitter<IProduct[]>();
+  @Output() newFilters = new EventEmitter<IProduct[]>();
+  @Output() sortBy = new EventEmitter<IProduct[]>();
 
   regions = Region;
   yearMade: number[] = [];
@@ -24,9 +26,22 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
   recommandations!: (string | undefined)[];
   tri = 'nouveaute';
 
+  filtres = new FormGroup({
+    type: new FormControl(),
+    price: new FormControl(),
+    year: new FormControl(),
+    reco: new FormControl(),
+    region: new FormControl(),
+  });
+
   constructor(private productService: ProductService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.filtres.valueChanges.subscribe(value => {
+      this.newFilters.emit(value);
+      console.log('filters : fetch data with new value', value);
+    });
+  }
 
   ngOnChanges() {
     if (this.products.length !== 0) {
@@ -55,6 +70,14 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
     this.recommandations = recoFinal;
   }
 
+  reset() {
+    this.filtres.reset();
+  }
+
+  setType(type_value: string) {
+    this.filtres.setValue({ type: type_value });
+  }
+
   trier() {
     console.log('by ' + this.tri);
     let productSorted: IProduct[] = [];
@@ -75,49 +98,6 @@ export class ProductFiltersComponent implements OnInit, OnChanges {
         productSorted = this.products;
         break;
     }
-    this.newProducts.emit(productSorted);
-  }
-
-  filterRegion() {
-    if (this.wineData.region !== null) {
-      const productFiltered = this.products.filter(product => product.region === this.wineData.region);
-      this.newProducts.emit(productFiltered);
-    }
-  }
-
-  filterRecommandation() {
-    if (this.wineData.recommandation !== null) {
-      const productFiltered = this.products.filter(product => {
-        const recos = product.recommandation
-          ?.split(',')
-          .map(r => r.toLowerCase())
-          .map(r => r.trim());
-        const alors = recos?.includes(this.wineData.recommandation!);
-        if (recos?.includes(this.wineData.recommandation!)) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      this.newProducts.emit(productFiltered);
-    }
-  }
-
-  filterYear() {
-    if (this.wineData.year !== null) {
-      const productFiltered = this.products.filter(product => product.year! <= this.wineData.year!);
-      this.newProducts.emit(productFiltered);
-    }
-  }
-
-  filterPrice() {
-    if (this.wineData.price !== null) {
-      const productFiltered = this.products.filter(product => product.price! <= this.wineData.price!);
-      this.newProducts.emit(productFiltered);
-    }
-  }
-
-  reset() {
-    this.newProducts.emit(this.products);
+    this.sortBy.emit(productSorted);
   }
 }
