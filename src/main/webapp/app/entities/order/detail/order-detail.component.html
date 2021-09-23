@@ -48,9 +48,6 @@
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Retour</span>
     </button>
 
-    <button type="button" (click)="openPayment = true" class="btn btn-success" [disabled]="getBasket().orderLines.length <= 0">
-      Acheter1
-    </button>
     <button
       type="button"
       (click)="putPayment()"

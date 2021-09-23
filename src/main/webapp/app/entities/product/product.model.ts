@@ -75,7 +75,7 @@ export enum Recommandation {
 }
 
 export enum TypeVin {
-  Rouge = 'Vin Rouge',
-  Blanc = 'Vin Blanc',
-  Rose = 'Vin Rosé',
+  Rouge = 'rouge',
+  Blanc = 'blanc',
+  Rose = 'rosé',
 }
