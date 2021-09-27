@@ -11,6 +11,8 @@
 Projet EconoCom de début de M2 GI. L'objectif est de réaliser une application web permettant d'effectuer des transactions. <br>
 🍷 _LaPiquette : Site de vente de vin huppé._ 🍷
 
+Les rapports pour les référents IM2AG sont dans le répertoire EIHM.
+
 ## Fonctionnalitées
 
 ### Magasin
